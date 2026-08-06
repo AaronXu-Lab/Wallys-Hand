@@ -21,11 +21,6 @@ struct PaddingConfigurationView: View {
 
     var body: some View {
         LuminareForm {
-            ScreenView {
-                PaddingPreview($paddingModel)
-            }
-            .disabled(!enablePadding)
-
             LuminareSection {
                 LuminareToggle("Apply padding", isOn: $enablePadding)
             }

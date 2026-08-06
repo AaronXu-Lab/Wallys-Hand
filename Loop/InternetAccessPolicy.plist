@@ -5,7 +5,7 @@
 	<key>DeveloperName</key>
 	<string>MrKai77</string>
 	<key>ApplicationDescription</key>
-	<string>Loop is a macOS window management utility with a radial menu and configurable keybinds for moving, resizing, and arranging windows.</string>
+	<string>Loop Just is a macOS window management utility with configurable keyboard shortcuts for moving, resizing, and arranging windows.</string>
 	<key>Website</key>
 	<string>https://github.com/MrKai77/Loop</string>
 	<key>Connections</key>

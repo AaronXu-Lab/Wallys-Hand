@@ -5,7 +5,6 @@
 //  Created by Kami on 15/06/2024.
 //
 
-import Defaults
 import Luminare
 import SwiftUI
 
@@ -14,8 +13,6 @@ struct UpdateView: View {
     @Environment(\.luminareAnimation) var luminareAnimation
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var updater = Updater.shared
-
-    @Default(.currentIcon) private var currentIcon
 
     @State private var isShowingTheLoopTimes: Bool = false
 
@@ -104,7 +101,7 @@ struct UpdateView: View {
 
     @ViewBuilder
     private func appIconView() -> some View {
-        if let image = NSImage(named: currentIcon) {
+        if let image = NSApp.applicationIconImage {
             Image(nsImage: image)
                 .resizable()
                 .aspectRatio(contentMode: .fit)

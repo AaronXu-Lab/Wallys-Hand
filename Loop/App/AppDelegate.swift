@@ -9,13 +9,12 @@ import Darwin
 import Defaults
 import Scribe
 import SwiftUI
-import UserNotifications
 
 @Loggable
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let urlCommandHandler = URLCommandHandler()
 
-    private static let terminateNotificationName = Notification.Name("com.MrKai77.Loop.terminate")
+    private static let terminateNotificationName = Notification.Name("com.xuweinan.LoopJust.terminate")
     private var terminateObserver: Any?
 
     private var launchedAsLoginItem: Bool {
@@ -44,11 +43,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         DataPatcher.run()
-        IconManager.refreshCurrentAppIcon()
         LaunchAtLoginManager.shared.start()
-
-        UNUserNotificationCenter.current().delegate = self
-        AppDelegate.requestNotificationAuthorization()
 
         // Register for URL handling
         NSAppleEventManager.shared().setEventHandler(
@@ -67,11 +62,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             WindowDragManager.shared.addObservers()
             StashManager.shared.start()
             AccessibilityManager.requestAccess()
-
-            // Wait for the app to settle before showing the update window
-            try? await Task.sleep(for: .seconds(5))
-            await Updater.shared.fetchLatestInfo()
-            await Updater.shared.showUpdateWindowIfEligible()
         }
     }
 
@@ -99,7 +89,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @discardableResult
     private func broadcastTerminateToOtherInstances() -> [pid_t] {
         let currentPID = ProcessInfo.processInfo.processIdentifier
-        let bundleId = Bundle.main.bundleIdentifier ?? "com.MrKai77.Loop"
+        let bundleId = Bundle.main.bundleIdentifier ?? "com.xuweinan.LoopJust"
 
         let otherInstances = NSWorkspace.shared.runningApplications.filter {
             $0.bundleIdentifier == bundleId && $0.processIdentifier != currentPID

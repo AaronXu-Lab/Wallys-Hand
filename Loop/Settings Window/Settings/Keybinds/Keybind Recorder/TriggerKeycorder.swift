@@ -173,7 +173,7 @@ struct TriggerKeycorder: View {
             // Set the valid keybind to the current selected one
             validCurrentKey = selectionKey
         } else {
-            // Set preview keybind back to previous one
+            // Restore the previously selected keybind
             selectionKey = validCurrentKey
         }
 

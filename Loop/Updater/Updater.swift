@@ -15,27 +15,19 @@ import SwiftUI
 final class Updater: ObservableObject {
     static let shared = Updater()
 
-    @Published private(set) var updateState: UpdateAvailability = .unavailable {
-        didSet { updateStateChanged() }
-    }
+    @Published private(set) var updateState: UpdateAvailability = .unavailable
 
     @Published private(set) var installState: InstallState = .ready
     @Published private(set) var progressBar: Double = 0
-    @Published private(set) var updatesEnabled: Bool = Updater.checkIfUpdatesEnabled()
+    var updatesEnabled: Bool { Self.checkIfUpdatesEnabled() }
     @Published private(set) var changelog: [ChangelogSection] = []
     @Published var expandedChangelogSections: Set<String> = [] // By ID
     @Published private(set) var updateManifest: UpdateManifest?
 
-    private(set) var shouldAutoPresentUpdateWindow: Bool = false
     private var windowController: NSWindowController?
     private var includeDevelopmentVersions: Bool { Defaults[.includeDevelopmentVersions] }
-    private var automaticallyUpdate: Bool { Defaults[.automaticallyUpdate] }
 
     private var updateFetcherTask: Task<(), Never>?
-    private var updateCheckerTask: Task<(), Never>?
-    private var autoPresentUpdateWindowTask: Task<(), Never>?
-    private var includeDevelopmentVersionsObserver: Task<(), Never>?
-    private var updatesEnabledObserver: Task<(), Never>?
 
     private let updateChecker: UpdateChecker
     private let downloader: UpdateDownloader
@@ -47,120 +39,10 @@ final class Updater: ObservableObject {
         self.downloader = UpdateDownloader()
         self.installer = UpdateInstaller()
 
-        // Initialize optional properties to nil - will be set up after init
-        self.updateCheckerTask = nil
-        self.includeDevelopmentVersionsObserver = nil
-        self.updatesEnabledObserver = nil
-
-        // Set up observers and tasks after initialization is complete
-        Task {
-            setupObserversAndTasks()
-        }
-    }
-
-    private func setupObserversAndTasks() {
-        // Set up observers and tasks now that self is fully initialized
-        let updatesEnabled = Self.checkIfUpdatesEnabled()
-        if updatesEnabled {
-            updateCheckerTask = makeUpdateCheckerTask()
-            includeDevelopmentVersionsObserver = makeIncludeDevelopmentVersionsObserver()
-        }
-
-        updatesEnabledObserver = makeUpdatesEnabledObserver()
     }
 
     private static func checkIfUpdatesEnabled() -> Bool {
-        if let env = ProcessInfo.processInfo.environment["LOOP_SKIP_UPDATE_CHECK"],
-           env == "1" || env.lowercased() == "true" {
-            return false
-        }
         return Defaults[.updatesEnabled]
-    }
-
-    private func updateStateChanged() {
-        autoPresentUpdateWindowTask?.cancel()
-        autoPresentUpdateWindowTask = nil
-
-        if updateState == .available {
-            // If automatic updates are enabled, never auto-present the update window
-            if automaticallyUpdate {
-                // Only install if Loop is not in use
-                if !NSApp.isActive, NSApp.windows.allSatisfy({ !$0.isVisible }) {
-                    log.info("Automatic updates enabled, installing update...")
-                    Task {
-                        try await downloadAndInstallUpdate()
-                        await relaunchAfterUpdate()
-                    }
-                } else {
-                    log.info("Automatic updates enabled, but Loop is active. Skipping installation.")
-                }
-
-                return
-            }
-
-            shouldAutoPresentUpdateWindow = true
-
-            // If the updater has requested that the update window be presented for over 6 hours, automatically present it.
-            autoPresentUpdateWindowTask = Task {
-                log.info("Will automatically present update window in 6 hours if there is no activity")
-
-                try? await Task.sleep(for: .seconds(21600))
-
-                if !Task.isCancelled, shouldAutoPresentUpdateWindow {
-                    await showUpdateWindowIfEligible()
-                }
-
-                autoPresentUpdateWindowTask = nil
-            }
-        } else {
-            shouldAutoPresentUpdateWindow = false
-        }
-    }
-
-    private func makeUpdateCheckerTask() -> Task<(), Never>? {
-        Task {
-            while !Task.isCancelled {
-                // 6 hours
-                try? await Task.sleep(for: .seconds(21600))
-
-                await self.fetchLatestInfo()
-            }
-        }
-    }
-
-    private func makeIncludeDevelopmentVersionsObserver() -> Task<(), Never>? {
-        Task {
-            for await _ in Defaults.updates(.includeDevelopmentVersions, initial: false) {
-                guard !Task.isCancelled else { break }
-                await fetchLatestInfo()
-            }
-        }
-    }
-
-    private func makeUpdatesEnabledObserver() -> Task<(), Never>? {
-        Task {
-            for await _ in Defaults.updates(.updatesEnabled) {
-                guard !Task.isCancelled else { break }
-
-                updatesEnabled = Updater.checkIfUpdatesEnabled()
-
-                log.info("Updates enabled status changed to: \(updatesEnabled)")
-
-                if updatesEnabled {
-                    self.updateCheckerTask = makeUpdateCheckerTask()
-                    self.includeDevelopmentVersionsObserver = makeIncludeDevelopmentVersionsObserver()
-                } else {
-                    self.updateCheckerTask?.cancel()
-                    self.includeDevelopmentVersionsObserver?.cancel()
-                    self.updateCheckerTask = nil
-                    self.includeDevelopmentVersionsObserver = nil
-
-                    updateManifest = nil
-                    updateState = .unavailable
-                    progressBar = 0
-                }
-            }
-        }
     }
 
     func dismissWindow() {
@@ -171,7 +53,6 @@ final class Updater: ObservableObject {
         updateManifest = nil
         progressBar = 0
         installState = .ready
-        shouldAutoPresentUpdateWindow = false
     }
 
     /// Pulls the latest release information from GitHub and updates the app state accordingly.
@@ -209,7 +90,7 @@ final class Updater: ObservableObject {
                 let channel: UpdateChannel = includeDevelopmentVersions ? .development : .stable
 
                 let currentVersion = Bundle.main.appVersion?.filter(\.isASCII)
-                    .trimmingCharacters(in: .whitespaces) ?? "0.0.0"
+                    .trimmingCharacters(in: .whitespaces) ?? "0.0.1"
                 let currentBuild = Bundle.main.appBuild ?? 0
 
                 if let manifest = try await updateChecker.checkForUpdate(
@@ -246,7 +127,6 @@ final class Updater: ObservableObject {
     }
 
     func showUpdateWindowIfEligible() async {
-        shouldAutoPresentUpdateWindow = false
         guard updateState == .available else { return }
 
         if windowController?.window == nil {

@@ -21,8 +21,6 @@ final class WindowDragManager {
     /// This is to avoid repeated window resolution attempts during a non-window drag (e.g. in games).
     private var didFailToResolveDraggedWindow: Bool = false
 
-    private let previewController = PreviewController()
-
     private var leftMouseDraggedMonitor: PassiveEventMonitor?
     private var leftMouseUpMonitor: PassiveEventMonitor?
 
@@ -61,7 +59,6 @@ final class WindowDragManager {
         accessibilityCheckerTask = nil
         removeListeners()
         resetDragState()
-        previewController.close()
     }
 
     private func setupListeners() {
@@ -139,8 +136,6 @@ final class WindowDragManager {
         }
 
         Task {
-            previewController.close()
-
             if let context = resizeContext,
                !context.action.direction.isNoOp,
                let window = context.window,
@@ -177,8 +172,7 @@ final class WindowDragManager {
             initialWindowFrame = window.frame
 
             let context = ResizeContext(
-                window: window,
-                initialMousePosition: currentMousePosition
+                window: window
             )
             await context.refreshResolvedState()
             self.resizeContext = context
@@ -271,19 +265,10 @@ final class WindowDragManager {
 
             // Only update if direction actually changed
             if newDirection != oldDirection {
-                // Refresh accent colors in case user has enabled the wallpaper processor
-                Task {
-                    await AccentColorController.shared.refresh()
-                }
-
                 log.info("Window snapping direction changed: \(newDirection.debugDescription)")
 
                 resizeContext?.setScreen(to: screen)
                 resizeContext?.setAction(to: .init(newDirection), parent: nil)
-
-                if let context = resizeContext {
-                    previewController.open(context: context)
-                }
 
                 // Haptic feedback
                 if newDirection != .noAction, Defaults[.hapticFeedback] {
@@ -291,9 +276,8 @@ final class WindowDragManager {
                 }
             }
         } else if !oldDirection.isNoOp {
-            // Only close if we were showing something
+            // Clear the pending snap action when the cursor leaves the snap area.
             resizeContext?.setAction(to: .init(.noAction), parent: nil)
-            previewController.close()
         }
     }
 }

@@ -49,7 +49,6 @@ struct StashActionConfigurationView: View {
         action.unit ?? .percentage
     }
 
-    private let previewController = PreviewController()
     private let screenSize: CGSize = NSScreen.main?.frame.size ?? NSScreen.screens[0].frame.size
 
     init(action: Binding<WindowAction>, isPresented: Binding<Bool>) {
@@ -60,10 +59,6 @@ struct StashActionConfigurationView: View {
 
     var body: some View {
         LuminareForm {
-            ScreenView(isBlurred: action.sizeMode != .custom) {
-                ActionPreview(action: action)
-            }
-
             configurationSections()
             actionButtons()
         }
@@ -138,25 +133,6 @@ struct StashActionConfigurationView: View {
 
     private func actionButtons() -> some View {
         HStack(spacing: 8) {
-            Button("Preview") {}
-                .onLongPressGesture(
-                    // Allows for a press-and-hold gesture to show the preview
-                    minimumDuration: 100.0,
-                    maximumDistance: .infinity,
-                    pressing: { pressing in
-                        if pressing {
-                            guard let screen = NSScreen.main else { return }
-                            let context = ResizeContext(screen: screen)
-                            context.setAction(to: action, parent: nil)
-                            previewController.open(context: context)
-                        } else {
-                            previewController.close()
-                        }
-                    },
-                    perform: {}
-                )
-                .disabled(action.sizeMode != .custom)
-
             Button {
                 isPresented = false
             } label: {

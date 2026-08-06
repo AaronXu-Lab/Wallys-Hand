@@ -9,7 +9,7 @@ import Foundation
 
 extension Bundle {
     var appName: String {
-        getInfo("CFBundleName") ?? "⚠️"
+        getInfo("CFBundleDisplayName") ?? getInfo("CFBundleName") ?? "⚠️"
     }
 
     var displayName: String {
@@ -17,7 +17,7 @@ extension Bundle {
     }
 
     var bundleID: String {
-        getInfo("CFBundleIdentifier") ?? Bundle.main.bundleIdentifier ?? "com.MrKai77.loop"
+        getInfo("CFBundleIdentifier") ?? Bundle.main.bundleIdentifier ?? "com.xuweinan.LoopJust"
     }
 
     var copyright: String {

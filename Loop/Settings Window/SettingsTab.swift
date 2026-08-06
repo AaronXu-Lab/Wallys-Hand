@@ -13,11 +13,6 @@ import SwiftUI
 enum SettingsTab: @MainActor LuminareTabItem, CaseIterable {
     var id: String { title }
 
-    case icon
-    case accentColor
-    case radialMenu
-    case preview
-
     case behavior
     case keybinds
 
@@ -31,14 +26,6 @@ enum SettingsTab: @MainActor LuminareTabItem, CaseIterable {
 
     var color: Color {
         switch self {
-        case .icon:
-            Color(#colorLiteral(red: 0.2235294118, green: 0.3843137255, blue: 0.6274509804, alpha: 1))
-        case .accentColor:
-            Color(#colorLiteral(red: 0.8235294118, green: 0.3529411765, blue: 0.337254902, alpha: 1))
-        case .radialMenu:
-            Color(#colorLiteral(red: 0.8078431373, green: 0.6235294118, blue: 0.3254901961, alpha: 1))
-        case .preview:
-            Color(#colorLiteral(red: 0.2901960784, green: 0.5647058824, blue: 0.7882352941, alpha: 1))
         case .behavior:
             Color(#colorLiteral(red: 0.4373228079, green: 0.6609574352, blue: 0.2663080928, alpha: 1))
         case .keybinds:
@@ -54,10 +41,6 @@ enum SettingsTab: @MainActor LuminareTabItem, CaseIterable {
 
     var title: String {
         switch self {
-        case .icon: .init(localized: "Settings tab: Icon", defaultValue: "Icon")
-        case .accentColor: .init(localized: "Settings tab: Accent Color", defaultValue: "Accent Color")
-        case .radialMenu: .init(localized: "Settings tab: Radial Menu", defaultValue: "Radial Menu")
-        case .preview: .init(localized: "Settings tab: Preview", defaultValue: "Preview")
         case .behavior: .init(localized: "Settings tab: Behavior", defaultValue: "Behavior")
         case .keybinds: .init(localized: "Settings tab: Keybindings", defaultValue: "Keybinds")
         case .advanced: .init(localized: "Settings tab: Advanced", defaultValue: "Advanced")
@@ -68,10 +51,6 @@ enum SettingsTab: @MainActor LuminareTabItem, CaseIterable {
 
     var image: Image {
         switch self {
-        case .icon: Image(systemName: "sparkles")
-        case .accentColor: Image(systemName: "paintbrush.pointed.fill")
-        case .radialMenu: Image(.loop)
-        case .preview: Image(systemName: "inset.filled.center.rectangle")
         case .behavior: Image(systemName: "gearshape.fill")
         case .keybinds: Image(systemName: "keyboard.fill")
         case .advanced: Image(systemName: "wrench.adjustable.fill")
@@ -89,10 +68,6 @@ enum SettingsTab: @MainActor LuminareTabItem, CaseIterable {
 
     @ViewBuilder func view() -> some View {
         switch self {
-        case .icon: IconConfigurationView()
-        case .accentColor: AccentColorConfigurationView()
-        case .radialMenu: RadialMenuConfigurationView()
-        case .preview: PreviewConfigurationView()
         case .behavior: BehaviorConfigurationView()
         case .keybinds: KeybindsConfigurationView()
         case .advanced: AdvancedConfigurationView()
@@ -101,7 +76,6 @@ enum SettingsTab: @MainActor LuminareTabItem, CaseIterable {
         }
     }
 
-    static let themingTabs: [Self] = [.icon, .accentColor, .radialMenu, .preview]
     static let settingsTabs: [Self] = [.behavior, .keybinds]
     static let loopTabs: [Self] = [.advanced, .excludedApps, .about]
 }

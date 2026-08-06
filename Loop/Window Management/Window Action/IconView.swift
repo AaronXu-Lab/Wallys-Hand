@@ -9,9 +9,9 @@ import SwiftUI
 
 /// An icon to represent a `WindowAction`.
 /// When the action is a cycle, it will display the first action in the cycle.
-/// Icons will prioritize using the action's `icon` property, then a simple frame preview, and finally a default icon.
+/// Icons will prioritize using the action's `icon` property, then a simple frame representation, and finally a default icon.
 /// - the `icon` property is used for common actions like hide, minimize, growing and shrinking, which cannot be easily represented by a frame.
-/// - a simple frame preview is used for more general actions such as right half, maximize, and center, as well as custom keybinds when available.
+/// - a simple frame representation is used for more general actions such as right half, maximize, and center, as well as custom keybinds when available.
 /// - finally, a default icon is used for cycle actions and actions without a specific icon or frame representation as backup (just in case, they shouldn't be needed in practice).
 struct IconView: NSViewRepresentable {
     private let source: Source

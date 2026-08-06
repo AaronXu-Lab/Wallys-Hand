@@ -14,10 +14,10 @@ enum WindowFrameResolver {
     typealias FrameResult = (frame: CGRect, sidesToAdjust: Edge.Set?)
 
     /// Sync convenience that doesn't resolve window properties, nor records.
-    /// Use this for UI previews, icon generation, stash frame computation, and recursive calls.
+    /// Use this for icon generation, stash frame computation, and recursive calls.
     /// - Parameters:
     ///   - action: the window action to calculate the frame for.
-    ///   - window: the window to be manipulated (can be nil for UI previews).
+    ///   - window: the window to be manipulated (can be nil when no window state is needed).
     ///   - bounds: the boundary within which the window should be manipulated.
     /// - Returns: the computed frame (raw, without padding).
     static func getFrame(
@@ -128,7 +128,7 @@ enum WindowFrameResolver {
 // MARK: - Calculators
 
 extension WindowFrameResolver {
-    /// Calculates the target frame for the specified window action based on the direction, window, bounds, and whether it is a preview.
+    /// Calculates the target frame for the specified window action based on the direction, window, and bounds.
     /// - Parameters:
     ///   - sidesToAdjust: inout parameter for tracking which edges to adjust during grow/shrink actions.
     ///   - context: the context tracking frame and edge adjustment state.
@@ -589,10 +589,9 @@ extension WindowFrameResolver {
         let direction = action.direction
         let step = Defaults[.sizeIncrement] * ((direction == .larger || direction == .scaleUp || direction.willGrow) ? -1 : 1)
 
-        let previewPadding = Defaults[.previewPadding]
         let minSize = CGSize(
-            width: previewPadding + 100,
-            height: previewPadding + 100
+            width: 100,
+            height: 100
         )
 
         func insetAllEdges(_ rect: CGRect) -> CGRect {

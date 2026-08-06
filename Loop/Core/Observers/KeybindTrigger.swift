@@ -31,9 +31,6 @@ final class KeybindTrigger {
     /// Special events only contain the globe key, as it can also be used as an emoji key.
     private let specialEventKeys: [CGKeyCode] = [.kVK_Globe_Emoji]
 
-    /// Will be set to `false` if the mouse has been moved by LoopManager.
-    var canPassthroughNextSpecialEvent = true
-
     private var useTriggerDelay: Bool { Defaults[.triggerDelay] > 0.1 }
     private var doubleClickToTrigger: Bool { Defaults[.doubleClickToTrigger] }
     private var sideDependentTriggerKey: Bool { Defaults[.sideDependentTriggerKey] }
@@ -103,9 +100,7 @@ final class KeybindTrigger {
 
             // Special events such as the emoji key
             if specialEventKeys.contains(keyCode) {
-                let canPassthrough = canPassthroughNextSpecialEvent
-                canPassthroughNextSpecialEvent = true // reset
-                return canPassthrough ? .forward : .ignore
+                return .forward
             }
 
             // If this is a valid event, don't passthrough
@@ -141,7 +136,6 @@ final class KeybindTrigger {
 
         // Reset states
         pressedKeys = []
-        canPassthroughNextSpecialEvent = true
     }
 
     enum PerformKeybindResult {

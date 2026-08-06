@@ -14,7 +14,6 @@ import SwiftUI
 @Loggable
 @MainActor
 final class AdvancedConfigurationModel: ObservableObject {
-    @Published private(set) var showResetRadialMenuActionsSuccessIndicator = false
     @Published private(set) var showImportKeybindsSuccessIndicator = false
     @Published private(set) var showExportKeybindsSuccessIndicator = false
     @Published private(set) var showResetKeybindsSuccessIndicator = false
@@ -97,11 +96,6 @@ final class AdvancedConfigurationModel: ObservableObject {
         showSuccessIndicator(\.showResetKeybindsSuccessIndicator)
     }
 
-    func resetRadialMenuActions() {
-        Defaults.reset(.radialMenuActions)
-        showSuccessIndicator(\.showResetRadialMenuActionsSuccessIndicator)
-    }
-
     private func showSuccessIndicator(_ keyPath: ReferenceWritableKeyPath<AdvancedConfigurationModel, Bool>) {
         Task {
             withAnimation(.smooth(duration: 0.5)) {
@@ -118,7 +112,6 @@ final class AdvancedConfigurationModel: ObservableObject {
 }
 
 struct AdvancedConfigurationView: View {
-    @EnvironmentObject private var windowModel: SettingsWindowManager
     @Environment(\.luminareAnimation) var luminareAnimation
     @Environment(\.openURL) private var openURL
 
@@ -127,15 +120,11 @@ struct AdvancedConfigurationView: View {
     @Default(.useSystemWindowManagerWhenAvailable) var useSystemWindowManagerWhenAvailable
     @Default(.ignoreLowPowerMode) var ignoreLowPowerMode
     @Default(.animateWindowResizes) var animateWindowResizes
-    @Default(.hideOnNoSelection) var hideOnNoSelection
-    @Default(.disableCursorInteraction) var disableCursorInteraction
     @Default(.ignoreFullscreen) var ignoreFullscreen
     @Default(.hapticFeedback) var hapticFeedback
     @Default(.sizeIncrement) var sizeIncrement
-    @Default(.enableRadialMenuCustomization) var enableRadialMenuCustomization
 
     @State private var isConfirmingResetKeybinds: Bool = false
-    @State private var isConfirmingResetRadialMenuActions: Bool = false
 
     private var showLowPowerModeWarning: Bool {
         animateWindowResizes && !ignoreLowPowerMode && model.isLowPowerModeEnabled
@@ -144,13 +133,11 @@ struct AdvancedConfigurationView: View {
     var body: some View {
         LuminareForm {
             generalSection
-            radialMenuSection
             keybindsSection
             permissionsSection
                 .onAppear(perform: model.startTracking)
                 .onDisappear(perform: model.stopTracking)
         }
-        .animation(luminareAnimation, value: enableRadialMenuCustomization)
     }
 
     private var generalSection: some View {
@@ -183,7 +170,6 @@ struct AdvancedConfigurationView: View {
                     .animation(luminareAnimation, value: showLowPowerModeWarning)
             }
 
-            LuminareToggle("Disable cursor interaction", isOn: $disableCursorInteraction)
             LuminareToggle("Ignore fullscreen windows", isOn: $ignoreFullscreen)
             LuminareToggle("Haptic feedback", isOn: $hapticFeedback)
 
@@ -196,51 +182,6 @@ struct AdvancedConfigurationView: View {
                 clampsUpper: false,
                 suffix: Text("px", comment: "Unit symbol: pixels")
             )
-        }
-    }
-
-    private var radialMenuSection: some View {
-        LuminareSection(String(localized: "Radial Menu", comment: "Section header shown in settings")) {
-            LuminareToggle("Hide when no action is selected", isOn: $hideOnNoSelection)
-
-            LuminareToggle(isOn: $enableRadialMenuCustomization) {
-                HStack {
-                    Text("Allow radial menu customization")
-
-                    if enableRadialMenuCustomization {
-                        Button {
-                            windowModel.currentTab = .radialMenu
-                        } label: {
-                            Image(systemName: "arrow.up.right.square.fill")
-                                .foregroundStyle(.secondary)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-            }
-
-            if enableRadialMenuCustomization {
-                Button(role: .destructive) {
-                    isConfirmingResetRadialMenuActions = true
-                } label: {
-                    HStack {
-                        Text("Reset radial menu actions")
-
-                        if model.showResetRadialMenuActionsSuccessIndicator {
-                            Image(systemName: "checkmark")
-                                .foregroundStyle(.green)
-                                .bold()
-                        }
-                    }
-                }
-                .luminareRoundingBehavior(bottom: true)
-                .alert("Reset radial menu actions?", isPresented: $isConfirmingResetRadialMenuActions) {
-                    Button("Cancel", role: .cancel) {}
-                    Button("Reset", role: .destructive, action: model.resetRadialMenuActions)
-                } message: {
-                    Text("This will reset all radial menu actions to their default configuration.")
-                }
-            }
         }
     }
 

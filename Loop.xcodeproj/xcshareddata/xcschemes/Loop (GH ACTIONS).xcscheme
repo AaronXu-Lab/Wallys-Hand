@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A8E59C34297F5E9A0064D4BA"
-               BuildableName = "Loop.app"
+               BuildableName = "Loop Just.app"
                BlueprintName = "Loop"
                ReferencedContainer = "container:Loop.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A8E59C34297F5E9A0064D4BA"
-            BuildableName = "Loop.app"
+            BuildableName = "Loop Just.app"
             BlueprintName = "Loop"
             ReferencedContainer = "container:Loop.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A8E59C34297F5E9A0064D4BA"
-            BuildableName = "Loop.app"
+            BuildableName = "Loop Just.app"
             BlueprintName = "Loop"
             ReferencedContainer = "container:Loop.xcodeproj">
          </BuildableReference>

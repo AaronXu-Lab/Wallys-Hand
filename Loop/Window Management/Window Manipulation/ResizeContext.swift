@@ -29,9 +29,6 @@ final class ResizeContext {
     /// Used for larger/smaller actions where the sides to adjust need to persist across frame calculations
     var sidesToAdjust: Edge.Set?
 
-    /// Used to open radial menu at the correct position.
-    private(set) var initialMousePosition: CGPoint = .zero
-
     var resolvedWindowProperties: Window.ResolvedProperties?
     var resolvedRecord: WindowRecords.ResolvedRecord?
 
@@ -46,22 +43,20 @@ final class ResizeContext {
         bounds: CGRect? = nil,
         padding: PaddingConfiguration? = nil,
         action: WindowAction = .init(.noSelection),
-        parentAction: WindowAction? = nil,
-        initialMousePosition: CGPoint = .zero
+        parentAction: WindowAction? = nil
     ) {
         let frame = initialFrame ?? window?.frame ?? .zero
         let bounds = bounds ?? screen?.cgSafeScreenFrame ?? .zero
         let padding = padding ?? PaddingConfiguration.getConfiguredPadding(for: screen)
 
         self.window = window
-        self.cachedTargetFrame = ComputedFrame(raw: frame, normalized: .zero, padded: frame)
+        self.cachedTargetFrame = ComputedFrame(raw: frame, padded: frame)
         self.screen = screen
         self.bounds = bounds
         self.padding = padding
         self.paddedBounds = padding.applyToBounds(bounds, screen: screen)
         self.action = action
         self.parentAction = parentAction
-        self.initialMousePosition = initialMousePosition
         self.needsRecompute = !action.direction.isNoOp
     }
 
@@ -112,8 +107,7 @@ final class ResizeContext {
             screen: screen,
             bounds: newBounds,
             padding: .zero,
-            action: newAction,
-            initialMousePosition: initialMousePosition
+            action: newAction
         )
         context.window = window
         context.resolvedWindowProperties = resolvedWindowProperties
@@ -140,13 +134,6 @@ final class ResizeContext {
 
         let result = WindowFrameResolver.getFrame(resizeContext: self)
 
-        let normalized = CGRect(
-            x: (result.frame.minX - bounds.minX) / bounds.width,
-            y: (result.frame.minY - bounds.minY) / bounds.height,
-            width: result.frame.width / bounds.width,
-            height: result.frame.height / bounds.height
-        )
-
         let paddedFrame = padding.applyToWindow(
             frame: result.frame,
             paddedBounds: paddedBounds,
@@ -156,11 +143,10 @@ final class ResizeContext {
 
         cachedTargetFrame = ComputedFrame(
             raw: result.frame,
-            normalized: normalized,
             padded: paddedFrame
         )
 
-        log.info("Computed target frame - raw: \(cachedTargetFrame.raw), normalized: \(cachedTargetFrame.normalized) padded: \(cachedTargetFrame.padded), for action: \(action)")
+        log.info("Computed target frame - raw: \(cachedTargetFrame.raw), padded: \(cachedTargetFrame.padded), for action: \(action)")
     }
 }
 
@@ -172,18 +158,14 @@ extension ResizeContext {
         /// The frame calculated without any padding applied.
         let raw: CGRect
 
-        /// The frame inside a 1x1 frame, used for radial menu angle calculations.
-        let normalized: CGRect
-
         /// The frame with padding applied (outer bounds padding + inner window padding).
         /// When no padding is configured, this equals `raw`.
         var padded: CGRect
 
-        static let zero = ComputedFrame(raw: .zero, normalized: .zero, padded: .zero)
+        static let zero = ComputedFrame(raw: .zero, padded: .zero)
 
-        init(raw: CGRect, normalized: CGRect, padded: CGRect) {
+        init(raw: CGRect, padded: CGRect) {
             self.raw = raw
-            self.normalized = normalized
             self.padded = padded
         }
     }

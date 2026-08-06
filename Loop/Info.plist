@@ -6,7 +6,7 @@
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>com.MrKai77.loop</string>
+			<string>com.xuweinan.LoopJust</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>loop</string>
@@ -15,7 +15,5 @@
 	</array>
 	<key>NSAutoFillRequiresTextContentTypeForOneTimeCodeOnMac</key>
 	<true/>
-	<key>NSDockTilePlugIn</key>
-	<string>LoopDockTile.plugin</string>
 </dict>
 </plist>

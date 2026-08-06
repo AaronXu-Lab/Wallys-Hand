@@ -16,7 +16,7 @@
                   <BuildableReference
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "A8E59C34297F5E9A0064D4BA"
-                     BuildableName = "Loop.app"
+                     BuildableName = "Loop Just.app"
                      BlueprintName = "Loop"
                      ReferencedContainer = "container:Loop.xcodeproj">
                   </BuildableReference>
@@ -35,7 +35,7 @@
                   <BuildableReference
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "A8E59C34297F5E9A0064D4BA"
-                     BuildableName = "Loop.app"
+                     BuildableName = "Loop Just.app"
                      BlueprintName = "Loop"
                      ReferencedContainer = "container:Loop.xcodeproj">
                   </BuildableReference>
@@ -53,7 +53,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A8E59C34297F5E9A0064D4BA"
-               BuildableName = "Loop.app"
+               BuildableName = "Loop Just.app"
                BlueprintName = "Loop"
                ReferencedContainer = "container:Loop.xcodeproj">
             </BuildableReference>
@@ -83,18 +83,11 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A8E59C34297F5E9A0064D4BA"
-            BuildableName = "Loop.app"
+            BuildableName = "Loop Just.app"
             BlueprintName = "Loop"
             ReferencedContainer = "container:Loop.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "LOOP_SKIP_UPDATE_CHECK"
-            value = "1"
-            isEnabled = "NO">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -107,7 +100,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A8E59C34297F5E9A0064D4BA"
-            BuildableName = "Loop.app"
+            BuildableName = "Loop Just.app"
             BlueprintName = "Loop"
             ReferencedContainer = "container:Loop.xcodeproj">
          </BuildableReference>

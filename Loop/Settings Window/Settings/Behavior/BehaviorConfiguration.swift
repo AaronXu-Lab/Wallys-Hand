@@ -15,7 +15,6 @@ struct BehaviorConfigurationView: View {
     @Default(.launchAtLogin) var launchAtLogin
     @Default(.startHidden) var startHidden
     @Default(.hideMenuBarIcon) var hideMenuBarIcon
-    @Default(.animationConfiguration) var animationConfiguration
     @Default(.windowSnapping) var windowSnapping
     @Default(.suppressMissionControlOnTopDrag) var suppressMissionControlOnTopDrag
     @Default(.restoreWindowFrameOnDrag) var restoreWindowFrameOnDrag
@@ -26,7 +25,6 @@ struct BehaviorConfigurationView: View {
     @Default(.focusWindowOnResize) var focusWindowOnResize
     @Default(.respectStageManager) var respectStageManager
     @Default(.stageStripSize) var stageStripSize
-    @Default(.previewVisibility) var previewVisibility
     @Default(.stashedWindowVisiblePadding) var stashedWindowVisiblePadding
     @Default(.animateStashedWindows) var animateStashedWindows
     @Default(.shiftFocusWhenStashed) var shiftFocusWhenStashed
@@ -60,14 +58,6 @@ struct BehaviorConfigurationView: View {
 
             LuminareToggle("Hide menu bar icon", isOn: $hideMenuBarIcon)
 
-            LuminareSliderPicker(
-                "Animation speed",
-                AnimationConfiguration.allCases.reversed(),
-                selection: $animationConfiguration
-            ) { item in
-                Text(item.name)
-                    .monospaced()
-            }
         }
     }
 
@@ -92,12 +82,7 @@ struct BehaviorConfigurationView: View {
 
     private var cursorSection: some View {
         LuminareSection(String(localized: "Cursor", comment: "Section header shown in settings")) {
-            // This can only be enabled when the preview is visible.
-            // Because when the preview is disabled, the window moves live with cursor movement,
-            // so moving the cursor would be unusable.
-            if previewVisibility {
-                LuminareToggle("Move cursor with window", isOn: $moveCursorWithWindow)
-            }
+            LuminareToggle("Move cursor with window", isOn: $moveCursorWithWindow)
 
             LuminareToggle("Resize window under cursor", isOn: $resizeWindowUnderCursor)
 

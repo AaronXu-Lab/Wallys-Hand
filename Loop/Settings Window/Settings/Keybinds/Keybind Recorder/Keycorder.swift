@@ -182,7 +182,7 @@ struct Keycorder: View {
             // Set the valid keybind to the current selected one
             validCurrentKeybind = selectionKeybind
         } else {
-            // Set preview keybind back to previous one
+            // Restore the previously selected keybind
             selectionKeybind = validCurrentKeybind
         }
 

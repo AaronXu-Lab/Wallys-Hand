@@ -16,7 +16,6 @@ final class KeybindsConfigurationModel: ObservableObject {
 
 struct KeybindsConfigurationView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
-    @EnvironmentObject private var windowModel: SettingsWindowManager
     @StateObject private var model = KeybindsConfigurationModel()
 
     @Default(.triggerKey) private var triggerKey
@@ -25,14 +24,7 @@ struct KeybindsConfigurationView: View {
     @Default(.cycleModeRestartEnabled) private var cycleModeRestartEnabled
     @Default(.cycleBackwardsOnShiftPressed) private var cycleBackwardsOnShiftPressed
     @Default(.doubleClickToTrigger) private var doubleClickToTrigger
-    @Default(.middleClickTriggersLoop) private var middleClickTriggersLoop
-    @Default(.enableTriggerDelayOnMiddleClick) private var enableTriggerDelayOnMiddleClick
     @Default(.keybinds) private var keybinds
-
-    /// If the user has "enabled" the trigger delay.
-    private var useTriggerDelay: Bool {
-        Defaults[.triggerDelay] != 0
-    }
 
     /// Is there at least one keybind action that is a cycle?
     private var isCycleActionPresentInKeybinds: Bool {
@@ -42,10 +34,6 @@ struct KeybindsConfigurationView: View {
     /// Is Shift used in the trigger key?
     private var isShiftUsedByTriggerKey: Bool {
         triggerKey.map(\.baseModifier).contains(.kVK_Shift)
-    }
-
-    private var showMiddleClickTriggerDelayOption: Bool {
-        middleClickTriggersLoop && useTriggerDelay
     }
 
     private var showCycleRestartOption: Bool {
@@ -65,7 +53,6 @@ struct KeybindsConfigurationView: View {
         .animation(
             luminareAnimation,
             value: [
-                showMiddleClickTriggerDelayOption,
                 cycleModeRestartEnabled,
                 showCycleBackwardsOption
             ]
@@ -97,11 +84,6 @@ struct KeybindsConfigurationView: View {
                 )
 
                 LuminareToggle("Double-click to trigger", isOn: $doubleClickToTrigger)
-                LuminareToggle("Middle-click to trigger", isOn: $middleClickTriggersLoop)
-
-                if showMiddleClickTriggerDelayOption {
-                    LuminareToggle("Apply trigger delay on middle-click", isOn: $enableTriggerDelayOnMiddleClick)
-                }
             }
 
             if showCycleRestartOption || showCycleBackwardsOption {
@@ -162,22 +144,6 @@ struct KeybindsConfigurationView: View {
                 .padding()
             }
             .luminareRoundingBehavior(bottom: true)
-            .onChange(of: model.selectedKeybinds, initial: true) {
-                if model.selectedKeybinds.count == 1, let action = model.selectedKeybinds.first {
-                    windowModel.isPreviewingUserSelection = true
-                    windowModel.setPreviewedAction(to: action)
-                } else {
-                    windowModel.isPreviewingUserSelection = false
-                }
-            }
-            .onDisappear {
-                windowModel.isPreviewingUserSelection = false
-            }
         }
     }
-}
-
-#Preview {
-    KeybindsConfigurationView()
-        .frame(width: 300)
 }

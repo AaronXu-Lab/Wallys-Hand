@@ -553,7 +553,7 @@ actor UpdateInstaller {
             fileManager.homeDirectoryForCurrentUser.appendingPathComponent("Applications", isDirectory: true)
         )
         let destinationURL = LoopSupportPaths.canonical(
-            userAppsURL.appendingPathComponent("Loop.app", isDirectory: true)
+            userAppsURL.appendingPathComponent("Loop Just.app", isDirectory: true)
         )
 
         // Create ~/Applications if needed

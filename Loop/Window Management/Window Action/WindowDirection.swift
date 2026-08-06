@@ -14,7 +14,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     /// "Empty" actions.
     /// `noAction` is explicitly chosen or user-bound.
-    /// `noSelection` is the default state before any radial menu selection is made.
+    /// `noSelection` is the default state before an action is selected.
     case noAction = "NoAction", noSelection = "NoSelection"
 
     // General Actions
@@ -117,15 +117,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var willFocusWindow: Bool { WindowDirection.focus.contains(self) }
     var willCenter: Bool { [.center, .macOSCenter, .verticalCenterHalf, .horizontalCenterHalf].contains(self) }
     var isCustomizable: Bool { [.custom, .stash].contains(self) }
-
-    var hasRadialMenuAngle: Bool {
-        let noAngleActions: [WindowDirection] = [.noAction, .noSelection, .minimize, .minimizeOthers, .hide, .initialFrame, .undo, .cycle]
-        return !(noAngleActions.contains(self) || shouldFillRadialMenu || willChangeScreen || willChangeSpace || willAdjustSize || willShrink || willGrow || willMove || willFocusWindow)
-    }
-
-    var shouldFillRadialMenu: Bool {
-        [.fullscreen, .maximize, .almostMaximize, .maximizeHeight, .maximizeWidth, .fillAvailableSpace].contains(self) || willCenter
-    }
 
     var frameMultiplyValues: CGRect? {
         switch self {

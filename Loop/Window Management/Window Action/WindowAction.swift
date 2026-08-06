@@ -87,12 +87,6 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         self.keybind = keybind
     }
 
-    /// Initializes a cycle without a name or keybind. Used in radial menu.
-    /// - Parameter cycle: the cycle of window actions.
-    init(_ cycle: [WindowAction]) {
-        self.init(nil, cycle: cycle)
-    }
-
     // Generic Properties
     var direction: WindowDirection
     var keybind: Set<CGKeyCode>
@@ -223,26 +217,6 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         direction == .cycle && !keybind.contains(.kVK_Shift)
     }
 
-    /// Determines the angle to show in the radial menu, if applicable.
-    /// Examples of actions where the radial menu angle is not applicable:
-    /// - No action (noAction)
-    /// - Hiding the window (hide)
-    /// - Minimizing the window (minimize)
-    /// - Cycling through actions (cycle) - the selected action's angle will be used instead within the radial menu's selected action logic.
-    ///
-    /// - Parameter context: the resize context containing the pre-computed target frame.
-    /// - Returns: the angle to show in the radial menu, or `nil` if the action does not have a radial menu angle.
-    func radialMenuAngle(context: ResizeContext) -> Angle? {
-        guard direction.hasRadialMenuAngle else {
-            return nil
-        }
-
-        let targetFrame = context.getTargetFrame().normalized
-        let angle = CGPoint(x: 0.5, y: 0.5).angle(to: targetFrame.center)
-        let result: Angle = angle * -1
-
-        return result.normalized()
-    }
 }
 
 extension WindowAction: CustomStringConvertible {

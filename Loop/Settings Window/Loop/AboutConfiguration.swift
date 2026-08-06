@@ -155,9 +155,7 @@ struct AboutConfigurationView: View {
     @ObservedObject private var updater = Updater.shared
 
     @Default(.timesLooped) private var timesLooped
-    @Default(.currentIcon) private var currentIcon
     @Default(.includeDevelopmentVersions) private var includeDevelopmentVersions
-    @Default(.automaticallyUpdate) private var automaticallyUpdate
 
     private var updateButtonEnabled: Bool {
         updater.updatesEnabled || model.isHoveringOverUpdateButton
@@ -187,7 +185,7 @@ struct AboutConfigurationView: View {
     private var iconHeader: some View {
         LuminareSection {
             HStack {
-                if let image = NSImage(named: currentIcon) {
+                if let image = NSApp.applicationIconImage {
                     Image(nsImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -270,16 +268,6 @@ struct AboutConfigurationView: View {
             .luminareRoundingBehavior(top: true)
 
             LuminareToggle("Include development versions", isOn: $includeDevelopmentVersions)
-
-            LuminareToggle(isOn: $automaticallyUpdate) {
-                Text("Automatically install updates")
-                    .padding(.trailing, automaticallyUpdate ? 4 : 0)
-                    .luminareToolTip(attachedTo: .topTrailing, hidden: !automaticallyUpdate) {
-                        Text("Updates will only be installed when \(Bundle.main.appName) is in the background.")
-                            .padding(6)
-                    }
-                    .animation(luminareAnimation, value: automaticallyUpdate)
-            }
         }
     }
 

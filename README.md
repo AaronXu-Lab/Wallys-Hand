@@ -1,17 +1,17 @@
 <div align="center">
   <img width="225" height="225" src="/assets/graphics/Classic.png" alt="Logo">
-  <h1><b>Loop</b></h1>
+  <h1><b>Loop Just</b></h1>
   <p>Window management made elegant.<br>
-  <a href="https://github.com/MrKai77/Loop#features"><strong>Explore Loop »</strong></a><br><br>
+  <a href="https://github.com/MrKai77/Loop#features"><strong>Explore Loop Just »</strong></a><br><br>
   <a href="https://github.com/MrKai77/Loop/releases/latest/download/Loop.zip">Download for macOS</a><br>
   <i>~ Compatible with macOS 13 and later. ~</i></p>
 </div>
 
-Loop is a macOS app that simplifies window management for you. You can effortlessly choose your window direction using a radial menu triggered by a simple key press, and customize it according to your preferences with personalized colors and settings. You can easily move, resize, and arrange your windows with just a few clicks, saving you valuable time and energy.
+Loop Just is a macOS app that simplifies window management with keyboard shortcuts. Assign actions to the trigger key to move, resize, and arrange windows quickly, saving valuable time and energy.
 
 > [!NOTE]
 >
-> Loop is constantly evolving, with new features and improvements added regularly to enhance your window management experience on macOS.
+> Loop Just is constantly evolving, with new features and improvements added regularly to enhance your window management experience on macOS.
 
 <h6 align="center">
   <img src="assets/graphics/loop_demo.gif" alt="Loop Demo">
@@ -36,27 +36,15 @@ Loop is a macOS app that simplifies window management for you. You can effortles
 
 ## Features
 
-### Radial Menu
-
-The Radial Menu allows you to manipulate windows using your mouse/trackpad. Hold down the trigger key and move your cursor in the desired direction to move and resize the window.
-
-<div><video controls src="https://github.com/user-attachments/assets/658f7043-79a1-4690-83b6-a714fe6245c8" muted="false"></video></div>
-
-### Preview
-
-The preview window enables you to see the resize action *before* committing to it.
-
-<div><video controls src="https://github.com/user-attachments/assets/5ecb3ae8-f295-406f-b968-31e539f4a098" muted="false"></video></div>
-
 ### Keyboard Shortcuts
 
-Loop allows you to assign any key in tandem with the trigger key to initiate a window manipulation action.
+Loop Just allows you to assign any key in tandem with the trigger key to initiate a window manipulation action.
 
 <div><video controls src="https://github.com/user-attachments/assets/d865329f-0533-4eeb-829d-9aa6159f454b" muted="false"></video></div>
 
 ### Cycles
 
-Loop can become very powerful when paired with cycles. These enable you to perform multiple window manipulations in quick succession by pressing the same key combination repeatedly, or by left-clicking repeatedly!
+Loop Just can become very powerful when paired with cycles. These enable you to perform multiple window manipulations in quick succession by pressing the same key combination repeatedly.
 
 <div><video controls src="https://github.com/user-attachments/assets/1adb1325-775d-4687-9085-71c7f775d65d" muted="false"></video></div>
 
@@ -65,20 +53,6 @@ Loop can become very powerful when paired with cycles. These enable you to perfo
 Hide windows at the screen edge to declutter your workspace. Hover near the edge or use a keybind to access them whenever you need.
 
 <div><video controls src="https://github.com/user-attachments/assets/080ba2fb-41b3-4b39-9000-a76f2fc794ed" muted="false"></video></div>
-
-### Theming
-
-#### Radial Menu
-
-The radial menu is fully customizable in terms of width, shape, and color. It is also completely optional and can be disabled. Both the cursor interaction and the radial menu itself are independently toggleable.
-
-<div><video controls src="https://github.com/user-attachments/assets/b2d3f6c8-dd68-4ac2-a30a-19f36a8fd94d" muted="false"></video></div>
-
-#### Preview
-
-Adjust the padding, corner radius, border color, and border width of the optional preview window.
-
-<div><video controls src="https://github.com/user-attachments/assets/fc107861-8125-42c2-b987-2fff554078d5" muted="false"></video></div>
 
 ## Usage
 
@@ -96,7 +70,7 @@ Navigate to the [release page](https://github.com/MrKai77/Loop/releases/latest) 
 
 ### Triggering
 
-Loop uses a trigger key to function. This key must be held down or pressed to activate certain features within Loop. To access the radial menu, hold down the trigger key and move the cursor in the desired direction. Users who prefer keyboard shortcuts can assign a key to work with the trigger key, activating specific actions. The trigger key can be set in the "Behavior" tab of the "Settings" section. The trigger key can consist of one or multiple keys.
+Loop Just uses a trigger key to function. Users can assign a key to work with the trigger key, activating specific actions. The trigger key can be set in the "Behavior" tab of the "Settings" section and can consist of one or multiple keys.
 
 To set Caps Lock as your trigger key, you have two options:
 
@@ -105,7 +79,7 @@ To set Caps Lock as your trigger key, you have two options:
 1. Go to System Settings → Keyboard → "Keyboard Shortcuts...".
 2. In the "Modifier Keys" tab, remap `Caps Lock (⇪) key` to `(^) Control`.
 3. Repeat this remapping process for every connected keyboard.
-4. In Loop, select the `Right Control` key as your trigger.
+4. In Loop Just, select the `Right Control` key as your trigger.
 
 #### b. Use an external App
 
@@ -114,7 +88,7 @@ To set Caps Lock as your trigger key, you have two options:
 
 #### c. Shell/AppleScript
 
-Loop can be controlled via shell commands or AppleScript using its URL scheme:
+Loop Just can be controlled via shell commands or AppleScript using its URL scheme:
 
 ```bash
 # Shell examples
@@ -123,7 +97,7 @@ open "loop://action/maximize"     # Maximize window
 open "loop://screen/next"         # Move to next screen
 
 # AppleScript examples
-osascript -e 'tell application "Loop" to activate'
+osascript -e 'tell application "Loop Just" to activate'
 osascript -e 'open location "loop://direction/left"'
 ```
 
@@ -283,63 +257,6 @@ For an extensive guide on how to contribute, check out the [contributing guide](
       <td>✅</td>
     </tr>
     <tr>
-      <td>Preview&nbsp;Window</td>
-      <td>✅</td>
-      <td>✅</td>
-      <td>✅</td>
-      <td>✅</td>
-      <td>✅</td>
-      <td>✅</td>
-      <td>✅</td>
-      <td>✅</td>
-      <td>✅</td>
-      <td>❌</td>
-      <td>✅</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>✅</td>
-      <td>✅</td>
-      <td>❌</td>
-    </tr>
-    <tr>
-      <td>Theming&nbsp;Options</td>
-      <td>✅</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-    </tr>
-    <tr>
-      <td>Modifier&nbsp;+&nbsp;Mouse</td>
-      <td>✅</td>
-      <td>❌</td>
-      <td>✅</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>✅</td>
-    </tr>
-    <tr>
       <td>Modifier&nbsp;+&nbsp;Arrows</td>
       <td>✅</td>
       <td>✅</td>
@@ -356,44 +273,6 @@ For an extensive guide on how to contribute, check out the [contributing guide](
       <td>✅</td>
       <td>❌</td>
       <td>✅</td>
-      <td>✅</td>
-    </tr>
-    <tr>
-      <td>Modifier&nbsp;+&nbsp;Trackpad</td>
-      <td>✅</td>
-      <td>❌</td>
-      <td>✅</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>✅</td>
-      <td>✅</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>✅</td>
-    </tr>
-    <tr>
-      <td>Trackpad&nbsp;Gestures</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>✅</td>
-      <td>❌</td>
-      <td>✅</td>
-      <td>❌</td>
-      <td>✅</td>
-      <td>✅</td>
-      <td>✅</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
       <td>✅</td>
     </tr>
     <tr>
