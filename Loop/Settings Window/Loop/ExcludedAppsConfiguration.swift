@@ -39,12 +39,8 @@ struct ExcludedAppsConfigurationView: View {
                 } emptyView: {
                     HStack {
                         Spacer()
-                        VStack {
-                            Text("No excluded applications")
-                                .font(.title3)
-                            Text("Press \"Add\" to add an application")
-                                .font(.caption)
-                        }
+                        Text("No excluded applications")
+                            .font(.title3)
                         Spacer()
                     }
                     .foregroundStyle(.secondary)

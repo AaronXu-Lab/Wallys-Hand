@@ -132,12 +132,8 @@ struct KeybindsConfigurationView: View {
             } emptyView: {
                 HStack {
                     Spacer()
-                    VStack {
-                        Text("No keybinds")
-                            .font(.title3)
-                        Text("Press \"Add\" to add a keybind")
-                            .font(.caption)
-                    }
+                    Text("No keybinds")
+                        .font(.title3)
                     Spacer()
                 }
                 .foregroundStyle(.secondary)

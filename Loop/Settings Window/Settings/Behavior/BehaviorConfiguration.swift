@@ -57,7 +57,6 @@ struct BehaviorConfigurationView: View {
             LuminareToggle("Start hidden", isOn: $startHidden)
 
             LuminareToggle("Hide menu bar icon", isOn: $hideMenuBarIcon)
-
         }
     }
 
@@ -113,14 +112,7 @@ struct BehaviorConfigurationView: View {
             }
 
             if windowSnapping {
-                LuminareToggle(isOn: $suppressMissionControlOnTopDrag) {
-                    Text("Suppress Mission Control")
-                        .padding(.trailing, 4)
-                        .luminareToolTip(attachedTo: .topTrailing) {
-                            Text("Whether to allow Mission Control to open when windows\nare dragged to the top of the screen.")
-                                .padding(6)
-                        }
-                }
+                LuminareToggle("Suppress Mission Control", isOn: $suppressMissionControlOnTopDrag)
             }
         }
     }

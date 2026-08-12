@@ -76,8 +76,7 @@ enum SettingsTab: @MainActor LuminareTabItem, CaseIterable {
         }
     }
 
-    static let settingsTabs: [Self] = [.behavior, .keybinds]
-    static let loopTabs: [Self] = [.advanced, .excludedApps, .about]
+    static let allTabs: [Self] = [.behavior, .keybinds, .advanced, .excludedApps, .about]
 }
 
 struct SettingsTabIconView: View {

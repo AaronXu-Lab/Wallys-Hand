@@ -16,16 +16,6 @@ struct LoopApp: App {
 
     var body: some Scene {
         MenuBarExtra(Bundle.main.appName, image: "menubarIcon", isInserted: Binding.constant(!hideMenuBarIcon)) {
-            Button {
-                if let url = URL(string: "https://github.com/sponsors/MrKai77") {
-                    NSWorkspace.shared.open(url)
-                }
-            } label: {
-                Label("Donate", systemImage: "heart")
-            }
-
-            Divider()
-
             Text(
                 "Version \(VersionDisplay.current.fullDisplay)",
                 comment: "Format: Version [version, e.g. 1.3.0] ([build number, e.g. 1500])"

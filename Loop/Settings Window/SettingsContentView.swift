@@ -16,8 +16,7 @@ struct SettingsContentView: View {
     var body: some View {
         LuminareDividedStack {
             LuminareSidebar {
-                LuminareSidebarSection("Settings", selection: $model.currentTab, items: SettingsTab.settingsTabs)
-                LuminareSidebarSection("\(Bundle.main.appName)", selection: $model.currentTab, items: SettingsTab.loopTabs)
+                LuminareSidebarSection("Settings", selection: $model.currentTab, items: SettingsTab.allTabs)
             }
             .frame(width: 230)
             .padding(.top, titleBarHeight)
@@ -27,8 +26,6 @@ struct SettingsContentView: View {
                 model.currentTab.view()
             } header: {
                 HStack {
-                    model.currentTab.icon
-
                     Text(model.currentTab.title)
                         .font(.title2)
 
