@@ -1,5 +1,5 @@
 name: Suggest New Icon
-description: Add your icon to Loop.
+description: Add your icon to Loop Just.
 title: "🍱 Add [icon name]"
 labels: ["Feature"]
 body:
@@ -14,7 +14,7 @@ body:
   - type: input
     attributes:
       label: Icon Name
-      description: Provide the exact name of the icon that should appear in Loop.
+      description: Provide the exact name of the icon that should appear in Loop Just.
       placeholder: Black Hole
     validations:
       required: true
@@ -57,4 +57,4 @@ body:
     attributes:
       value: |
         Please keep in mind that not all icons may be approved, as they do take up quite a bit of space in the app itself.
-        Thank you for taking the time to make icons for Loop!
+        Thank you for taking the time to make icons for Loop Just!

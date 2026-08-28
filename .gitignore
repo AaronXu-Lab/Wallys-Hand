@@ -1,5 +1,5 @@
-# Loop Build
-Loop.app
+# Loop Just Build
+Loop Just.app
 
 # Mac OS X
 *.DS_Store
@@ -12,6 +12,6 @@ Loop.app
 *.xcuserstate
 xcuserdata
 project.xcworkspace
-Loop.zip
+Loop Just.zip
 Build/
 DerivedData

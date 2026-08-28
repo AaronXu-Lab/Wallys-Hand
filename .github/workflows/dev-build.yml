@@ -32,12 +32,12 @@ jobs:
           # Set VERSION
           latest_tag=$APP_VERSION
           echo "Latest tag: $latest_tag"
-          sed -i -e "/VERSION =/ s/= .*/= $latest_tag/" Loop/Config.xcconfig
+          sed -i -e "/VERSION =/ s/= .*/= $latest_tag/" Loop-Just/Config.xcconfig
 
           # Set BUILD_NUMBER
           latest_commit_number=$APP_BUILD
           echo "Latest commit number: $latest_commit_number"
-          sed -i -e "/BUILD_NUMBER =/ s/= .*/= $latest_commit_number/" Loop/Config.xcconfig
+          sed -i -e "/BUILD_NUMBER =/ s/= .*/= $latest_commit_number/" Loop-Just/Config.xcconfig
 
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
           echo "APP_BUILD=$APP_BUILD" >> $GITHUB_ENV
@@ -74,58 +74,58 @@ jobs:
         env:
           PROVISION_PROFILE_BASE64: ${{ secrets.PROVISION_PROFILE_BASE64 }}
         run: |
-          PP_PATH=$RUNNER_TEMP/Loop.provisionprofile
-          echo -n "$PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
+          PP_PATH="$RUNNER_TEMP/Loop Just.provisionprofile"
+          echo -n "$PROVISION_PROFILE_BASE64" | base64 --decode -o "$PP_PATH"
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+          cp "$PP_PATH" ~/Library/MobileDevice/Provisioning\ Profiles
           
-      - name: 🛠️ Build Loop
+      - name: 🛠️ Build Loop Just
         run: |
           set -o pipefail && xcodebuild \
             archive \
-            -project Loop.xcodeproj/ \
-            -scheme "Loop (GH ACTIONS)" \
+            -project Loop-Just.xcodeproj/ \
+            -scheme "Loop Just (GH ACTIONS)" \
             -destination 'generic/platform=macOS' \
-            -archivePath dist/Loop.xcarchive \
+            -archivePath "dist/Loop Just.xcarchive" \
             -allowProvisioningUpdates \
             -skipMacroValidation \
             -skipPackagePluginValidation \
             -showBuildTimingSummary \
             | xcbeautify
 
-      - name: 🥡 Export Loop.app
+      - name: 🥡 Export Loop Just.app
         run: |
           xcodebuild \
             -exportArchive \
-            -archivePath dist/Loop.xcarchive \
+            -archivePath "dist/Loop Just.xcarchive" \
             -exportPath dist/ \
             -exportOptionsPlist assets/ExportOptions.plist \
             -allowProvisioningUpdates
 
-      - name: 🤏 Compress Loop for notarization
+      - name: 🤏 Compress Loop Just for notarization
         run: |
-          ditto -c -k --sequesterRsrc --keepParent "dist/Loop.app" "dist/Loop.zip"
+          ditto -c -k --sequesterRsrc --keepParent "dist/Loop Just.app" "dist/Loop Just.zip"
       
-      - name: ✅ Notarize Loop
+      - name: ✅ Notarize Loop Just
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PWD: ${{ secrets.APPLE_ID_PWD }}
         run: |
-          xcrun notarytool store-credentials Loop --apple-id "$APPLE_ID" --team-id "$APPLE_TEAM_ID" --password "$APPLE_ID_PWD"
-          xcrun notarytool submit "dist/Loop.zip" --keychain-profile "Loop" --wait
-          xcrun stapler staple "dist/Loop.app"
+          xcrun notarytool store-credentials "Loop Just" --apple-id "$APPLE_ID" --team-id "$APPLE_TEAM_ID" --password "$APPLE_ID_PWD"
+          xcrun notarytool submit "dist/Loop Just.zip" --keychain-profile "Loop Just" --wait
+          xcrun stapler staple "dist/Loop Just.app"
 
-      - name: 🤏 Compress notarized Loop
+      - name: 🤏 Compress notarized Loop Just
         run: |
-          rm dist/Loop.zip
-          ditto -c -k --sequesterRsrc --keepParent "dist/Loop.app" "dist/Loop.zip"
+          rm "dist/Loop Just.zip"
+          ditto -c -k --sequesterRsrc --keepParent "dist/Loop Just.app" "dist/Loop Just.zip"
 
-      - name: ⬆️ Upload Loop
+      - name: ⬆️ Upload Loop Just
         uses: actions/upload-artifact@v7
         with:
-          name: Loop
-          path: dist/Loop.zip
+          name: Loop Just
+          path: dist/Loop Just.zip
 
       - name: 💬 Comment on PR with build link
         if: "${{ !inputs.release-new-build }}"
@@ -195,7 +195,7 @@ jobs:
           toTag: "prerelease"
           configurationJson: |
             {
-              "template": "## 📰 Development News\n- 💸 Support Loop by [sponsoring the project](https://github.com/sponsors/MrKai77)!\n- 🌐 Let us know if you are interested in localizing Loop to your language :)\n- 💬 Join our [Discord server](https://discord.gg/2CZ2N6PKjq)!\n#{{CHANGELOG}}\n## 💭 Uncategorized\n#{{UNCATEGORIZED}}\n---\nMinimum macOS version: 13.0",
+              "template": "## 📰 Development News\n- 💸 Support Loop Just by [sponsoring the project](https://github.com/sponsors/MrKai77)!\n- 🌐 Let us know if you are interested in localizing Loop Just to your language :)\n- 💬 Join our [Discord server](https://discord.gg/2CZ2N6PKjq)!\n#{{CHANGELOG}}\n## 💭 Uncategorized\n#{{UNCATEGORIZED}}\n---\nMinimum macOS version: 13.0",
               "pr_template": "- #{{TITLE}} ##{{NUMBER}}",
               "categories": [
                 {
@@ -221,7 +221,7 @@ jobs:
         if: "${{ inputs.release-new-build }}"
         with:
           allowUpdates: true
-          artifacts: dist/Loop.zip
+          artifacts: dist/Loop Just.zip
           commit: develop
           bodyFile: CHANGELOG.md
           name: "${{ env.APP_VERSION }} (${{ env.APP_BUILD }})"

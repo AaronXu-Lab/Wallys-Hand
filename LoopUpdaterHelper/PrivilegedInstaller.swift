@@ -167,7 +167,7 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
             operation: operation,
             rollbackID: rollbackID,
             role: "staged bundle",
-            expectedDescription: "Loop staging directory"
+            expectedDescription: "Loop Just staging directory"
         )
         try ensurePathInside(
             rollbackContainerURL,
@@ -175,7 +175,7 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
             operation: operation,
             rollbackID: rollbackID,
             role: "rollback container",
-            expectedDescription: "Loop rollback directory"
+            expectedDescription: "Loop Just rollback directory"
         )
         try ensurePathInside(
             backupBundleURL,
@@ -183,7 +183,7 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
             operation: operation,
             rollbackID: rollbackID,
             role: "backup bundle",
-            expectedDescription: "Loop rollback directory"
+            expectedDescription: "Loop Just rollback directory"
         )
 
         return AtomicSwapPaths(
@@ -218,7 +218,7 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
             operation: operation,
             rollbackID: rollbackID,
             role: "rollback container",
-            expectedDescription: "Loop rollback directory"
+            expectedDescription: "Loop Just rollback directory"
         )
         try ensurePathInside(
             backupBundleURL,
@@ -226,7 +226,7 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
             operation: operation,
             rollbackID: rollbackID,
             role: "backup bundle",
-            expectedDescription: "Loop rollback directory"
+            expectedDescription: "Loop Just rollback directory"
         )
 
         return RestorePaths(

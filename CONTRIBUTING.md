@@ -1,21 +1,21 @@
-# Contributing to Loop
+# Contributing to Loop Just
 
-Welcome to Loop. If you're here, you may be interested in contributing to this awesome project. Well, let's get to it!
+Welcome to Loop Just. If you're here, you may be interested in contributing to this awesome project. Well, let's get to it!
 
 If at any time you need help, contact us on [Discord](https://discord.gg/2CZ2N6PKjq) or create an issue on GitHub.
 
 ## Areas of focus
 
-You can improve Loop by doing some of the following:
+You can improve Loop Just by doing some of the following:
 
-1. Add your language to Loop, or if you see someone make a grammatical error or mistake, help fix it!
+1. Add your language to Loop Just, or if you see someone make a grammatical error or mistake, help fix it!
 2. Have an idea that you can proactively add, or see an area where some code can be changed? Submit an issue and explain what you wish to do, and if it's greenlit, push your changes into a PR!
 3. Got an icon? We LOVE icons, especially good ones! Make a great icon the team likes, and it *may* be included for everyone to use.
 4. Got a bug to report? Head over to the issues tab; here, you'll be walked through what you need!
 
 ## AI usage policy
 
-Loop has a strict policy regarding AI-assisted contributions.  
+Loop Just has a strict policy regarding AI-assisted contributions.
 Before contributing, please read and follow our [AI Usage Policy](AI_POLICY.md) if you plan to use AI in your contribution :)
 
 # Contributing new code
@@ -33,11 +33,11 @@ Well, it's very easy: fork the repo, push your changes to the fork, and submit a
 
 ## Forking
 
-Forking creates a personal copy of the Loop repository under your GitHub account. This allows you to make changes without affecting the original project. To fork, go to the Loop repository page on GitHub and click the "Fork" button at the top right of your screen. Once forked, you'll see:
+Forking creates a personal copy of the Loop Just repository under your GitHub account. This allows you to make changes without affecting the original project. To fork, go to the Loop Just repository page on GitHub and click the "Fork" button at the top right of your screen. Once forked, you'll see:
 
 ```sh
-Loop
-forked from MrKai77/Loop
+Loop Just
+forked from MrKai77/Loop-Just
 ```
 
 ## Cloning your fork
@@ -45,12 +45,12 @@ forked from MrKai77/Loop
 Now, you've forked our repo. What next? Don't stress. First, go to where you want to code and execute some quick command lines! Here's how to do it!
 
 ```sh
-cd downloads # Or the directory where you wish to clone Loop
+cd downloads # Or the directory where you wish to clone Loop Just
 git clone https://github.com/{your-name}/Loop.git
 # Remember to replace {your-name} with your actual GitHub username!
-# For example: https://github.com/MrKai77/Loop.git
-cd Loop
-open Loop.xcodeproj
+# For example: https://github.com/MrKai77/Loop-Just.git
+cd Loop-Just
+open Loop-Just.xcodeproj
 ```
 
 Once you've got your fork, it'll auto-open in Xcode!
@@ -76,17 +76,17 @@ Now, let's tackle Xcode. If you followed the method above, you should be automat
 
 </details>
 
-### Signing Loop
+### Signing Loop Just
 
 1. Wait until all dependencies are resolved. This should take a couple of minutes at most.
-2. In the file browser on the left, click `Loop` at the very top. It's the icon with the App Store logo.
+2. In the file browser on the left, click `Loop Just` at the very top. It's the icon with the App Store logo.
 3. In the pane that opens on the right, click `Signing & Capabilities` at the top.
 4. Under `Signing`, change the `Team` dropdown to your ID.
 5. Under `Signing → macOS`, change the `Signing Certificate` to `Development`.
 
 ### Building
 
-Now that you've signed Loop with your developer account, it's time to build! First, validate if the current build works <kbd>⌘</kbd> + <kbd>R</kbd> (this command will run Loop). If the build was successful, you should see an alert that Loop requires Accessibility permissions; if you change any code related to Loop's movement or core code, you will need to enable this. For cases of simple code changes, this is not needed.
+Now that you've signed Loop Just with your developer account, it's time to build! First, validate if the current build works <kbd>⌘</kbd> + <kbd>R</kbd> (this command will run Loop Just). If the build was successful, you should see an alert that Loop Just requires Accessibility permissions; if you change any code related to Loop Just's movement or core code, you will need to enable this. For cases of simple code changes, this is not needed.
 
 ### Formatting
 
@@ -127,7 +127,7 @@ func isSimilar(to color: NSColor, threshold: CGFloat = 0.1) -> Bool { ... }
 
 ## Low-effort contributions
 
-While we appreciate all interest in improving Loop, low-effort pull requests may be closed.
+While we appreciate all interest in improving Loop Just, low-effort pull requests may be closed.
 
 Examples of low-effort contributions include:
 - Fixing a single typo or grammatical error.
@@ -168,21 +168,21 @@ git push origin develop
 
 ## Before we get started
 
-We love icons, just look at how many we already have! We love talented designers, and we love people who express their creativity for Loop. But as Loop grows and the app quality improves, some previous icons may be removed, making room for new icons. Do not feel disheartened, as you've shaped Loop!
+We love icons, just look at how many we already have! We love talented designers, and we love people who express their creativity for Loop Just. But as Loop Just grows and the app quality improves, some previous icons may be removed, making room for new icons. Do not feel disheartened, as you've shaped Loop Just!
 
 ## How do I submit my icon?
 
-To submit an icon, simply go to the "Issues" tab here on GitHub, and press the "New issue" button. Then press the "Suggest new icon" button, where you will be guided through the process of proposing your icon to the project! If it gets rejected, then you may get some feedback in the areas we wish to focus on. If your icon has been dismissed, remember, this isn't your only chance. Come back more invigorated and show us your best! You don't need to be a professional designer, you just need to capture the feel of Loop in your design.
+To submit an icon, simply go to the "Issues" tab here on GitHub, and press the "New issue" button. Then press the "Suggest new icon" button, where you will be guided through the process of proposing your icon to the project! If it gets rejected, then you may get some feedback in the areas we wish to focus on. If your icon has been dismissed, remember, this isn't your only chance. Come back more invigorated and show us your best! You don't need to be a professional designer, you just need to capture the feel of Loop Just in your design.
 
 # Localisation
 
-We wish to localise (localize?) Loop in every language possible!
+We wish to localise (localize?) Loop Just in every language possible!
 
 For quick, and easy localisation, we use [Crowdin](https://crowdin.com/project/loop-i18n).
 
 ## Get started
 
-1. Go to the [Loop Crowdin page](https://crowdin.com/project/loop-i18n).
+1. Go to the [Loop Just Crowdin page](https://crowdin.com/project/loop-i18n).
 2. Click the `Join the team` button.
 3. Login or signup with your GitHub account.
 4. Add a message to the top of the page, and click `Request Access`.

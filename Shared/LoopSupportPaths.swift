@@ -13,24 +13,24 @@ enum LoopSupportPaths {
         canonical(homeDirectory.appendingPathComponent("Library/Application Support", isDirectory: true))
     }
 
-    /// Returns the Loop application support root under the supplied home directory.
-    static func loopDirectory(homeDirectory: URL) -> URL {
-        canonical(appSupportDirectory(homeDirectory: homeDirectory).appendingPathComponent("Loop", isDirectory: true))
+    /// Returns Loop Just's application support root under the supplied home directory.
+    static func loopJustDirectory(homeDirectory: URL) -> URL {
+        canonical(appSupportDirectory(homeDirectory: homeDirectory).appendingPathComponent("Loop Just", isDirectory: true))
     }
 
-    /// Returns the Loop backups directory under the supplied home directory.
+    /// Returns the Loop Just backups directory under the supplied home directory.
     static func backupsDirectory(homeDirectory: URL) -> URL {
-        canonical(loopDirectory(homeDirectory: homeDirectory).appendingPathComponent("Backups", isDirectory: true))
+        canonical(loopJustDirectory(homeDirectory: homeDirectory).appendingPathComponent("Backups", isDirectory: true))
     }
 
-    /// Returns the Loop staging directory under the supplied home directory.
+    /// Returns the Loop Just staging directory under the supplied home directory.
     static func stagingDirectory(homeDirectory: URL) -> URL {
-        canonical(loopDirectory(homeDirectory: homeDirectory).appendingPathComponent("Staging", isDirectory: true))
+        canonical(loopJustDirectory(homeDirectory: homeDirectory).appendingPathComponent("Staging", isDirectory: true))
     }
 
-    /// Returns the Loop rollback directory under the supplied home directory.
+    /// Returns the Loop Just rollback directory under the supplied home directory.
     static func rollbackDirectory(homeDirectory: URL) -> URL {
-        canonical(loopDirectory(homeDirectory: homeDirectory).appendingPathComponent("Rollback.noindex", isDirectory: true))
+        canonical(loopJustDirectory(homeDirectory: homeDirectory).appendingPathComponent("Rollback.noindex", isDirectory: true))
     }
 
     /// Resolves symlinks and normalizes the URL to a standardized file URL.

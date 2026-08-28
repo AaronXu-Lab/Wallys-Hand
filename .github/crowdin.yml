@@ -4,9 +4,9 @@ base_path: ..
 preserve_hierarchy: false
 
 files:
-  - source: "Loop/Localizable.xcstrings"
-    translation: "Loop/Localizable.xcstrings"
+  - source: "Loop-Just/Localizable.xcstrings"
+    translation: "Loop-Just/Localizable.xcstrings"
     multilingual: true
 
-  - source: "Loop/en.lproj/InfoPlist.strings"
-    translation: "Loop/%osx_code%/%original_file_name%"
+  - source: "Loop-Just/en.lproj/InfoPlist.strings"
+    translation: "Loop-Just/%osx_code%/%original_file_name%"

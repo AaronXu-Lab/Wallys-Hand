@@ -7,7 +7,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleName</key>
-	<string>LoopUpdaterHelper</string>
+	<string>Loop Just Updater Helper</string>
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 </dict>

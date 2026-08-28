@@ -101,7 +101,7 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate {
         let clientGID = accountInfo.primaryGroupID
         let canonicalBundleURL = LoopSupportPaths.canonical(bundleURL)
         let canonicalHomeDirectory = LoopSupportPaths.canonical(homeDirectory)
-        let loopSupportRoot = LoopSupportPaths.loopDirectory(homeDirectory: canonicalHomeDirectory)
+        let loopSupportRoot = LoopSupportPaths.loopJustDirectory(homeDirectory: canonicalHomeDirectory)
         let stagingRoot = LoopSupportPaths.stagingDirectory(homeDirectory: canonicalHomeDirectory)
         let rollbackRoot = LoopSupportPaths.rollbackDirectory(homeDirectory: canonicalHomeDirectory)
 

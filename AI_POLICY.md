@@ -1,8 +1,8 @@
 # AI usage policy
 
-The Loop project has strict rules for AI usage.
+The Loop Just project has strict rules for AI usage.
 
-All AI usage in any form must be disclosed. You must state the tool you used (for example, Claude, ChatGPT, GitHub Copilot, Cursor) and describe how the work was AI-assisted. If we suspect that you have automatically used a tool to open a pull request-such as when the code fails in obvious ways, or when your responses to review comments do not feel human-we may try to verify that you are a human contributor through specific questions. If you fail to respond, refuse to engage, or cannot reasonably demonstrate understanding, your pull request may be closed and further actions may be taken in line with this policy and the broader policies of the Loop repository.
+All AI usage in any form must be disclosed. You must state the tool you used (for example, Claude, ChatGPT, GitHub Copilot, Cursor) and describe how the work was AI-assisted. If we suspect that you have automatically used a tool to open a pull request-such as when the code fails in obvious ways, or when your responses to review comments do not feel human-we may try to verify that you are a human contributor through specific questions. If you fail to respond, refuse to engage, or cannot reasonably demonstrate understanding, your pull request may be closed and further actions may be taken in line with this policy and the broader policies of the Loop Just repository.
 
 AI-assisted pull requests must be fully verified by a human. You are responsible for ensuring that AI-suggested changes actually work. You must manually review all AI-generated code rather than pasting unreviewed output, and you must not submit code for platforms, environments, or configurations you cannot personally run or test. Pull requests that clearly contain untested or hypothetical code may be closed without detailed review.
 
@@ -10,7 +10,7 @@ Issues and discussions may use AI assistance but must have a full human in the l
 
 No AI-generated media is allowed. Only text and code are acceptable AI-generated content, and only when they comply with the rest of this policy.
 
-These rules apply only to outside contributions to Loop. Maintainers are exempt from these rules and may use AI tools at their discretion. They are expected to exercise good judgment, validate AI output, and remain accountable for changes they approve or merge.
+These rules apply only to outside contributions to Loop Just. Maintainers are exempt from these rules and may use AI tools at their discretion. They are expected to exercise good judgment, validate AI output, and remain accountable for changes they approve or merge.
 
 ## Not allowed
 
@@ -36,7 +36,7 @@ Before submitting, confirm that:
 
 ## There are humans here
 
-Loop is maintained by humans.
+Loop Just is maintained by humans.
 
 Every discussion, issue, and pull request is read and reviewed by people, sometimes with the help of tools. That review time is limited and valuable. When low-effort or unqualified work is submitted-especially large amounts of AI-generated content-it shifts the burden of validation onto maintainers.
 
@@ -46,12 +46,12 @@ Treat maintainers’ time with respect by doing the hard work yourself: understa
 
 ## AI is welcome here
 
-Some parts of Loop have been developed with the help of AI, and maintainers may actively use AI tools as part of their workflow. As a project, we consider AI to be a valuable tool.
+Some parts of Loop Just have been developed with the help of AI, and maintainers may actively use AI tools as part of their workflow. As a project, we consider AI to be a valuable tool.
 
 This strict AI policy is not anti-AI. It exists because many people currently using AI lack the experience or context to validate its output. The main risk is not the tools themselves, but unqualified usage that produces incorrect, noisy, or misleading contributions.
 
-We include this section to be transparent about how AI is used in Loop, for people who may disagree with it, and to address the misconception that this policy is anti-AI in nature.
+We include this section to be transparent about how AI is used in Loop Just, for people who may disagree with it, and to address the misconception that this policy is anti-AI in nature.
 
 ## Attribution
 
-This AI policy takes inspiration from the [Ghostty project's AI policy](https://github.com/ghostty-org/ghostty/blob/main/AI_POLICY.md) and has been tailored specifically for this project. Any adjustments or interpretations are made solely by the maintainers of Loop and do not reflect the positions or policies of the Ghostty project.
+This AI policy takes inspiration from the [Ghostty project's AI policy](https://github.com/ghostty-org/ghostty/blob/main/AI_POLICY.md) and has been tailored specifically for this project. Any adjustments or interpretations are made solely by the maintainers of Loop Just and do not reflect the positions or policies of the Ghostty project.

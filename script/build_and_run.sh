@@ -2,8 +2,8 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PROJECT_PATH="$ROOT_DIR/Loop.xcodeproj"
-SCHEME="Loop"
+PROJECT_PATH="$ROOT_DIR/Loop-Just.xcodeproj"
+SCHEME="Loop Just"
 CONFIGURATION="${CONFIGURATION:-Debug}"
 DERIVED_DATA_PATH="${DERIVED_DATA_PATH:-$ROOT_DIR/.codex/build}"
 APP_PATH="$DERIVED_DATA_PATH/Build/Products/$CONFIGURATION/Loop Just.app"

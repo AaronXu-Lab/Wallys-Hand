@@ -27,8 +27,8 @@ import Foundation
 }
 
 enum PrivilegedInstallerConstants {
-    static let helperExecutableName = "LoopUpdaterHelper"
-    static let serviceName = "com.MrKai77.Loop.UpdaterJob"
-    static let appBundleIdentifier = "com.MrKai77.Loop"
-    static let authorizedClientRequirement = "identifier \"com.MrKai77.Loop\" and anchor apple generic and certificate leaf[subject.OU] = \"5F967GYF84\""
+    static let helperExecutableName = "LoopJustUpdaterHelper"
+    static let serviceName = "com.xuweinan.LoopJust.UpdaterJob"
+    static let appBundleIdentifier = "com.xuweinan.LoopJust"
+    static let authorizedClientRequirement = "identifier \"com.xuweinan.LoopJust\" and anchor apple generic and certificate leaf[subject.OU] = \"BPP589VP97\""
 }
