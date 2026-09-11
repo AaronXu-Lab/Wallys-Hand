@@ -1,26 +1,21 @@
 {
-  "images" : [
+  "images": [
     {
-      "filename" : "menubarIcon.png",
-      "idiom" : "universal",
-      "scale" : "1x"
+      "filename": "appTemplate.png",
+      "idiom": "mac",
+      "scale": "1x"
     },
     {
-      "filename" : "menubarIcon@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "menubarIcon@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename": "appTemplate@2x.png",
+      "idiom": "mac",
+      "scale": "2x"
     }
   ],
-  "info" : {
-    "author" : "xcode",
-    "version" : 1
+  "info": {
+    "author": "xcode",
+    "version": 1
   },
-  "properties" : {
-    "template-rendering-intent" : "template"
+  "properties": {
+    "template-rendering-intent": "template"
   }
 }

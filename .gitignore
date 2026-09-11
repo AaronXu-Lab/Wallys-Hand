@@ -15,3 +15,9 @@ project.xcworkspace
 Loop Just.zip
 Build/
 DerivedData
+
+# Local packaging and skill environments
+.codex/release/
+dist/
+.venv/
+__pycache__/

@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="225" height="225" src="/assets/graphics/Classic.png" alt="Logo">
+  <img width="225" height="225" src="/assets/branding/logo.svg" alt="Logo">
   <h1><b>Loop Just</b></h1>
   <p>Window management made elegant.<br>
   <a href="https://github.com/MrKai77/Loop-Just#features"><strong>Explore Loop Just »</strong></a><br><br>

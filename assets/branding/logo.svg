@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 32 32">
+<style>
+path.bg { fill: #F1F5F2; }
+path.ink { fill: #173E35; }
+path.alert { fill: #218B69; }
+@media (prefers-color-scheme: dark) {
+path.bg { fill: #102D28; }
+path.ink { fill: #ECF7EE; }
+path.alert { fill: #76E0AE; }
+}
+</style>
+<path class="bg" d="M0 0H32V32H0Z"/>
+<path class="ink" d="M9 7H23V10H10V22H17V25H9A2 2 0 0 1 7 23V9A2 2 0 0 1 9 7Z"/>
+<path class="alert" d="M19 13H25V25H22V18.12L16.06 24.06L13.94 21.94L19.88 16H19Z"/>
+</svg>
