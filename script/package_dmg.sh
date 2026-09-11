@@ -32,4 +32,4 @@ ln -s /Applications "$STAGE_DIR/Applications"
 hdiutil create -volname 'Loop Just' -srcfolder "$STAGE_DIR" -ov -format UDZO "$OUTPUT_DIR/Loop-Just.dmg"
 hdiutil verify "$OUTPUT_DIR/Loop-Just.dmg"
 ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$OUTPUT_DIR/Loop-Just.zip"
-shasum -a 256 "$OUTPUT_DIR/Loop-Just.dmg" "$OUTPUT_DIR/Loop-Just.zip" > "$OUTPUT_DIR/SHA256SUMS.txt"
+(cd "$OUTPUT_DIR" && shasum -a 256 Loop-Just.dmg Loop-Just.zip > SHA256SUMS.txt)
