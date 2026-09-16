@@ -36,6 +36,7 @@ import SwiftUI
 /// ## Considerations:
 /// - Currently supports only one revealed window at a time.
 @Loggable
+@MainActor
 final class StashManager {
     static let shared = StashManager()
     private init() {}
@@ -434,7 +435,9 @@ private extension StashManager {
                 .leftMouseDragged // Dragging items to stashed windows
             ],
             callback: { [weak self] cgEvent in
-                self?.handleMouseMoved(cgEvent: cgEvent)
+                Task { @MainActor [weak self] in
+                    self?.handleMouseMoved(cgEvent: cgEvent)
+                }
             }
         )
         monitor.start()
