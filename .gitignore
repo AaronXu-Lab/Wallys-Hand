@@ -1,5 +1,5 @@
-# Loop Just Build
-Loop Just.app
+# Wally‘s Hand Build
+Wally‘s Hand.app
 
 # Mac OS X
 *.DS_Store
@@ -12,12 +12,26 @@ Loop Just.app
 *.xcuserstate
 xcuserdata
 project.xcworkspace
-Loop Just.zip
+Wally‘s Hand.zip
 Build/
 DerivedData
 
 # Local packaging and skill environments
 .codex/release/
+.codex/dmg-export/
 dist/
 .venv/
 __pycache__/
+
+# Build caches after the project rename
+.codex/rename-build/
+.codex/wallys-hand-release/
+
+# Keep the app dependency lockfile reproducible.
+!Wally‘s Hand.xcodeproj/project.xcworkspace/
+Wally‘s Hand.xcodeproj/project.xcworkspace/*
+!Wally‘s Hand.xcodeproj/project.xcworkspace/xcshareddata/
+Wally‘s Hand.xcodeproj/project.xcworkspace/xcshareddata/*
+!Wally‘s Hand.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+Wally‘s Hand.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/*
+!Wally‘s Hand.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved

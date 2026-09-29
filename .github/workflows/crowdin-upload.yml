@@ -6,7 +6,7 @@ on:
     branches:
       - develop
     paths:
-      - "Loop-Just/Localizable.xcstrings"
+      - "Wally‘s Hand/Localizable.xcstrings"
 
 jobs:
   crowdin-upload:

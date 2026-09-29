@@ -1,4 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 32 32">
-  <path class="ink" d="M9 7H23V10H10V22H17V25H9A2 2 0 0 1 7 23V9A2 2 0 0 1 9 7Z" fill="#ECF7EE" />
-  <path class="alert" d="M19 13H25V25H22V18.12L16.06 24.06L13.94 21.94L19.88 16H19Z" fill="#76E0AE" />
-</svg>

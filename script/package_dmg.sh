@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-DERIVED_DATA_PATH="${DERIVED_DATA_PATH:-$ROOT_DIR/.codex/release}"
+DERIVED_DATA_PATH="${DERIVED_DATA_PATH:-$ROOT_DIR/.codex/wallys-hand-release}"
 OUTPUT_DIR="${OUTPUT_DIR:-$ROOT_DIR/dist}"
-APP_PATH="$DERIVED_DATA_PATH/Build/Products/Release/Loop Just.app"
+APP_PATH="$DERIVED_DATA_PATH/Build/Products/Release/Wally‘s Hand.app"
 mkdir -p "$OUTPUT_DIR"
-xcodebuild -project "$ROOT_DIR/Loop-Just.xcodeproj" -scheme 'Loop Just (GH ACTIONS)' \
+xcodebuild -project "$ROOT_DIR/Wally‘s Hand.xcodeproj" -scheme "Wally‘s Hand (GH ACTIONS)" \
   -configuration Release -derivedDataPath "$DERIVED_DATA_PATH" \
   build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
   ARCHS='arm64 x86_64' ONLY_ACTIVE_ARCH=NO \
@@ -27,9 +27,9 @@ codesign --force --sign - "$APP_PATH"
 codesign --verify --deep --strict "$APP_PATH"
 STAGE_DIR="$(mktemp -d)"
 trap 'rm -rf "$STAGE_DIR"' EXIT
-ditto "$APP_PATH" "$STAGE_DIR/Loop Just.app"
+ditto "$APP_PATH" "$STAGE_DIR/Wally‘s Hand.app"
 ln -s /Applications "$STAGE_DIR/Applications"
-hdiutil create -volname 'Loop Just' -srcfolder "$STAGE_DIR" -ov -format UDZO "$OUTPUT_DIR/Loop-Just.dmg"
-hdiutil verify "$OUTPUT_DIR/Loop-Just.dmg"
-ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$OUTPUT_DIR/Loop-Just.zip"
-(cd "$OUTPUT_DIR" && shasum -a 256 Loop-Just.dmg Loop-Just.zip > SHA256SUMS.txt)
+hdiutil create -volname "Wally‘s Hand" -srcfolder "$STAGE_DIR" -ov -format UDZO "$OUTPUT_DIR/Wallys-Hand.dmg"
+hdiutil verify "$OUTPUT_DIR/Wallys-Hand.dmg"
+ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$OUTPUT_DIR/Wallys-Hand.zip"
+(cd "$OUTPUT_DIR" && shasum -a 256 Wallys-Hand.dmg Wallys-Hand.zip > SHA256SUMS.txt)

@@ -1,0 +1,8 @@
+# Revised icon
+
+Generated with the built-in imagegen tool. The generated transparent foreground uses the icon package's pearl-blue background fill.
+
+Design a beautiful production macOS app icon for Wally's Hand, a precise window-management utility. This is a completely new design, not a recolor of the previous giant open-palm illustration.
+Create one elegant unified symbol: a stylized sculptural hand gently pinching the lower-right corner of a small rounded rectangular application window, expressing effortless control. The hand is an abstract compact refined gesture, not a full spread palm; only the essential thumb and curved fingers, anatomically coherent. The small window is the main geometric anchor. A distinctive, balanced silhouette with generous negative space, easy to recognize at Dock size.
+Art direction: sophisticated Apple productivity app icon, restrained softly sculpted porcelain and matte ceramic, very shallow relief and precise delicate bevels, tasteful diffuse studio light, subtle contact shadow. Pearl white hand, desaturated deep navy-blue window frame (#263244), pale icy blue window interior (#E7EFF7), one restrained medium blue accent (#3363AD). Background uniform very pale blue (#F1F6FC). No black silhouette, no green, no inflated cartoon fingers, no plastic toy appearance, no strong gloss, no sparkles or rays, no gradient backdrop.
+Front-facing orthographic composition, one central compact motif occupying 68–72% of square canvas. Quiet, exceptionally polished, original visual identity. No text, letters, logo labels, or watermark. Full-bleed square image, no pre-drawn outer squircle tile, no external whitespace: operating system applies the rounded icon mask. Output one finished icon, not a presentation sheet.

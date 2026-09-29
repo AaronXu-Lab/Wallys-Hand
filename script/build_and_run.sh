@@ -2,13 +2,13 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PROJECT_PATH="$ROOT_DIR/Loop-Just.xcodeproj"
-SCHEME="Loop Just"
+PROJECT_PATH="$ROOT_DIR/Wally‘s Hand.xcodeproj"
+SCHEME="Wally‘s Hand"
 CONFIGURATION="${CONFIGURATION:-Debug}"
-DERIVED_DATA_PATH="${DERIVED_DATA_PATH:-$ROOT_DIR/.codex/build}"
-APP_PATH="$DERIVED_DATA_PATH/Build/Products/$CONFIGURATION/Loop Just.app"
-APP_BINARY="$APP_PATH/Contents/MacOS/Loop Just"
-APP_PROCESS_NAME="Loop Just"
+DERIVED_DATA_PATH="${DERIVED_DATA_PATH:-$ROOT_DIR/.codex/rename-build}"
+APP_PATH="$DERIVED_DATA_PATH/Build/Products/$CONFIGURATION/Wally‘s Hand.app"
+APP_BINARY="$APP_PATH/Contents/MacOS/Wally‘s Hand"
+APP_PROCESS_NAME="Wally‘s Hand"
 
 build_app() {
     xcodebuild \
@@ -60,12 +60,12 @@ case "$MODE" in
     --logs)
         build_app
         run_app
-        /usr/bin/log stream --style compact --predicate 'process == "Loop Just"'
+        /usr/bin/log stream --style compact --predicate "process == \"Wally‘s Hand\""
         ;;
     --telemetry)
         build_app
         run_app
-        /usr/bin/log stream --style compact --predicate 'process == "Loop Just" OR subsystem CONTAINS[c] "Loop"'
+        /usr/bin/log stream --style compact --predicate "process == \"Wally‘s Hand\" OR subsystem CONTAINS[c] \"Loop\""
         ;;
     --verify)
         build_app

@@ -1,76 +1,84 @@
 <div align="center">
-  <img width="225" height="225" src="/assets/branding/logo.svg" alt="Logo">
-  <h1><b>Loop Just</b></h1>
-  <p>Window management made elegant.<br>
-  <a href="https://github.com/MrKai77/Loop-Just#features"><strong>Explore Loop Just »</strong></a><br><br>
-  <a href="https://github.com/MrKai77/Loop-Just/releases/latest/download/Loop%20Just.zip">Download for macOS</a><br>
-  <i>~ Compatible with macOS 13 and later. ~</i></p>
+  <img width="225" height="225" src="/assets/branding/wallys-hand-app-icon-master.png" alt="Wally‘s Hand icon">
+  <h1><b>Wally‘s Hand</b></h1>
+  <p>A personal macOS window utility.</p>
 </div>
 
-Loop Just is a macOS app that simplifies window management with keyboard shortcuts. Assign actions to the trigger key to move, resize, and arrange windows quickly, saving valuable time and energy.
-
-> [!NOTE]
->
-> Loop Just is constantly evolving, with new features and improvements added regularly to enhance your window management experience on macOS.
-
-<h6 align="center">
-  <img src="assets/graphics/loop_demo.gif" alt="Loop Just Demo">
-  <br /><br />
-  <a href="https://discord.gg/2CZ2N6PKjq">
-    <img src="https://img.shields.io/badge/Discord-join%20us-7289DA?logo=discord&logoColor=white&style=for-the-badge&labelColor=23272A" />
-  </a>
-  <a href="https://github.com/MrKai77/Loop-Just/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/MrKai77/Loop-Just?label=License&color=5865F2&style=for-the-badge&labelColor=23272A" />
-  </a>
-  <a href="https://github.com/MrKai77/Loop-Just/stargazers">
-    <img src="https://img.shields.io/github/stars/MrKai77/Loop-Just?label=Stars&color=57F287&style=for-the-badge&labelColor=23272A" />
-  </a>
-  <a href="https://github.com/MrKai77/Loop-Just/network/members">
-    <img src="https://img.shields.io/github/forks/MrKai77/Loop-Just?label=Forks&color=ED4245&style=for-the-badge&labelColor=23272A" />
-  </a>
-  <a href="https://github.com/MrKai77/Loop-Just/issues">
-    <img src="https://img.shields.io/github/issues/MrKai77/Loop-Just?label=Issues&color=FEE75C&style=for-the-badge&labelColor=23272A" />
-  </a>
-  <br />
-</h6>
+Wally‘s Hand arranges windows with keyboard shortcuts, cycles, and drag-to-edge snapping. It is a personal fork of [Loop](https://github.com/MrKai77/Loop); original contributors are credited in the app.
 
 ## Features
 
 ### Keyboard Shortcuts
 
-Loop Just allows you to assign any key in tandem with the trigger key to initiate a window manipulation action.
+Wally‘s Hand allows you to assign any key in tandem with the trigger key to initiate a window manipulation action.
 
 <div><video controls src="https://github.com/user-attachments/assets/d865329f-0533-4eeb-829d-9aa6159f454b" muted="false"></video></div>
 
 ### Cycles
 
-Loop Just can become very powerful when paired with cycles. These enable you to perform multiple window manipulations in quick succession by pressing the same key combination repeatedly.
+Wally‘s Hand can become very powerful when paired with cycles. These enable you to perform multiple window manipulations in quick succession by pressing the same key combination repeatedly.
 
 <div><video controls src="https://github.com/user-attachments/assets/1adb1325-775d-4687-9085-71c7f775d65d" muted="false"></video></div>
 
-### Stash
+### Port management
 
-Hide windows at the screen edge to declutter your workspace. Hover near the edge or use a keybind to access them whenever you need.
+In **Settings → 端口管理**, add a service name, TCP port, project directory and startup command.
+Commands run in a login zsh with `PORT` set. Use a foreground command (for example,
+`npm run dev -- --port 5173 --strictPort`); the project must actually use the configured port.
+Do not use a launcher that detaches or supervises its own services.
 
-<div><video controls src="https://github.com/user-attachments/assets/080ba2fb-41b3-4b39-9000-a76f2fc794ed" muted="false"></video></div>
+- Protection starts only when manually enabled, including after relaunch.
+- The app identifies listeners by the launched process group and process start times.
+  Other listeners on the configured port receive SIGTERM, followed by SIGKILL after two seconds
+  if necessary. Processes the app cannot terminate are reported as conflicts.
+- A lost listener gets a three-second recovery grace period; initial startup gets 90 seconds.
+  Automatic recovery is off by default. When enabled, it retries ten times with backoff,
+  resetting the retry budget after two minutes of stable operation. Each service’s **详情** sheet has a live
+  **自动恢复** switch: changing it preserves the running process, turning it off cancels pending
+  automatic retries, and turning it on recovers an already failed service. An intentionally
+  stopped service stays stopped.
+- **停止服务** stops recovery and keeps the port protected with a local HTTP 503 page on
+  IPv4 and IPv6 loopback. **停用保护** releases it. Quit stops managed processes and placeholders.
+- The menu bar shows per-service actions, status, logs, and an alert icon/tooltip on failures.
+  It stays visible while protection is enabled, even when the normal menu icon is hidden.
+
+Enable **监听日志** in a service's **详情** sheet to keep appending its process output
+and timestamped status/retry events across launches. The switch applies immediately
+and persists with the service configuration. Disable it to return to a latest-attempt
+log on the next launch. Monitoring logs can grow while the switch is enabled.
+
+The overview cards show only service name, port, status, a primary action, and
+**详情**. Details combine configuration, recovery policy, diagnostics, logs,
+restart, release, and deletion. Configuration is read-only while protected;
+disable protection before editing. Configuration changes require saving, while
+the recovery switch for an existing service applies immediately.
+
+Port handoffs have a brief gap; this is polling and reclamation, not an uninterrupted proxy.
+The placeholder serves plain HTTP, not HTTPS, and no application-level health check is implied
+by “running.” Logs for the latest attempt are in `~/Library/Logs/WallysHand/Ports/`.
+
+Run `./script/test_port_management.sh` for isolated process/socket regression tests.
 
 ## Usage
 
-### Installation
+### Build from source
 
-#### Homebrew
+Requires **macOS 26+** and **Xcode 26+ (Swift 6.2)**. Settings use
+[AaronUI 0.1.1](https://github.com/AaronXu-Lab/AaronUI-SwiftUI) for semantic colors,
+buttons, badges, empty states, and service editor fields, alongside Luminare's
+window and settings containers. The AaronUI package is pinned to an exact version;
+Xcode needs GitHub access to this private repository to resolve it. CI also
+needs credentials with read access to AaronUI; the default repository-scoped
+`GITHUB_TOKEN` cannot read a separate private repository.
 
-```bash
-brew install loop
-```
+For UI review, launch a Debug build with `--preview-settings`. This opens the
+port settings without starting event taps or requesting accessibility permission.
 
-#### Manual Download
-
-Navigate to the [release page](https://github.com/MrKai77/Loop-Just/releases/latest) and download the latest `.zip` file located at the bottom, or [click me](https://github.com/MrKai77/Loop-Just/releases/latest/download/Loop%20Just.zip).
+Open `Wally‘s Hand.xcodeproj` and build the `Wally‘s Hand` scheme, or run `./script/build_and_run.sh --verify`.
 
 ### Triggering
 
-Loop Just uses a trigger key to function. Users can assign a key to work with the trigger key, activating specific actions. The trigger key can be set in the "Behavior" tab of the "Settings" section and can consist of one or multiple keys.
+Wally‘s Hand uses a trigger key to function. Users can assign a key to work with the trigger key, activating specific actions. The trigger key can be set in the "Keybinds" tab and can consist of one or multiple keys.
 
 To set Caps Lock as your trigger key, you have two options:
 
@@ -79,45 +87,12 @@ To set Caps Lock as your trigger key, you have two options:
 1. Go to System Settings → Keyboard → "Keyboard Shortcuts...".
 2. In the "Modifier Keys" tab, remap `Caps Lock (⇪) key` to `(^) Control`.
 3. Repeat this remapping process for every connected keyboard.
-4. In Loop Just, select the `Right Control` key as your trigger.
+4. In Wally‘s Hand, select the `Right Control` key as your trigger.
 
 #### b. Use an external App
 
 - [Hyperkey](https://hyperkey.app/)
 - [Karabiner Elements](https://karabiner-elements.pqrs.org/)
-
-#### c. Shell/AppleScript
-
-Loop Just can be controlled via shell commands or AppleScript using its URL scheme:
-
-```bash
-# Shell examples
-open "loopjust://direction/right"     # Move window to right half
-open "loopjust://action/maximize"     # Maximize window
-open "loopjust://screen/next"         # Move to next screen
-
-# AppleScript examples
-osascript -e 'tell application "Loop Just" to activate'
-osascript -e 'open location "loopjust://direction/left"'
-```
-
-You can also create custom scripts to chain multiple actions:
-
-```bash
-#!/bin/bash
-# Example: Move window right and then maximize
-open "loopjust://direction/right"
-sleep 0.5
-open "loopjust://action/maximize"
-```
-
-For a complete list of available commands:
-
-```bash
-open "loopjust://list/all"           # List all commands
-open "loopjust://list/actions"       # List window actions
-open "loopjust://list/keybinds"      # List custom keybinds
-```
 
 ### Keyboard Shortcuts
 
@@ -166,7 +141,7 @@ open "loopjust://list/keybinds"      # List custom keybinds
 
 ## Contributors
 
-To see all the contributors who have played a significant role in developing Loop Just, visit our [Contributors](CONTRIBUTORS.md) page.
+To see all the contributors who have played a significant role in developing Wally‘s Hand, visit our [Contributors](CONTRIBUTORS.md) page.
 
 ### How to Contribute
 
@@ -180,7 +155,7 @@ For an extensive guide on how to contribute, check out the [contributing guide](
   <thead>
     <tr>
       <th></th>
-      <th>Loop Just</th>
+      <th>Wally‘s Hand</th>
       <th>macOS&nbsp;15+</th>
       <th>Rectangle&nbsp;Pro</th>
       <th>Rectangle</th>
@@ -293,25 +268,6 @@ For an extensive guide on how to contribute, check out the [contributing guide](
       <td>✅</td>
       <td>✅</td>
       <td>✅</td>
-    </tr>
-    <tr>
-      <td>Stashed&nbsp;Windows</td>
-      <td>✅</td>
-      <td>❌</td>
-      <td>✅</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>✅</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
     </tr>
     <tr>
       <td>Save&nbsp;Workspace</td>
@@ -494,3 +450,7 @@ For an extensive guide on how to contribute, check out the [contributing guide](
 ### License
 
 This project is licensed under the [GNU GPLv3 license](LICENSE).
+
+### Compatibility identifiers
+
+The app keeps `com.xuweinan.LoopJust` and the existing `Loop Just` application-support directory to preserve settings and update compatibility. Existing GitHub repository URLs remain unchanged.
