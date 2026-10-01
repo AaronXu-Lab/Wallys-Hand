@@ -123,6 +123,7 @@ struct AdvancedConfigurationView: View {
     @Default(.ignoreFullscreen) var ignoreFullscreen
     @Default(.hapticFeedback) var hapticFeedback
     @Default(.sizeIncrement) var sizeIncrement
+    @Default(.windowManagementEnabled) var windowManagementEnabled
 
     @State private var isConfirmingResetKeybinds: Bool = false
 
@@ -134,9 +135,11 @@ struct AdvancedConfigurationView: View {
         LuminareForm {
             generalSection
             keybindsSection
-            permissionsSection
-                .onAppear(perform: model.startTracking)
-                .onDisappear(perform: model.stopTracking)
+            if windowManagementEnabled {
+                permissionsSection
+                    .onAppear(perform: model.startTracking)
+                    .onDisappear(perform: model.stopTracking)
+            }
         }
     }
 

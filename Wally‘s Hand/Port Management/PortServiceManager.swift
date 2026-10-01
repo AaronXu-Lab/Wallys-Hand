@@ -3,6 +3,25 @@ import Foundation
 
 @MainActor
 final class PortServiceManager: ObservableObject {
+    private struct Backup: Codable {
+        let version: Int
+        let services: [PortService]
+    }
+
+    enum BackupError: LocalizedError {
+        case unsupportedVersion
+        case duplicateConfiguration
+        case protectedServices
+
+        var errorDescription: String? {
+            switch self {
+            case .unsupportedVersion: "不支持此版本的端口配置备份。"
+            case .duplicateConfiguration: "备份中有重复的服务 ID 或端口。"
+            case .protectedServices: "请先停用所有服务保护，再导入配置。"
+            }
+        }
+    }
+
     static let shared = PortServiceManager()
     @Published private(set) var services: [PortService] = []
     @Published private(set) var statuses: [UUID: PortServiceStatus] = [:]
@@ -29,6 +48,33 @@ final class PortServiceManager: ObservableObject {
     }
     func retryProblemServices() {
         for service in problemServices { retry(service.id) }
+    }
+
+    /// Includes every saved service and its recovery/logging options, but no running state.
+    func exportBackup() throws -> Data {
+        if let storageError { throw NSError(domain: "PortServiceManager", code: 1,
+                                            userInfo: [NSLocalizedDescriptionKey: storageError]) }
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        return try encoder.encode(Backup(version: 1, services: services))
+    }
+
+    /// Replaces the saved list. Imported services stay disabled until manually enabled.
+    func importBackup(_ data: Data) throws {
+        guard !hasProtection else { throw BackupError.protectedServices }
+        let backup = try JSONDecoder().decode(Backup.self, from: data)
+        guard backup.version == 1 else { throw BackupError.unsupportedVersion }
+        let ids = Set(backup.services.map(\.id))
+        let ports = Set(backup.services.map(\.port))
+        guard ids.count == backup.services.count, ports.count == backup.services.count,
+              backup.services.allSatisfy({ (1...65535).contains($0.port) })
+        else { throw BackupError.duplicateConfiguration }
+        if let error = persist(backup.services) {
+            throw NSError(domain: "PortServiceManager", code: 2,
+                          userInfo: [NSLocalizedDescriptionKey: error])
+        }
+        statuses.removeAll()
+        storageError = nil
     }
     var tooltip: String {
         let enabled = services.filter { status($0.id).protected }

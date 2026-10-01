@@ -16,6 +16,7 @@ struct BehaviorConfigurationView: View {
 
     @Default(.launchAtLogin) var launchAtLogin
     @Default(.startHidden) var startHidden
+    @Default(.windowManagementEnabled) var windowManagementEnabled
     @Default(.hideMenuBarIcon) var hideMenuBarIcon
     @Default(.windowSnapping) var windowSnapping
     @Default(.suppressMissionControlOnTopDrag) var suppressMissionControlOnTopDrag
@@ -74,6 +75,14 @@ struct BehaviorConfigurationView: View {
             LuminareToggle("Launch at login", isOn: $launchAtLogin)
 
             LuminareToggle("Start hidden", isOn: $startHidden)
+
+            LuminareToggle("启用窗口管理", isOn: Binding(
+                get: { windowManagementEnabled },
+                set: { enabled in
+                    if enabled { AccessibilityManager.requestAccess() }
+                    windowManagementEnabled = enabled
+                }
+            ))
 
             LuminareToggle("Hide menu bar icon", isOn: $hideMenuBarIcon)
         }

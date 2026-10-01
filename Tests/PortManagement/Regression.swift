@@ -90,6 +90,19 @@ struct PortRegression {
         try require(manager.setMonitorLogs(true, for: saved.id) == nil, "Monitoring setting failed")
         try require(PortServiceManager(defaults: defaults).services.first?.isMonitoringLogs == true, "Monitoring setting did not persist")
         try require(!manager.status(saved.id).protected, "Changing recovery enabled protection")
+        let backup = try manager.exportBackup()
+        let importSuite = "PortImportTests.\(UUID())"
+        let importedDefaults = UserDefaults(suiteName: importSuite)!
+        defer { importedDefaults.removePersistentDomain(forName: importSuite) }
+        let imported = PortServiceManager(defaults: importedDefaults)
+        try imported.importBackup(backup)
+        try require(imported.services == manager.services, "Backup did not restore every service setting")
+        try require(!imported.status(saved.id).protected, "Import enabled protection")
+        do {
+            try imported.importBackup(Data("not JSON".utf8))
+            throw PortProcessError.message("Invalid backup was accepted")
+        } catch is DecodingError {}
+        try require(imported.services == manager.services, "Invalid backup changed configuration")
         print("PASS configuration, recovery and monitoring persistence with manual enable on relaunch")
         let descriptorBaseline = openDescriptorCount()
         for _ in 0..<80 { _ = try PortProcess.listeners(port: try freePort()) }

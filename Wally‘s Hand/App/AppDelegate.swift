@@ -16,6 +16,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var terminateObserver: Any?
     private var terminating = false
     private var menuBarController: MenuBarController?
+    private var windowManagementTask: Task<Void, Never>?
 
     private var launchedAsLoginItem: Bool {
         guard let event = NSAppleEventManager.shared().currentAppleEvent else { return false }
@@ -58,9 +59,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Wait for other instances to fully exit before installing event taps to prevent conflicts
         Task { @MainActor in
             await waitForInstancesToExit(pids: stalePIDs, timeout: .seconds(15))
-            LoopManager.shared.start()
-            WindowDragManager.shared.addObservers()
-            AccessibilityManager.requestAccess()
+            windowManagementTask = Task { @MainActor in
+                for await enabled in Defaults.updates(.windowManagementEnabled, initial: true) {
+                    guard !Task.isCancelled else { break }
+                    if enabled {
+                        LoopManager.shared.start()
+                        WindowDragManager.shared.addObservers()
+                    } else {
+                        LoopManager.shared.shutdown()
+                        WindowDragManager.shared.shutdown()
+                    }
+                }
+            }
         }
     }
 
@@ -150,6 +160,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationShouldTerminate(_: NSApplication) -> NSApplication.TerminateReply {
+        windowManagementTask?.cancel()
         // LoopManager and WindowDragManager are explicitly shut down so that their
         // event monitors are stopped immediately (in case they are active)
         LoopManager.shared.shutdown()

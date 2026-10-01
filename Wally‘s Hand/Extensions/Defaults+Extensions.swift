@@ -18,6 +18,7 @@ extension Defaults.Keys {
     // Behavior
     static let launchAtLogin = Key<Bool>("launchAtLogin", default: false, iCloud: true)
     static let startHidden = Key<Bool>("startHidden", default: false, iCloud: true)
+    static let windowManagementEnabled = Key<Bool>("windowManagementEnabled", default: false, iCloud: false)
     static let hideMenuBarIcon = Key<Bool>("hideMenuBarIcon", default: false, iCloud: false)
     static let windowSnapping = Key<Bool>("windowSnapping", default: false, iCloud: true)
     static let suppressMissionControlOnTopDrag = Key<Bool>("suppressMissionControlOnTopDrag", default: true, iCloud: true)

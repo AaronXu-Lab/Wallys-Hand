@@ -23,6 +23,9 @@ Wally‘s Hand can become very powerful when paired with cycles. These enable yo
 ### Port management
 
 In **Settings → 端口管理**, add a service name, TCP port, project directory and startup command.
+Use **导出全部配置** to save every service and its recovery/log settings as one JSON backup;
+**导入配置** replaces the saved list after confirmation. Imported services stay disabled.
+Project files and logs are not included, so restore the project directories separately.
 Commands run in a login zsh with `PORT` set. Use a foreground command (for example,
 `npm run dev -- --port 5173 --strictPort`); the project must actually use the configured port.
 Do not use a launcher that detaches or supervises its own services.
@@ -60,6 +63,10 @@ by “running.” Logs for the latest attempt are in `~/Library/Logs/WallysHand/
 Run `./script/test_port_management.sh` for isolated process/socket regression tests.
 
 ## Usage
+
+Window management is off by default. Enable it with **Settings → Behavior → 启用窗口管理**;
+the app asks for Accessibility access only when you enable it. Turning it off stops
+window keyboard and drag monitoring while port management remains available.
 
 ### Build from source
 
