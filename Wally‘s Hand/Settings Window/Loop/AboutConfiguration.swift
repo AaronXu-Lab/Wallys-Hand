@@ -7,7 +7,7 @@
 
 import Combine
 import Defaults
-import Luminare
+import AaronUI
 import SwiftUI
 
 @MainActor
@@ -87,7 +87,7 @@ struct AboutConfigurationView: View {
     }
 
     var body: some View {
-        LuminareForm {
+        SettingsForm {
             iconHeader
             updateSection
             communitySection
@@ -96,7 +96,7 @@ struct AboutConfigurationView: View {
     }
 
     private var iconHeader: some View {
-        LuminareSection {
+        SettingsSection {
             HStack {
                 if let image = NSApp.applicationIconImage {
                     Image(nsImage: image)
@@ -123,18 +123,8 @@ struct AboutConfigurationView: View {
                         .padding(4)
                         .contentShape(.rect)
                 }
-                .luminareContentSize(
-                    aspectRatio: 1.0,
-                    contentMode: .fit,
-                    hasFixedHeight: true
-                )
-                .luminareRoundingBehavior(top: true, bottom: true)
-                .luminareSurfaceStyle(.flat)
-                .luminarePopover(
-                    isPresented: $model.didCompleteCopyToClipboard,
-                    arrowEdge: .bottom,
-                    shouldHideAnchor: true
-                ) {
+
+                .popover(isPresented: $model.didCompleteCopyToClipboard, arrowEdge: .bottom) {
                     Text("Copied!")
                         .padding(6)
                 }
@@ -145,8 +135,8 @@ struct AboutConfigurationView: View {
     }
 
     private var updateSection: some View {
-        LuminareSection {
-            LuminareButtonRow {
+        SettingsSection {
+            SettingsActions {
                 Button {
                     Task {
                         await updater.fetchLatestInfo(bypassUpdatesEnabled: true)
@@ -163,31 +153,25 @@ struct AboutConfigurationView: View {
                 }
                 .disabled(!updater.updatesEnabled)
             }
-            .luminareRoundingBehavior(top: true)
 
-            LuminareToggle("Include development versions", isOn: $includeDevelopmentVersions)
+            SettingsToggle("Include development versions", isOn: $includeDevelopmentVersions)
         }
     }
 
     private var communitySection: some View {
-        LuminareSection {
-            LuminareButtonRow {
+        SettingsSection {
+            SettingsActions {
                 Button("Send Feedback") {
                     openURL(URL(string: "https://github.com/MrKai77/Loop-Just")!)
                 }
             }
-            .luminareRoundingBehavior(top: true, bottom: true)
         }
     }
 
     private var creditsSection: some View {
-        LuminareSection(String(localized: "Credits", comment: "Section header shown in settings")) {
+        SettingsSection(String(localized: "Credits", comment: "Section header shown in settings")) {
             ForEach(model.credits) { credit in
                 creditView(credit)
-                    .luminareRoundingBehavior(
-                        top: (credit == model.credits.first) == true,
-                        bottom: (credit == model.credits.last) == true
-                    )
             }
         }
     }
@@ -223,13 +207,7 @@ struct AboutConfigurationView: View {
                     .padding(4)
                     .contentShape(.rect)
             }
-            .luminareContentSize(
-                aspectRatio: 1.0,
-                contentMode: .fit,
-                hasFixedHeight: true
-            )
-            .luminareRoundingBehavior(top: true, bottom: true)
-            .luminareSurfaceStyle(.flat)
+
         }
         .padding(12)
     }

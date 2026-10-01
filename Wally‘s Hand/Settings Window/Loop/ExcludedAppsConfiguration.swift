@@ -6,7 +6,7 @@
 //
 
 import Defaults
-import Luminare
+import AaronUI
 import SwiftUI
 
 struct ExcludedAppsConfigurationView: View {
@@ -14,9 +14,9 @@ struct ExcludedAppsConfigurationView: View {
     @State private var selectedApps = Set<URL>()
 
     var body: some View {
-        LuminareForm {
-            LuminareSection {
-                LuminareButtonRow {
+        SettingsForm {
+            SettingsSection {
+                SettingsActions {
                     Button("Add") {
                         showAppChooser()
                     }
@@ -27,9 +27,8 @@ struct ExcludedAppsConfigurationView: View {
                     .disabled(selectedApps.isEmpty)
                     .keyboardShortcut(.delete)
                 }
-                .luminareRoundingBehavior(top: true)
 
-                LuminareList(
+                SettingsSelectionList(
                     items: $excludedApps,
                     selection: $selectedApps,
                     id: \.self
@@ -37,23 +36,15 @@ struct ExcludedAppsConfigurationView: View {
                     ExcludedListAppView(url: item.wrappedValue)
                         .equatable()
                 } emptyView: {
-                    HStack {
-                        Spacer()
-                        Text("No excluded applications")
-                            .font(.title3)
-                        Spacer()
-                    }
-                    .foregroundStyle(.secondary)
-                    .padding()
+                    AUIEmptyState(String(localized: "No excluded applications"), systemImage: "app.dashed", type: .inline)
                 }
-                .luminareRoundingBehavior(bottom: true)
             }
         }
     }
 
     func showAppChooser() {
         Task { @MainActor in
-            guard let window = SettingsWindowManager.shared.window else { return }
+            guard let window = WorkspaceWindowManager.shared.window else { return }
 
             let panel = NSOpenPanel()
             panel.worksWhenModal = true
@@ -94,7 +85,7 @@ struct ExcludedListAppView: View, Equatable {
                 if let icon = app.icon {
                     Image(nsImage: icon)
                 } else {
-                    ProgressView()
+                    AUILoading(size: .sm)
                 }
             }
             .frame(width: 36, height: 36)
@@ -122,13 +113,7 @@ struct ExcludedListAppView: View, Equatable {
                 .padding(4)
                 .contentShape(.rect)
             }
-            .luminareContentSize(
-                aspectRatio: 1.0,
-                contentMode: .fit,
-                hasFixedHeight: true
-            )
-            .luminareRoundingBehavior(top: true, bottom: true)
-            .luminareSurfaceStyle(.flat)
+
         }
         .padding(.horizontal, 12)
         .task {

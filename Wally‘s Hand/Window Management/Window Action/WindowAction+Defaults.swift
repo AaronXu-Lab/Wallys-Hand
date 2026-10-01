@@ -12,8 +12,9 @@ import Foundation
 
 extension WindowAction {
     static let defaultKeybinds: [WindowAction] = [
-        WindowAction(.maximize, keybind: [.kVK_Space]),
-        WindowAction(.center, keybind: [.kVK_Return]),
+        WindowAction(.nextScreen, keybind: [.kVK_ANSI_RightBracket]),
+        WindowAction(.previousScreen, keybind: [.kVK_ANSI_LeftBracket]),
+        WindowAction(.maximize, keybind: [.kVK_Return]),
         WindowAction(
             .init(localized: "Top Cycle"),
             cycle: [.init(.topHalf), .init(.topThird), .init(.topTwoThirds)],

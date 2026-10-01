@@ -7,7 +7,7 @@
 
 import Carbon.HIToolbox
 import Defaults
-import Luminare
+import AaronUI
 import SwiftUI
 
 struct Keycorder: View {
@@ -49,7 +49,7 @@ struct Keycorder: View {
                     .fixedSize(horizontal: true, vertical: false)
                     .frame(width: 27, height: 27)
                     .font(.callout)
-                    .luminareSurface()
+                    .background(AUIColor.surfaceControl, in: RoundedRectangle(cornerRadius: AUIRadius.sm))
             } else {
                 HStack(spacing: 4) {
                     // First show modifiers in order
@@ -68,7 +68,7 @@ struct Keycorder: View {
                     }
                     .frame(width: 27, height: 27)
                     .font(.callout)
-                    .luminareSurface(isHovering: isHovering)
+                    .background(AUIColor.surfaceControl, in: RoundedRectangle(cornerRadius: AUIRadius.sm))
                 }
                 .contentShape(.rect)
             }
@@ -98,11 +98,10 @@ struct Keycorder: View {
                 selectionKeybind = validCurrentKeybind
             }
         }
-        .buttonStyle(.plain)
+        .buttonStyle(AUIButtonStyle(variant: .ghost, size: .xs))
         // Don't allow the button to be pressed if more than one keybind is selected in the list
         .allowsHitTesting(model.selectedKeybinds.count <= 1)
-        .luminareFilledStates(.all)
-        .luminareBorderedStates(.all)
+
     }
 
     func startObservingKeys() {

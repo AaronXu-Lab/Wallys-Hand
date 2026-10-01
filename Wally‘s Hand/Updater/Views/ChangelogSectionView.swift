@@ -5,18 +5,19 @@
 //  Created by Kai Azim on 2026-01-23.
 //
 
-import Luminare
+import AaronUI
 import SwiftUI
 
 struct ChangelogSectionView: View {
-    @Environment(\.luminareAnimation) var luminareAnimation
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    private var luminareAnimation: Animation { reduceMotion ? .linear(duration: 0) : AUIMotion.fast }
 
     let section: ChangelogSection
     let isExpanded: Bool
     let onToggle: () -> ()
 
     var body: some View {
-        LuminareSection {
+        SettingsSection {
             ChangelogSectionHeader(
                 section: section,
                 isExpanded: isExpanded,
@@ -60,7 +61,7 @@ private struct ChangelogSectionHeader: View {
             .contentShape(.rect)
             .fontWeight(.medium)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(AUIButtonStyle(variant: .ghost, size: .xs))
     }
 }
 
@@ -107,7 +108,7 @@ private struct ChangelogMetadataView: View {
             }
         }
         .foregroundStyle(.secondary)
-        .buttonStyle(.plain)
+        .buttonStyle(AUIButtonStyle(variant: .ghost, size: .xs))
         .fixedSize()
     }
 }

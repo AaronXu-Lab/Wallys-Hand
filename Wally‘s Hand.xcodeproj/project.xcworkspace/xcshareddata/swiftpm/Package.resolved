@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/AaronXu-Lab/AaronUI-SwiftUI.git",
       "state" : {
-        "revision" : "cc9fc246b2f39eaebef7a7718963404ecbab674e",
-        "version" : "0.1.1"
+        "revision" : "5932be15d523844a485f6abefed65c7c2a940075",
+        "version" : "0.2.0"
       }
     },
     {

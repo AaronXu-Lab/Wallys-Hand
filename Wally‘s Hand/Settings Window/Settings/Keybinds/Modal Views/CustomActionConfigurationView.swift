@@ -6,11 +6,12 @@
 //
 
 import Defaults
-import Luminare
+import AaronUI
 import SwiftUI
 
 struct CustomActionConfigurationView: View {
-    @Environment(\.luminareAnimation) private var luminareAnimation
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    private var luminareAnimation: Animation { reduceMotion ? .linear(duration: 0) : AUIMotion.fast }
 
     @Binding var windowAction: WindowAction
     @Binding var isPresented: Bool
@@ -53,9 +54,8 @@ struct CustomActionConfigurationView: View {
     }
 
     var body: some View {
-        LuminareForm {
+        SettingsForm(scrolls: false) {
             configurationSections()
-            actionButtons()
         }
         .onChange(of: action) { newValue in
             guard !isDeferringExternalCommit else { return }
@@ -65,24 +65,23 @@ struct CustomActionConfigurationView: View {
 
     @ViewBuilder
     private func configurationSections() -> some View {
-        LuminareSection(outerPadding: 0) {
-            LuminareTextField(
+        SettingsSection {
+            AUIInput(
                 "Custom Action",
                 text: Binding(
                     get: { action.name ?? "" },
                     set: { action.name = $0 }
                 )
             )
-            .luminareFilledStates(.none)
-            .luminareBorderedStates(.none)
+
         }
 
-        LuminareSection(outerPadding: 0) {
+        SettingsSection {
             tabPicker()
             unitToggle()
         }
 
-        LuminareSection(outerPadding: 0) {
+        SettingsSection {
             if currentTab == .position {
                 positionConfiguration()
             } else {
@@ -118,7 +117,7 @@ struct CustomActionConfigurationView: View {
     }
 
     private func tabPicker() -> some View {
-        LuminarePicker(
+        SettingsChoiceGrid(
             elements: Tab.allCases,
             selection: $currentTab.animation(luminareAnimation),
             columns: 2
@@ -129,12 +128,11 @@ struct CustomActionConfigurationView: View {
             }
             .fixedSize()
         }
-        .luminareContentSize(hasFixedHeight: true)
-        .luminareRoundingBehavior(top: true)
+
     }
 
     private func unitToggle() -> some View {
-        LuminareToggle("Use pixels", isOn: Binding(get: { action.unit == .pixels }, set: { action.unit = $0 ? .pixels : .percentage }))
+        SettingsToggle("Use pixels", isOn: Binding(get: { action.unit == .pixels }, set: { action.unit = $0 ? .pixels : .percentage }))
             .onChange(of: actionUnit) { unit in
                 if unit == .percentage {
                     if let xPoint = action.xPoint { action.xPoint = max(0, min(100, xPoint)) }
@@ -145,21 +143,9 @@ struct CustomActionConfigurationView: View {
             }
     }
 
-    private func actionButtons() -> some View {
-        HStack(spacing: 8) {
-            Button {
-                isPresented = false
-            } label: {
-                Text("Close", comment: "Label for a button that closes a modal window")
-            }
-        }
-        .buttonStyle(.luminare(overrideUseMainStyle: true))
-        .luminareCornerRadius(8)
-    }
-
     private func positionConfiguration() -> some View {
         Group {
-            LuminareToggle(
+            SettingsToggle(
                 "Use coordinates",
                 isOn: Binding(
                     get: {
@@ -174,7 +160,7 @@ struct CustomActionConfigurationView: View {
             )
 
             if action.positionMode ?? .generic == .generic {
-                LuminarePicker(
+                SettingsChoiceGrid(
                     elements: anchors,
                     selection: Binding(
                         get: {
@@ -195,12 +181,12 @@ struct CustomActionConfigurationView: View {
                 ) { anchor in
                     if let action = anchor.iconAction {
                         IconView(action: action)
+                            .accessibilityLabel(Text(action.getName()))
                     }
                 }
-                .luminareRoundingBehavior(bottom: !showMacOSCenterToggle)
 
                 if showMacOSCenterToggle {
-                    LuminareToggle(
+                    SettingsToggle(
                         isOn: Binding(
                             get: {
                                 action.anchor == .macOSCenter
@@ -213,7 +199,7 @@ struct CustomActionConfigurationView: View {
                         if let infoText = action.direction.infoText {
                             Text("Use macOS center", comment: "Toggle to enable macOS-style centering in custom actions")
                                 .padding(.trailing, 4)
-                                .luminareToolTip(attachedTo: .topTrailing) {
+                                .settingsHelp() {
                                     Text(infoText)
                                         .padding(6)
                                 }
@@ -223,7 +209,7 @@ struct CustomActionConfigurationView: View {
                     }
                 }
             } else {
-                LuminareSlider(
+                SettingsNumericField(
                     String(localized: "X", comment: "X axis label"),
                     value: Binding(
                         get: {
@@ -241,7 +227,7 @@ struct CustomActionConfigurationView: View {
                     onEditingCommit: commitSliderChanges
                 )
 
-                LuminareSlider(
+                SettingsNumericField(
                     String(localized: "Y", comment: "Y axis label"),
                     value: Binding(
                         get: {
@@ -264,7 +250,7 @@ struct CustomActionConfigurationView: View {
 
     private func sizeConfiguration() -> some View {
         Group {
-            LuminarePicker(
+            SettingsChoiceGrid(
                 elements: CustomWindowActionSizeMode.allCases,
                 selection: Binding(
                     get: {
@@ -282,17 +268,12 @@ struct CustomActionConfigurationView: View {
                     mode.image
                     Text(mode.name)
                 }
-                .padding(.vertical, 15)
                 .compositingGroup()
             }
-            .luminareContentSize(hasFixedHeight: true)
-            .luminareRoundingBehavior(
-                top: true,
-                bottom: action.sizeMode != .custom
-            )
+
 
             if action.sizeMode ?? .custom == .custom {
-                LuminareSlider(
+                SettingsNumericField(
                     "Width",
                     value: Binding(
                         get: {
@@ -310,7 +291,7 @@ struct CustomActionConfigurationView: View {
                     onEditingCommit: commitSliderChanges
                 )
 
-                LuminareSlider(
+                SettingsNumericField(
                     "Height",
                     value: Binding(
                         get: {

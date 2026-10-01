@@ -76,11 +76,12 @@ final class MenuBarController: NSObject, NSMenuDelegate, NSMenuItemValidation {
                 await Updater.shared.showUpdateWindowIfEligible()
             }
         }
-        add(String(localized: "Settings…"), key: ",", to: menu) { SettingsWindowManager.shared.show() }
+        add(String(localized: "打开 Wally‘s Hand"), to: menu) { WorkspaceWindowManager.shared.show() }
+        add(String(localized: "窗口管理…"), to: menu) { WorkspaceWindowManager.shared.show(.windows) }
+        add(String(localized: "Settings…"), key: ",", to: menu) { WorkspaceWindowManager.shared.show(.settings) }
         menu.addItem(.separator())
         let settings = add("端口管理…", to: menu) {
-            SettingsWindowManager.shared.currentTab = .ports
-            SettingsWindowManager.shared.show()
+            WorkspaceWindowManager.shared.show(.ports)
         }
         settings.tag = servicesAnchorTag
         let retryProblems = add("重启异常服务", to: menu) { [weak self] in
@@ -150,21 +151,21 @@ final class MenuBarController: NSObject, NSMenuDelegate, NSMenuItemValidation {
         let status = submenu.addItem(withTitle: "", action: nil, keyEquivalent: "")
         let detail = submenu.addItem(withTitle: "", action: nil, keyEquivalent: "")
         submenu.addItem(.separator())
-        let recovery = add("自动恢复", to: submenu) { [weak self] in
+        let recovery = add("异常后自动重启", to: submenu) { [weak self] in
             guard let self, let current = self.ports.services.first(where: { $0.id == service.id }) else { return }
             if let error = self.ports.setAutomaticallyRecover(!current.automaticallyRecover, for: service.id) {
                 let alert = NSAlert()
-                alert.messageText = "无法修改自动恢复"
+                alert.messageText = "自动重启设置保存失败"
                 alert.informativeText = error
                 alert.runModal()
             }
         }
-        recovery.toolTip = "异常断开后自动重试，最多 10 次。停止服务后不会自动重启。"
+        recovery.toolTip = "服务异常后自动尝试重启，最多 10 次；手动停止后不会自动重启。"
         submenu.addItem(.separator())
-        let enable = add("启用保护并启动", to: submenu) { [weak self] in self?.ports.enable(service) }
+        let enable = add("启动并保护端口", to: submenu) { [weak self] in self?.ports.enable(service) }
         let retry = add("启动 / 重试", to: submenu) { [weak self] in self?.ports.retry(service.id) }
-        let stop = add("停止服务 · 保留保护", to: submenu) { [weak self] in self?.ports.stop(service.id) }
-        let disable = add("停用保护 · 释放端口", to: submenu) { [weak self] in self?.ports.disable(service.id) }
+        let stop = add("停止服务，保留端口", to: submenu) { [weak self] in self?.ports.stop(service.id) }
+        let disable = add("停用保护并释放端口", to: submenu) { [weak self] in self?.ports.disable(service.id) }
         let log = add("查看日志", to: submenu) { NSWorkspace.shared.open(service.logURL) }
         item.submenu = submenu
         return ServiceEntry(service: service, item: item, status: status, detail: detail,

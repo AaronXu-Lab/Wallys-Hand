@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euo pipefail
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+if [[ -n "${WALLY_APP:-}" ]]; then
+    APP="$WALLY_APP"
+else
+    APP=""
+    for candidate in "$ROOT_DIR/.codex/rename-build/Build/Products/Debug/Wally‘s Hand.app" "$ROOT_DIR/.codex/build/Build/Products/Debug/Wally‘s Hand.app" "/Applications/Wally‘s Hand.app" "$HOME/Applications/Wally‘s Hand.app"; do
+        if [[ -d "$candidate" ]]; then APP="$candidate"; break; fi
+    done
+fi
+if [[ ! -d "$APP" ]]; then
+    echo '找不到应用。请先构建，或用 WALLY_APP=/path/to/app 指定应用。' >&2
+    exit 1
+fi
+EXECUTABLE=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$APP/Contents/Info.plist")
+exec "$APP/Contents/MacOS/$EXECUTABLE" --cli "$@"

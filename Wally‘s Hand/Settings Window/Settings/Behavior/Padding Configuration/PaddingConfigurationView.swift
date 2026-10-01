@@ -6,11 +6,12 @@
 //
 
 import Defaults
-import Luminare
+import AaronUI
 import SwiftUI
 
 struct PaddingConfigurationView: View {
-    @Environment(\.luminareAnimation) private var luminareAnimation
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    private var luminareAnimation: Animation { reduceMotion ? .linear(duration: 0) : AUIMotion.fast }
     @Default(.enablePadding) private var enablePadding
 
     @State var paddingModel = Defaults[.padding]
@@ -20,13 +21,13 @@ struct PaddingConfigurationView: View {
     let range: ClosedRange<Double> = 0...100
 
     var body: some View {
-        LuminareForm {
-            LuminareSection {
-                LuminareToggle("Apply padding", isOn: $enablePadding)
+        SettingsForm(scrolls: false) {
+            SettingsSection {
+                SettingsToggle("Apply padding", isOn: $enablePadding)
             }
 
             Group {
-                LuminareSection {
+                SettingsSection {
                     paddingMode()
 
                     if !paddingModel.configureScreenPadding {
@@ -37,20 +38,14 @@ struct PaddingConfigurationView: View {
                 }
 
                 if paddingModel.configureScreenPadding {
-                    LuminareSection {
+                    SettingsSection {
                         screenInsetsPaddingConfiguration()
                     }
                 }
             }
             .disabled(!enablePadding)
 
-            Button {
-                isPresented = false
-            } label: {
-                Text("Close", comment: "Label for a button that closes a modal window")
-            }
-            .buttonStyle(.luminare(overrideUseMainStyle: true))
-            .luminareCornerRadius(8)
+
         }
         .onChange(of: paddingModel) { _ in
             guard !isDeferringDefaultsCommit else { return }
@@ -60,7 +55,7 @@ struct PaddingConfigurationView: View {
     }
 
     func paddingMode() -> some View {
-        LuminarePicker(
+        SettingsChoiceGrid(
             elements: [false, true],
             selection: Binding(
                 get: {
@@ -101,11 +96,10 @@ struct PaddingConfigurationView: View {
             }
             .fixedSize()
         }
-        .luminareRoundingBehavior(top: true)
     }
 
     func nonScreenPaddingConfiguration() -> some View {
-        LuminareSlider(
+        SettingsNumericField(
             "Padding",
             value: Binding(
                 get: {
@@ -130,7 +124,7 @@ struct PaddingConfigurationView: View {
 
     func screenSidesPaddingConfiguration() -> some View {
         Group {
-            LuminareSlider(
+            SettingsNumericField(
                 String(localized: "Top", comment: "Label for a slider in Wally‘s Hand’s padding settings"),
                 value: $paddingModel.top.doubleBinding,
                 in: range,
@@ -140,9 +134,8 @@ struct PaddingConfigurationView: View {
                 onEditingChanged: handleSliderEditingChanged,
                 onEditingCommit: commitSliderChanges
             )
-            .luminareSliderLayout(.compact(textBoxWidth: 76))
 
-            LuminareSlider(
+            SettingsNumericField(
                 String(localized: "Bottom", comment: "Label for a slider in Wally‘s Hand’s padding settings"),
                 value: $paddingModel.bottom.doubleBinding,
                 in: range,
@@ -152,9 +145,8 @@ struct PaddingConfigurationView: View {
                 onEditingChanged: handleSliderEditingChanged,
                 onEditingCommit: commitSliderChanges
             )
-            .luminareSliderLayout(.compact(textBoxWidth: 76))
 
-            LuminareSlider(
+            SettingsNumericField(
                 String(localized: "Right", comment: "Label for a slider in Wally‘s Hand’s padding settings"),
                 value: $paddingModel.right.doubleBinding,
                 in: range,
@@ -164,9 +156,8 @@ struct PaddingConfigurationView: View {
                 onEditingChanged: handleSliderEditingChanged,
                 onEditingCommit: commitSliderChanges
             )
-            .luminareSliderLayout(.compact(textBoxWidth: 76))
 
-            LuminareSlider(
+            SettingsNumericField(
                 String(localized: "Left", comment: "Label for a slider in Wally‘s Hand’s padding settings"),
                 value: $paddingModel.left.doubleBinding,
                 in: range,
@@ -176,13 +167,12 @@ struct PaddingConfigurationView: View {
                 onEditingChanged: handleSliderEditingChanged,
                 onEditingCommit: commitSliderChanges
             )
-            .luminareSliderLayout(.compact(textBoxWidth: 76))
         }
     }
 
     func screenInsetsPaddingConfiguration() -> some View {
         Group {
-            LuminareSlider(
+            SettingsNumericField(
                 String(localized: "Window gaps", comment: "Label for a slider in Wally‘s Hand’s padding settings"),
                 value: $paddingModel.window.doubleBinding,
                 in: range,
@@ -192,9 +182,8 @@ struct PaddingConfigurationView: View {
                 onEditingChanged: handleSliderEditingChanged,
                 onEditingCommit: commitSliderChanges
             )
-            .luminareSliderLayout(.compact(textBoxWidth: 76))
 
-            LuminareSlider(
+            SettingsNumericField(
                 value: $paddingModel.externalBar.doubleBinding,
                 in: range,
                 format: .number.precision(.fractionLength(0...1)),
@@ -204,12 +193,11 @@ struct PaddingConfigurationView: View {
             ) {
                 Text("External bar", comment: "Label for a slider in Wally‘s Hand’s padding settings")
                     .padding(.trailing, 4)
-                    .luminareToolTip(attachedTo: .topTrailing) {
+                    .settingsHelp() {
                         Text("Use this if you are using a custom menubar.")
                             .padding(6)
                     }
             }
-            .luminareSliderLayout(.compact(textBoxWidth: 76))
         }
     }
 

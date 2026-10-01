@@ -18,7 +18,7 @@ extension Defaults.Keys {
     // Behavior
     static let launchAtLogin = Key<Bool>("launchAtLogin", default: false, iCloud: true)
     static let startHidden = Key<Bool>("startHidden", default: false, iCloud: true)
-    static let windowManagementEnabled = Key<Bool>("windowManagementEnabled", default: false, iCloud: false)
+    static let windowManagementEnabled = Key<Bool>("windowManagementEnabled", default: true, iCloud: false)
     static let hideMenuBarIcon = Key<Bool>("hideMenuBarIcon", default: false, iCloud: false)
     static let windowSnapping = Key<Bool>("windowSnapping", default: false, iCloud: true)
     static let suppressMissionControlOnTopDrag = Key<Bool>("suppressMissionControlOnTopDrag", default: true, iCloud: true)
@@ -30,11 +30,11 @@ extension Defaults.Keys {
     static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false, iCloud: true)
     static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true, iCloud: true)
     static let respectStageManager = Key<Bool>("respectStageManager", default: true, iCloud: true)
-    static let stageStripSize = Key<CGFloat>("stageStripSize", default: 150, iCloud: true)
+    static let stageStripSize = Key<CGFloat>("stageStripSize", default: 100, iCloud: true)
     static let cycleModeRestartEnabled = Key<Bool>("cycleModeRestartEnabled", default: false, iCloud: true)
 
     // Keybinds
-    static let triggerKey = Key<Set<CGKeyCode>>("trigger", default: [.kVK_Function], iCloud: true)
+    static let triggerKey = Key<Set<CGKeyCode>>("trigger", default: [.kVK_Control, .kVK_Option], iCloud: true)
     static let sideDependentTriggerKey = Key<Bool>("sideDependentTriggerKey", default: true, iCloud: true)
     static let triggerDelay = Key<Double>("triggerDelay", default: 0, iCloud: true)
     static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false, iCloud: true)

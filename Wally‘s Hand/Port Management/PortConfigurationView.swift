@@ -42,15 +42,6 @@ struct PortConfigurationView: View {
                     }
                     .background(SettingsAppearance.surface, in: RoundedRectangle(cornerRadius: AUIRadius.lg))
                 } else {
-                    HStack {
-                        Text("\(manager.services.count) 个服务")
-                            .auiText(.bodySm)
-                            .foregroundStyle(SettingsAppearance.muted)
-                        Spacer()
-                        addButton
-                    }
-                    .padding(.bottom, AUISpacing.xs)
-
                     ForEach(manager.services) { service in
                         PortServiceCard(service: service, manager: manager) {
                             selectedService = service
@@ -60,31 +51,45 @@ struct PortConfigurationView: View {
             }
             .padding(AUISpacing.xxl)
         }
+        .safeAreaInset(edge: .top, spacing: 0) {
+            if !manager.services.isEmpty {
+                HStack {
+                    Text("\(manager.services.count) 个服务")
+                        .auiText(.bodySm)
+                        .monospacedDigit()
+                        .foregroundStyle(SettingsAppearance.muted)
+                    Spacer()
+                    addButton
+                }
+                .padding(.horizontal, AUISpacing.xxl)
+                .padding(.vertical, AUISpacing.lg)
+                .background(SettingsAppearance.canvas)
+            }
+        }
         .sheet(item: $selectedService) { service in
             PortServiceSheet(service: service, manager: manager)
         }
-        .alert("替换全部端口配置？", isPresented: $confirmingImport) {
-            Button("取消", role: .cancel) { pendingImport = nil }
-            Button("替换", role: .destructive) {
-                guard let pendingImport else { return }
-                do {
-                    try manager.importBackup(pendingImport)
-                    backupError = nil
-                    backupMessage = "已导入全部服务配置。服务保护需手动启用。"
-                } catch {
-                    backupError = error.localizedDescription
-                    backupMessage = nil
-                }
-                self.pendingImport = nil
+        .settingsConfirmation(String(localized: "替换全部端口配置？"), isPresented: $confirmingImport,
+                              message: String(localized: "现有服务配置将被备份文件替换。导入后不会自动启动服务。"),
+                              confirm: String(localized: "替换"), destructive: true,
+                              onCancel: { pendingImport = nil }) {
+            guard let pendingImport else { return }
+            do {
+                try manager.importBackup(pendingImport)
+                backupError = nil
+                backupMessage = "已导入全部服务配置。服务尚未启动，可按需启动。"
+            } catch {
+                backupError = error.localizedDescription
+                backupMessage = nil
             }
-        } message: {
-            Text("现有服务配置将被备份文件替换。导入后不会自动启动服务。")
+            self.pendingImport = nil
         }
     }
 
     private var addButton: some View {
         Button("添加服务", systemImage: "plus") { selectedService = PortService() }
             .buttonStyle(AUIButtonStyle(variant: .fill, size: .xs, contentType: .iconText))
+            .keyboardShortcut("n", modifiers: .command)
     }
 
     private func exportBackup() {

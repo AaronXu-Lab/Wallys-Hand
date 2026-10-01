@@ -15,6 +15,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private static let terminateNotificationName = Notification.Name("com.xuweinan.LoopJust.terminate")
     private var terminateObserver: Any?
     private var terminating = false
+    private var cliServer: PortCLIServer?
     private var menuBarController: MenuBarController?
     private var windowManagementTask: Task<Void, Never>?
 
@@ -27,11 +28,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_: Notification) {
         configureLogging()
+        cliServer = PortCLIServer()
         #if DEBUG
         // UI review without event taps, permission prompts, or service supervision.
-        if ProcessInfo.processInfo.arguments.contains("--preview-settings") {
-            SettingsWindowManager.shared.currentTab = .ports
-            SettingsWindowManager.shared.show()
+        let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("--preview-workspace") || arguments.contains("--preview-settings") {
+            if arguments.contains("--preview-settings") { WorkspaceWindowManager.shared.show(.ports) }
+            else { WorkspaceWindowManager.shared.show() }
             return
         }
         #endif
@@ -45,11 +48,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         // Show settings window only if not launched as login item AND startHidden is disabled
-        if !launchedAsLoginItem, !Defaults[.startHidden] {
-            SettingsWindowManager.shared.show()
+        if !launchedAsLoginItem, !Defaults[.startHidden], !ProcessInfo.processInfo.arguments.contains("--cli-background") {
+            WorkspaceWindowManager.shared.show()
         } else {
             // Closing also hides the dock icon if needed.
-            SettingsWindowManager.shared.close()
+            WorkspaceWindowManager.shared.close()
         }
 
         LaunchAtLoginManager.shared.start()
@@ -150,12 +153,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_: NSApplication) -> Bool {
-        SettingsWindowManager.shared.close()
+        WorkspaceWindowManager.shared.close()
         return false
     }
 
     func applicationShouldHandleReopen(_: NSApplication, hasVisibleWindows _: Bool) -> Bool {
-        SettingsWindowManager.shared.show()
+        WorkspaceWindowManager.shared.show()
         return true
     }
 

@@ -6,12 +6,13 @@
 //
 
 import Defaults
-import Luminare
+import AaronUI
 import SwiftUI
 
 struct TriggerKeycorder: View {
     @EnvironmentObject private var model: KeybindsConfigurationModel
-    @Environment(\.luminareAnimation) private var luminareAnimation
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    private var luminareAnimation: Animation { reduceMotion ? .linear(duration: 0) : AUIMotion.fast }
     @Environment(\.appearsActive) private var appearsActive
 
     let keyLimit: Int = 5
@@ -57,7 +58,7 @@ struct TriggerKeycorder: View {
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .opacity(shouldShowChangeButton ? 0 : 1)
         }
-        .buttonStyle(.luminare(overrideUseMainStyle: true))
+        .buttonStyle(AUIButtonStyle(variant: .outline, size: .sm))
         .onGeometryChange(for: CGFloat.self, of: \.size.width) { totalWidth = $0 }
     }
 

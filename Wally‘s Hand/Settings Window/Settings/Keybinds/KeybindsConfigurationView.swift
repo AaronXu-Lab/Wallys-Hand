@@ -6,7 +6,7 @@
 //
 
 import Defaults
-import Luminare
+import AaronUI
 import SwiftUI
 
 final class KeybindsConfigurationModel: ObservableObject {
@@ -15,7 +15,8 @@ final class KeybindsConfigurationModel: ObservableObject {
 }
 
 struct KeybindsConfigurationView: View {
-    @Environment(\.luminareAnimation) private var luminareAnimation
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    private var luminareAnimation: Animation { reduceMotion ? .linear(duration: 0) : AUIMotion.fast }
     @StateObject private var model = KeybindsConfigurationModel()
 
     @Default(.triggerKey) private var triggerKey
@@ -45,7 +46,7 @@ struct KeybindsConfigurationView: View {
     }
 
     var body: some View {
-        LuminareForm {
+        SettingsForm {
             triggerKeySection
             keybindsSection
             settingsSection
@@ -60,24 +61,22 @@ struct KeybindsConfigurationView: View {
     }
 
     private var triggerKeySection: some View {
-        LuminareSection(String(localized: "Trigger Key", comment: "Section header shown in settings")) {
+        SettingsSection(String(localized: "Trigger Key", comment: "Section header shown in settings")) {
             Text("Hold this key, then press an assigned shortcut to move a window.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
             TriggerKeycorder($triggerKey)
                 .environmentObject(model)
-                .luminareBorderedStates(.normal)
         }
-        .luminareBorderedStates(.none)
     }
 
     private var settingsSection: some View {
         Group {
-            LuminareSection(String(localized: "Settings", comment: "Section header shown in settings")) {
-                LuminareToggle("Treat left and right keys differently", isOn: $sideDependentTriggerKey)
+            SettingsSection(String(localized: "Settings", comment: "Section header shown in settings")) {
+                SettingsToggle("Treat left and right keys differently", isOn: $sideDependentTriggerKey)
 
-                LuminareSlider(
+                SettingsNumericField(
                     "Trigger delay",
                     value: $triggerDelay,
                     in: 0...1,
@@ -87,16 +86,16 @@ struct KeybindsConfigurationView: View {
                     suffix: Text("s", comment: "Unit symbol: seconds")
                 )
 
-                LuminareToggle("Double-click to trigger", isOn: $doubleClickToTrigger)
+                SettingsToggle("Double-click to trigger", isOn: $doubleClickToTrigger)
             }
 
             if showCycleRestartOption || showCycleBackwardsOption {
-                LuminareSection(String(localized: "Cycles", comment: "Section header shown in settings")) {
+                SettingsSection(String(localized: "Cycles", comment: "Section header shown in settings")) {
                     if showCycleRestartOption {
-                        LuminareToggle(isOn: $cycleModeRestartEnabled) {
+                        SettingsToggle(isOn: $cycleModeRestartEnabled) {
                             Text("Always start cycles from first item")
                                 .padding(.trailing, 4)
-                                .luminareToolTip(attachedTo: .topTrailing) {
+                                .settingsHelp() {
                                     Text("By default, Wally‘s Hand resumes cycles from where you last left off in each window.")
                                         .padding(6)
                                 }
@@ -104,7 +103,7 @@ struct KeybindsConfigurationView: View {
                     }
 
                     if showCycleBackwardsOption {
-                        LuminareToggle("Cycle backward with Shift", isOn: $cycleBackwardsOnShiftPressed)
+                        SettingsToggle("Cycle backward with Shift", isOn: $cycleBackwardsOnShiftPressed)
                     }
                 }
             }
@@ -112,8 +111,8 @@ struct KeybindsConfigurationView: View {
     }
 
     private var keybindsSection: some View {
-        LuminareSection(String(localized: "Keybinds", comment: "Section header shown in settings")) {
-            LuminareButtonRow {
+        SettingsSection(String(localized: "Keybinds", comment: "Section header shown in settings")) {
+            SettingsActions {
                 Button("Add") {
                     keybinds.insert(.init(.noAction), at: 0)
                 }
@@ -124,9 +123,8 @@ struct KeybindsConfigurationView: View {
                 .disabled(model.selectedKeybinds.isEmpty)
                 .keyboardShortcut(.delete)
             }
-            .luminareRoundingBehavior(top: true)
 
-            LuminareList(
+            SettingsSelectionList(
                 items: $keybinds,
                 selection: $model.selectedKeybinds,
                 id: \.id
@@ -134,16 +132,8 @@ struct KeybindsConfigurationView: View {
                 KeybindItemView(keybind)
                     .environmentObject(model)
             } emptyView: {
-                HStack {
-                    Spacer()
-                    Text("No keybinds")
-                        .font(.title3)
-                    Spacer()
-                }
-                .foregroundStyle(.secondary)
-                .padding()
+                AUIEmptyState(String(localized: "No keybinds"), systemImage: "keyboard", type: .inline)
             }
-            .luminareRoundingBehavior(bottom: true)
         }
     }
 }

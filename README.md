@@ -22,7 +22,7 @@ Wally‘s Hand can become very powerful when paired with cycles. These enable yo
 
 ### Port management
 
-In **Settings → 端口管理**, add a service name, TCP port, project directory and startup command.
+In **工具 → 端口管理**, add a service name, TCP port, project directory and startup command.
 Use **导出全部配置** to save every service and its recovery/log settings as one JSON backup;
 **导入配置** replaces the saved list after confirmation. Imported services stay disabled.
 Project files and logs are not included, so restore the project directories separately.
@@ -64,22 +64,40 @@ Run `./script/test_port_management.sh` for isolated process/socket regression te
 
 ## Usage
 
-Window management is off by default. Enable it with **Settings → Behavior → 启用窗口管理**;
-the app asks for Accessibility access only when you enable it. Turning it off stops
-window keyboard and drag monitoring while port management remains available.
+Window management is enabled by default and requires Accessibility access. Turn it
+off with **窗口管理 → 启用窗口管理** to stop window keyboard and drag monitoring
+while keeping port management available. Existing saved preferences are preserved.
+
+Hold **left Control + left Option** to use the default window shortcuts:
+**Return** maximizes, **[ / ]** moves to the previous / next screen, arrow keys
+cycle through half, third, and two-thirds layouts, and two adjacent arrow keys
+select a quarter. The default Stage Manager strip width is **100 px**.
 
 ### Build from source
 
 Requires **macOS 26+** and **Xcode 26+ (Swift 6.2)**. Settings use
-[AaronUI 0.1.1](https://github.com/AaronXu-Lab/AaronUI-SwiftUI) for semantic colors,
-buttons, badges, empty states, and service editor fields, alongside Luminare's
-window and settings containers. The AaronUI package is pinned to an exact version;
+[AaronUI 0.2.0](https://github.com/AaronXu-Lab/AaronUI-SwiftUI) for semantic colors,
+navigation, buttons, switches, inputs, dropdowns, badges, empty states, progress,
+settings surfaces, and modal content. Luminare is limited to creating the main
+and update windows. SwiftUI/AppKit remains for layout and state, window/menu/file
+panel integration, shortcut event recording, native modal focus, and the slider
+and multi-select/reorder list behaviors currently retained by this app.
+Application-specific compositions live in `App/Components`; they use AaronUI
+controls and tokens rather than maintaining a separate visual style. The AaronUI package is pinned to an exact version;
 Xcode needs GitHub access to this private repository to resolve it. CI also
 needs credentials with read access to AaronUI; the default repository-scoped
 `GITHUB_TOKEN` cannot read a separate private repository.
 
-For UI review, launch a Debug build with `--preview-settings`. This opens the
-port settings without starting event taps or requesting accessibility permission.
+The main window is a tool workspace. **窗口管理** and **端口管理** are peer tools;
+window shortcuts, behavior, excluded apps, and advanced options live inside the window tool.
+**通用设置** holds application-wide language, launch, and menu bar preferences.
+The workspace remembers the last tool and window-tool tab across launches. Use
+**⌘1 / ⌘2** to open the tools and **⌘,** for general settings. New tools should add
+an `AppDestination` and own their internal navigation instead of adding global preference tabs.
+
+For UI review, launch a Debug build with `--preview-workspace`. This restores the
+workspace without starting event taps or requesting accessibility permission.
+`--preview-settings` remains supported as a direct preview of port management.
 
 Open `Wally‘s Hand.xcodeproj` and build the `Wally‘s Hand` scheme, or run `./script/build_and_run.sh --verify`.
 
@@ -461,3 +479,20 @@ This project is licensed under the [GNU GPLv3 license](LICENSE).
 ### Compatibility identifiers
 
 The app keeps `com.xuweinan.LoopJust` and the existing `Loop Just` application-support directory to preserve settings and update compatibility. Existing GitHub repository URLs remain unchanged.
+
+### CLI 端口管理
+
+构建应用后，在仓库中使用 `./script/wally`。也可设置 `WALLY_APP="/path/to/Wally‘s Hand.app"` 指定应用。CLI 通过当前登录会话的本地 IPC 调用应用；未运行时会在后台启动应用。旧版本应用需要先退出并重启最新构建。
+
+```bash
+./script/wally ports list
+./script/wally ports add 7680 --name 'AaronUI Gallery' \
+  --directory '/Users/aaronxu/Documents/GitHub/AaronUI-Web' \
+  --command 'npm run dev -- --host 0.0.0.0'
+./script/wally ports edit 7680 --name 'AaronUI' --monitor-logs true
+./script/wally ports delete 7680
+```
+
+`edit` 和 `delete` 支持用端口或服务 UUID 定位。`edit` 仅修改提供的字段，可用 `--port` 修改端口；新增和编辑均支持 `--auto-recover true|false`、`--monitor-logs true|false`。目录相对于调用 CLI 时的工作目录解析。命令不会执行所保存的启动命令，新配置保持未启用；保护中的服务必须先在界面停用保护才能编辑或删除。
+
+输出为 JSON，成功退出码为 0，错误为 1；`--help` 查看参数说明。若请求超时，先用 `ports list` 核对结果后再决定是否重试。应用始终负责验证、保存与界面更新，CLI 不直接覆盖偏好设置。回归测试：`./script/test_cli.sh`。

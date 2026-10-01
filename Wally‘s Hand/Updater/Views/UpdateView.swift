@@ -5,12 +5,13 @@
 //  Created by Kami on 15/06/2024.
 //
 
-import Luminare
+import AaronUI
 import SwiftUI
 
 struct UpdateView: View {
-    @Environment(\.luminareTintColor) var tintColor
-    @Environment(\.luminareAnimation) var luminareAnimation
+    private let tintColor = AUIColor.accent
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    private var luminareAnimation: Animation { reduceMotion ? .linear(duration: 0) : AUIMotion.fast }
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var updater = Updater.shared
 
@@ -65,7 +66,7 @@ struct UpdateView: View {
         }
         .frame(width: 500, height: 480)
         .padding(.top, 38) // titlebar
-        .luminareBackground()
+        .background(AUIColor.canvasRecessed)
     }
 
     private func theLoopTimesView() -> some View {
@@ -181,7 +182,7 @@ struct UpdateView: View {
                 Text(updater.installState.isFailure ? "Try again later" : "Remind me later")
                     .contentTransition(.numericText())
                     .padding(.trailing, 4)
-                    .luminareToolTip(attachedTo: .topTrailing, hidden: updater.installState.errorDescription == nil) {
+                    .settingsHelp(hidden: updater.installState.errorDescription == nil) {
                         HStack(spacing: 4) {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .foregroundStyle(.secondary)
@@ -209,22 +210,9 @@ struct UpdateView: View {
             } label: {
                 ZStack {
                     if updater.installState == .installing {
-                        Capsule()
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 5)
-                            .foregroundStyle(.quinary)
-                            .overlay {
-                                GeometryReader { geo in
-                                    Capsule()
-                                        .foregroundStyle(tintColor)
-                                        .frame(width: CGFloat(updater.progressBar) * geo.size.width)
-                                        .animation(.smooth(duration: 0.8), value: updater.progressBar)
-                                        .shadow(color: tintColor.opacity(0.1), radius: 12)
-                                        .shadow(color: tintColor.opacity(0.4), radius: 6)
-                                        .shadow(color: tintColor, radius: 1)
-                                }
-                            }
-                            .padding(.horizontal, 12)
+                        AUIProgress(value: updater.progressBar, in: 0...1,
+                                    label: String(localized: "Installing update"))
+                            .padding(.horizontal, AUISpacing.lg)
                     }
 
                     Text(updater.installState.label)
@@ -233,10 +221,10 @@ struct UpdateView: View {
                         .opacity(updater.installState.isFailure ? 0.5 : 1.0)
                 }
             }
-            .allowsHitTesting(updater.installState.isUpdateButtonInteractive)
+            .disabled(!updater.installState.isUpdateButtonInteractive)
+            .buttonStyle(AUIButtonStyle(variant: .fill, size: .sm))
         }
-        .buttonStyle(.luminare(overrideUseMainStyle: true))
-        .luminareCornerRadius(8)
+        .buttonStyle(AUIButtonStyle(variant: .outline, size: .sm))
         .padding(12)
         .animation(luminareAnimation, value: updater.installState)
         .overlay {

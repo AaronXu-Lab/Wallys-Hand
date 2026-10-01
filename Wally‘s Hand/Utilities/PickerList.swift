@@ -5,12 +5,12 @@
 //  Created by Kai Azim on 2024-08-25.
 //
 
-import Luminare
+import AaronUI
 import Scribe
 import SwiftUI
 
 struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identifiable {
-    @Environment(\.luminareDismiss) private var dismiss
+    @Environment(\.dismiss) private var dismiss
     private let eventMonitorManager: PickerListEventMonitorManager = .shared
 
     @Binding var selection: V
@@ -137,8 +137,9 @@ extension LogCategory {
 }
 
 struct PopoverPickerItem<Content, V>: View where Content: View, V: Hashable {
-    @Environment(\.luminareDismiss) private var dismiss
-    @Environment(\.luminareAnimationFast) private var animationFast
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    private var animationFast: Animation { reduceMotion ? .linear(duration: 0) : AUIMotion.fast }
 
     @State private var isHovering = false
     @Binding var selection: V
@@ -159,9 +160,8 @@ struct PopoverPickerItem<Content, V>: View where Content: View, V: Hashable {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .contentShape(.rect)
         }
-        .buttonStyle(.luminare(overrideIsHovering: isSelected))
-        .luminareFilledStates([.hovering, .pressed])
-        .luminareBorderedStates(.hovering)
+        .buttonStyle(AUIButtonStyle(variant: isSelected ? .light : .ghost, size: .sm))
+
     }
 }
 

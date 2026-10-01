@@ -1,3 +1,4 @@
+import AaronUI
 //
 //  DirectionPickerView.swift
 //  Loop
@@ -41,13 +42,11 @@ struct DirectionPickerView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            TextField(
-                String(localized: "Search for a window action", defaultValue: "Search…"),
-                text: $searchText
-            )
-            .textFieldStyle(.plain)
-            .focused($isSearchFocused)
-            .padding(12)
+            AUIInput(String(localized: "Search for a window action", defaultValue: "Search…"),
+                     text: $searchText, size: .sm, leadingIcon: "magnifyingglass")
+                .accessibilityLabel("Search for a window action")
+                .focused($isSearchFocused)
+                .padding(AUISpacing.lg)
 
             Divider()
 
@@ -67,7 +66,6 @@ struct DirectionPickerView: View {
                         .padding(.horizontal, 6)
                     }
                     .padding(8)
-                    .luminareCornerRadius(12)
                 }
             }
         }

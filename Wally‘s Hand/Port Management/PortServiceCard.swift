@@ -10,28 +10,15 @@ struct PortServiceCard: View {
     private var status: PortServiceStatus { manager.status(service.id) }
 
     var body: some View {
-        HStack(spacing: AUISpacing.xl) {
-            VStack(alignment: .leading, spacing: AUISpacing.md) {
-                Text(service.name)
-                    .auiText(.headlineSm)
-                    .fixedSize(horizontal: false, vertical: true)
-                HStack(spacing: AUISpacing.md) {
-                    Text(":\(String(service.port))")
-                        .font(.system(size: 12, weight: .medium, design: .monospaced))
-                        .foregroundStyle(SettingsAppearance.muted)
-                        .accessibilityLabel("端口 \(String(service.port))")
-                    PortStatusBadge(status: status)
-                }
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: AUISpacing.xl) {
+                identity
+                actions
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-
-            HStack(spacing: AUISpacing.md) {
-                PortPrimaryAction(service: service, manager: manager)
-                Button("详情", action: showDetails)
-                    .buttonStyle(AUIButtonStyle(variant: .ghost, size: .xs))
-                    .accessibilityLabel("\(service.name) 的详情与配置")
+            VStack(alignment: .leading, spacing: AUISpacing.lg) {
+                identity
+                actions.frame(maxWidth: .infinity, alignment: .trailing)
             }
-            .fixedSize()
         }
         .padding(AUISpacing.xl)
         .background(SettingsAppearance.surface, in: RoundedRectangle(cornerRadius: AUIRadius.lg))
@@ -40,6 +27,36 @@ struct PortServiceCard: View {
                 .strokeBorder(status.needsAttention ? AUIColor.warning.opacity(0.45) : SettingsAppearance.line)
         }
     }
+
+    private var identity: some View {
+        VStack(alignment: .leading, spacing: AUISpacing.md) {
+            Text(service.name)
+                .auiText(.headlineSm)
+                .lineLimit(2)
+                .help(service.name)
+                .accessibilityAddTraits(.isHeader)
+            HStack(spacing: AUISpacing.md) {
+                Text(":\(String(service.port))")
+                    .font(.system(size: 12, weight: .medium, design: .monospaced))
+                    .foregroundStyle(SettingsAppearance.muted)
+                    .textSelection(.enabled)
+                    .accessibilityLabel("端口 \(String(service.port))")
+                PortStatusBadge(status: status).fixedSize()
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var actions: some View {
+        HStack(spacing: AUISpacing.md) {
+            PortPrimaryAction(service: service, manager: manager)
+            Button("详情", systemImage: "chevron.right", action: showDetails)
+                .buttonStyle(AUIButtonStyle(variant: .ghost, size: .xs, contentType: .iconText))
+                .accessibilityLabel("\(service.name) 的详情与配置")
+        }
+        .fixedSize()
+    }
+
 }
 
 struct PortPrimaryAction: View {
@@ -50,7 +67,7 @@ struct PortPrimaryAction: View {
         status.protected && [.running, .starting, .interrupted, .retrying].contains(status.phase)
     }
     private var title: String {
-        if !status.protected { return "启用保护" }
+        if !status.protected { return "启动并保护" }
         if shouldStop { return "停止服务" }
         return status.phase == .stopped ? "启动服务" : "重试"
     }

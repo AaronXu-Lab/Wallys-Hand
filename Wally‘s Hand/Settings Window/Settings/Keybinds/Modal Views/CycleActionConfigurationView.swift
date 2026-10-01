@@ -6,7 +6,7 @@
 //
 
 import Defaults
-import Luminare
+import AaronUI
 import SwiftUI
 
 struct CycleActionConfigurationView: View {
@@ -24,15 +24,14 @@ struct CycleActionConfigurationView: View {
     }
 
     var body: some View {
-        LuminareForm {
-            LuminareSection(outerPadding: 0) {
-                LuminareTextField("Cycle Keybind", text: Binding(get: { action.name ?? "" }, set: { action.name = $0 }))
-                    .luminareFilledStates(.none)
-                    .luminareBorderedStates(.none)
+        SettingsForm(scrolls: false) {
+            SettingsSection {
+                AUIInput("Cycle Keybind", text: Binding(get: { action.name ?? "" }, set: { action.name = $0 }))
+
             }
 
-            LuminareSection(outerPadding: 0) {
-                LuminareButtonRow {
+            SettingsSection {
+                SettingsActions {
                     Button("Add") {
                         if action.cycle == nil {
                             action.cycle = []
@@ -46,9 +45,8 @@ struct CycleActionConfigurationView: View {
                     }
                     .disabled(selectedKeybinds.isEmpty)
                 }
-                .luminareRoundingBehavior(top: true)
 
-                LuminareList(
+                SettingsSelectionList(
                     items: Binding(
                         get: {
                             action.cycle ?? []
@@ -66,31 +64,14 @@ struct CycleActionConfigurationView: View {
                     )
                     .environmentObject(KeybindsConfigurationModel())
                 } emptyView: {
-                    HStack {
-                        Spacer()
-                        VStack {
-                            Text("Nothing to cycle through")
-                                .font(.title3)
-                            Text("Press \"Add\" to add a cycle item")
-                                .font(.caption)
-                        }
-                        Spacer()
-                    }
-                    .foregroundStyle(.secondary)
-                    .padding()
+                    AUIEmptyState(String(localized: "Nothing to cycle through"), systemImage: "repeat",
+                                  description: String(localized: "Press \"Add\" to add a cycle item"), type: .inline)
                 }
-                .luminareRoundingBehavior(bottom: true)
-                .luminareListFixedHeight(until: .infinity)
+
             }
             .onChange(of: action) { windowAction = $0 }
 
-            Button {
-                isPresented = false
-            } label: {
-                Text("Close", comment: "Label for a button that closes a modal window")
-            }
-            .buttonStyle(.luminare(overrideUseMainStyle: true))
-            .luminareCornerRadius(8)
+
         }
         .onAppear {
             if action.cycle == nil {

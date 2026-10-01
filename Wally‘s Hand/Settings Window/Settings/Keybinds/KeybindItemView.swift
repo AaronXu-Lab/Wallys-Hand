@@ -6,11 +6,12 @@
 //
 
 import Defaults
-import Luminare
+import AaronUI
 import SwiftUI
 
 struct KeybindItemView: View {
-    @Environment(\.luminareAnimation) var luminareAnimation
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    private var luminareAnimation: Animation { reduceMotion ? .linear(duration: 0) : AUIMotion.fast }
 
     @Default(.triggerKey) private var triggerKey
     @Default(.keybinds) private var keybinds
@@ -49,12 +50,10 @@ struct KeybindItemView: View {
     }
 
     var body: some View {
-        ZStack {
+        HStack(spacing: AUISpacing.md) {
             titleAndButtons
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-            keybindCombination
-                .frame(maxWidth: .infinity, alignment: .trailing)
+            Spacer(minLength: 0)
+            keybindCombination.fixedSize().layoutPriority(1)
         }
         .padding(.horizontal, 12)
         .onChange(of: action.direction) { _ in
@@ -79,15 +78,15 @@ struct KeybindItemView: View {
                     } label: {
                         Image(systemName: "slider.horizontal.3")
                     }
-                    .buttonStyle(.plain)
-                    .luminareModal(isPresented: $isConfiguringCustom) {
+                    .buttonStyle(AUIButtonStyle(variant: .ghost, size: .xs))
+                    .settingsSheet(isPresented: $isConfiguringCustom, title: String(localized: "Custom Action"), width: .sm) {
                         CustomActionConfigurationView(
                             action: $action,
                             isPresented: $isConfiguringCustom
                         )
                         .frame(width: 400)
                     }
-                    .luminareModalCornerRadius(24)
+                    .accessibilityLabel("Customize this action's custom frame.")
                     .help("Customize this action's custom frame.")
                 }
 
@@ -97,15 +96,15 @@ struct KeybindItemView: View {
                     } label: {
                         Image(systemName: "repeat")
                     }
-                    .buttonStyle(.plain)
-                    .luminareModal(isPresented: $isConfiguringCycle) {
+                    .buttonStyle(AUIButtonStyle(variant: .ghost, size: .xs))
+                    .settingsSheet(isPresented: $isConfiguringCycle, title: String(localized: "Cycle Keybind"), width: .sm) {
                         CycleActionConfigurationView(
                             action: $action,
                             isPresented: $isConfiguringCycle
                         )
                         .frame(width: 400)
                     }
-                    .luminareModalCornerRadius(24)
+                    .accessibilityLabel("Customize what this action cycles through.")
                     .help("Customize what this action cycles through.")
                 }
             }
@@ -115,12 +114,7 @@ struct KeybindItemView: View {
         .background(alignment: .leading) {
             Color.clear
                 .frame(width: 300 - 24)
-                .luminarePopover(
-                    isPresented: $isDirectionPickerPresented,
-                    arrowEdge: .top,
-                    shouldHideAnchor: true,
-                    shouldAnimate: false
-                ) {
+                .popover(isPresented: $isDirectionPickerPresented, arrowEdge: .top) {
                     DirectionPickerView(
                         direction: $action.direction,
                         isInCycle: cycleIndex != nil
@@ -140,21 +134,19 @@ struct KeybindItemView: View {
             if let cycleIndex {
                 Text("\(cycleIndex)")
                     .frame(width: 27, height: 27)
-                    .luminareSurface()
+                    .background(AUIColor.surfaceControl, in: RoundedRectangle(cornerRadius: AUIRadius.sm))
             } else {
                 HStack(spacing: 6) {
                     keycorderSection()
                         .padding(.leading, 4)
-                        .luminareToolTip(attachedTo: .topLeading, hidden: !hasDuplicateKeybinds) {
+                        .settingsHelp(hidden: !hasDuplicateKeybinds) {
                             Text("There are other keybinds that conflict with this key combination.")
                                 .padding(6)
                         }
-                        .luminareTint(overridingWith: .red)
                 }
                 .fixedSize()
             }
         }
-        .luminareCornerRadius(8)
     }
 
     // MARK: - Helper Methods
@@ -189,7 +181,7 @@ struct KeybindItemView: View {
                         .fontWeight(.regular)
                         .lineLimit(1)
                         .padding(.trailing, 4)
-                        .luminareToolTip(attachedTo: .topTrailing) {
+                        .settingsHelp() {
                             Text(info)
                                 .padding(6)
                         }
@@ -201,11 +193,8 @@ struct KeybindItemView: View {
             }
             .padding(.horizontal, 4)
         }
-        .luminareContentSize(contentMode: .fit, hasFixedHeight: true)
-        .luminareRoundingBehavior(top: true, bottom: true)
-        .luminareFilledStates([.hovering, .pressed])
-        .luminareBorderedStates(.hovering)
-        .luminareMinHeight(24)
+
+
         .help("Customize this keybind's action.")
         .padding(.leading, -4)
     }
@@ -221,7 +210,7 @@ struct KeybindItemView: View {
                 .font(.callout)
                 .padding(6)
                 .frame(height: 27)
-                .luminareSurface()
+                .background(AUIColor.surfaceControl, in: RoundedRectangle(cornerRadius: AUIRadius.sm))
 
                 Image(systemName: "plus")
                     .foregroundStyle(.secondary)

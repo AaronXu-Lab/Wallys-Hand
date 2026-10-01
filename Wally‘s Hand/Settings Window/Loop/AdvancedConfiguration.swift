@@ -7,7 +7,7 @@
 
 import Combine
 import Defaults
-import Luminare
+import AaronUI
 import Scribe
 import SwiftUI
 
@@ -112,7 +112,8 @@ final class AdvancedConfigurationModel: ObservableObject {
 }
 
 struct AdvancedConfigurationView: View {
-    @Environment(\.luminareAnimation) var luminareAnimation
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    private var luminareAnimation: Animation { reduceMotion ? .linear(duration: 0) : AUIMotion.fast }
     @Environment(\.openURL) private var openURL
 
     @StateObject private var model = AdvancedConfigurationModel()
@@ -132,7 +133,7 @@ struct AdvancedConfigurationView: View {
     }
 
     var body: some View {
-        LuminareForm {
+        SettingsForm {
             generalSection
             keybindsSection
             if windowManagementEnabled {
@@ -144,15 +145,15 @@ struct AdvancedConfigurationView: View {
     }
 
     private var generalSection: some View {
-        LuminareSection {
+        SettingsSection {
             if #available(macOS 15.0, *) {
-                LuminareToggle("Use macOS window manager when available", isOn: $useSystemWindowManagerWhenAvailable)
+                SettingsToggle("Use macOS window manager when available", isOn: $useSystemWindowManagerWhenAvailable)
             }
 
-            LuminareToggle(isOn: $animateWindowResizes) {
+            SettingsToggle(isOn: $animateWindowResizes) {
                 Text("Animate window resize")
                     .padding(.trailing, 4)
-                    .luminareToolTip(attachedTo: .topTrailing, hidden: !showLowPowerModeWarning) {
+                    .settingsHelp(hidden: !showLowPowerModeWarning) {
                         HStack(spacing: 4) {
                             Text("To save power, window animations are\nunavailable in Low Power Mode.")
                                 .multilineTextAlignment(.leading)
@@ -165,7 +166,7 @@ struct AdvancedConfigurationView: View {
                                         .foregroundStyle(.secondary)
                                         .padding(4)
                                 }
-                                .buttonStyle(.plain)
+                                .buttonStyle(AUIButtonStyle(variant: .ghost, size: .xs))
                             }
                         }
                         .padding(6)
@@ -173,10 +174,10 @@ struct AdvancedConfigurationView: View {
                     .animation(luminareAnimation, value: showLowPowerModeWarning)
             }
 
-            LuminareToggle("Ignore fullscreen windows", isOn: $ignoreFullscreen)
-            LuminareToggle("Haptic feedback", isOn: $hapticFeedback)
+            SettingsToggle("Ignore fullscreen windows", isOn: $ignoreFullscreen)
+            SettingsToggle("Haptic feedback", isOn: $hapticFeedback)
 
-            LuminareSlider(
+            SettingsNumericField(
                 "Size increment",
                 value: $sizeIncrement.doubleBinding,
                 in: 5...50,
@@ -189,8 +190,8 @@ struct AdvancedConfigurationView: View {
     }
 
     private var keybindsSection: some View {
-        LuminareSection(String(localized: "Keybinds", comment: "Section header shown in settings")) {
-            LuminareButtonRow {
+        SettingsSection(String(localized: "Keybinds", comment: "Section header shown in settings")) {
+            SettingsActions {
                 Button(action: model.importPrompt) {
                     HStack {
                         Text("Import")
@@ -228,26 +229,22 @@ struct AdvancedConfigurationView: View {
                         }
                     }
                 }
-                .alert("Reset keybinds?", isPresented: $isConfirmingResetKeybinds) {
-                    Button("Cancel", role: .cancel) {}
-                    Button("Reset", role: .destructive, action: model.resetKeybinds)
-                } message: {
-                    Text("This will reset all keybinds to their original defaults.")
-                }
+                .settingsConfirmation(String(localized: "Reset keybinds?"), isPresented: $isConfirmingResetKeybinds,
+                                      message: String(localized: "This will reset all keybinds to their original defaults."),
+                                      confirm: String(localized: "Reset"), destructive: true, action: model.resetKeybinds)
             }
-            .luminareRoundingBehavior(top: true, bottom: true)
         }
     }
 
     private var permissionsSection: some View {
-        LuminareSection(String(localized: "Permissions", comment: "Section header shown in settings")) {
+        SettingsSection(String(localized: "Permissions", comment: "Section header shown in settings")) {
             accessibilityComponent()
         }
         .animation(luminareAnimation, value: model.isAccessibilityAccessGranted)
     }
 
     private func accessibilityComponent() -> some View {
-        LuminareButton {
+        SettingsActionRow {
             HStack {
                 if model.isAccessibilityAccessGranted {
                     Image(systemName: "checkmark.seal.fill")

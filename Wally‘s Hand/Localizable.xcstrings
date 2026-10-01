@@ -1,9 +1,279 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    ":%@" : {
-
+    "工具" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tools"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "工具"
+          }
+        }
+      }
     },
+    "应用" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Application"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用"
+          }
+        }
+      }
+    },
+    "窗口管理" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Window Management"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "窗口管理"
+          }
+        }
+      }
+    },
+    "通用设置" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "General Settings"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通用设置"
+          }
+        }
+      }
+    },
+    "关于" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关于"
+          }
+        }
+      }
+    },
+    "用快捷键和边缘吸附整理窗口。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrange windows with shortcuts and edge snapping."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用快捷键调整窗口，或拖到屏幕边缘排列窗口。"
+          }
+        }
+      }
+    },
+    "语言、启动方式与应用显示。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language, startup, and app visibility."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "语言、启动方式与应用显示。"
+          }
+        }
+      }
+    },
+    "版本、更新与项目信息。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version, updates, and project information."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "版本、更新与项目信息。"
+          }
+        }
+      }
+    },
+    "快捷键" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shortcuts"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "快捷键"
+          }
+        }
+      }
+    },
+    "窗口行为" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Behavior"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "窗口调整"
+          }
+        }
+      }
+    },
+    "排除应用" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluded Apps"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "忽略的应用"
+          }
+        }
+      }
+    },
+    "高级" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Advanced"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "高级"
+          }
+        }
+      }
+    },
+    "窗口管理分类" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Window management sections"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "窗口管理分类"
+          }
+        }
+      }
+    },
+    "当前未启用，仍可编辑配置。启用后需要辅助功能权限。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Window management is off. You can still edit its configuration. Enabling it requires Accessibility access."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尚未启用窗口管理。可先修改设置，启用时需授予辅助功能权限。"
+          }
+        }
+      }
+    },
+    "有可用更新" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update available"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有可用更新"
+          }
+        }
+      }
+    },
+    "打开 Wally‘s Hand" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Wally‘s Hand"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开 Wally‘s Hand"
+          }
+        }
+      }
+    },
+    "窗口管理…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Window Management…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "窗口管理..."
+          }
+        }
+      }
+    },
+    ":%@" : {},
     "%" : {
       "comment" : "Unit symbol: percentage",
       "localizations" : {
@@ -525,7 +795,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@将窗口放置在稍高于屏幕中心的位置，使其更加人性化。"
+            "value" : "%@ 会将窗口放在屏幕中心稍偏上的位置。"
           }
         },
         "zh-Hant" : {
@@ -536,9 +806,7 @@
         }
       }
     },
-    "%@ 的详情与配置" : {
-
-    },
+    "%@ 的详情与配置" : {},
     "%@：%@" : {
       "localizations" : {
         "en" : {
@@ -637,9 +905,7 @@
         }
       }
     },
-    "%lld 个服务" : {
-
-    },
+    "%lld 个服务" : {},
     "Accessibility access" : {
       "localizations" : {
         "ar" : {
@@ -717,7 +983,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "辅助功能"
+            "value" : "辅助功能权限"
           }
         },
         "zh-Hant" : {
@@ -805,7 +1071,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请授予权限以允许调整窗口大小。"
+            "value" : "请在系统设置中允许本应用使用辅助功能，以读取并调整其他应用的窗口。"
           }
         },
         "zh-Hant" : {
@@ -893,7 +1159,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@需要辅助功能权限"
+            "value" : "%@ 需要辅助功能权限"
           }
         },
         "zh-Hant" : {
@@ -1250,7 +1516,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "几乎最大化"
+            "value" : "最大化并留出边距"
           }
         },
         "zh-Hant" : {
@@ -1338,7 +1604,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "总是重新开始循环"
+            "value" : "每轮都从第一个操作开始"
           }
         },
         "zh-Hant" : {
@@ -1426,7 +1692,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "窗口大小调整动画"
+            "value" : "调整窗口时显示动画"
           }
         },
         "zh-Hant" : {
@@ -1514,7 +1780,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "包含边距"
+            "value" : "在窗口周围保留间距"
           }
         },
         "zh-Hant" : {
@@ -2242,7 +2508,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "底部屏幕"
+            "value" : "下方屏幕"
           }
         },
         "zh-Hant" : {
@@ -2598,7 +2864,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wally‘s Hand默认记忆每个窗口的循环状态，并从中断处继续。"
+            "value" : "关闭后，会记住每个窗口上次执行到哪一步，下次从后续操作继续。"
           }
         },
         "zh-Hant" : {
@@ -3041,7 +3307,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "检查更新…"
+            "value" : "检查更新..."
           }
         },
         "zh-Hant" : {
@@ -3131,7 +3397,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "检查更新…"
+            "value" : "检查更新..."
           }
         },
         "zh-Hant" : {
@@ -3503,7 +3769,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "配置…"
+            "value" : "配置..."
           }
         },
         "zh-Hant" : {
@@ -3591,7 +3857,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GitHub上的贡献者"
+            "value" : "GitHub 贡献者"
           }
         },
         "zh-Hant" : {
@@ -3679,7 +3945,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "已复制！"
+            "value" : "已复制"
           }
         },
         "zh-Hant" : {
@@ -3857,7 +4123,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "光标"
+            "value" : "鼠标"
           }
         },
         "zh-Hant" : {
@@ -4123,7 +4389,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "自定义循环"
+            "value" : "自定义循环操作"
           }
         },
         "zh-Hant" : {
@@ -4212,7 +4478,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "自定义此操作的边框位置。"
+            "value" : "设置窗口的位置和大小。"
           }
         },
         "zh-Hant" : {
@@ -4300,7 +4566,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "自定义此快捷键触发的操作。"
+            "value" : "设置按下此快捷键时执行的窗口操作。"
           }
         },
         "zh-Hant" : {
@@ -4389,7 +4655,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "自定义此操作的循环内容。"
+            "value" : "设置连续按下快捷键时依次执行的窗口操作。"
           }
         },
         "zh-Hant" : {
@@ -4478,7 +4744,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "循环"
+            "value" : "循环操作"
           }
         },
         "zh-Hant" : {
@@ -4566,7 +4832,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "按住Shift时反向循环"
+            "value" : "按住 Shift 时倒序切换"
           }
         },
         "zh-Hant" : {
@@ -4654,7 +4920,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "循环快捷键"
+            "value" : "循环操作快捷键"
           }
         },
         "zh-Hant" : {
@@ -4743,7 +5009,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "循环"
+            "value" : "循环操作"
           }
         },
         "zh-Hant" : {
@@ -5009,7 +5275,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "你希望合并还是清空现有快捷键设置？"
+            "value" : "合并会保留现有快捷键；替换会移除现有快捷键并导入所选文件。"
           }
         },
         "zh-Hant" : {
@@ -5186,7 +5452,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "双击以触发"
+            "value" : "连按两次按键后启用窗口操作"
           }
         },
         "zh-Hant" : {
@@ -5275,7 +5541,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "开启窗口吸附"
+            "value" : "拖到屏幕边缘时自动排列窗口"
           }
         },
         "zh-Hant" : {
@@ -5286,9 +5552,7 @@
         }
       }
     },
-    "English" : {
-
-    },
+    "English" : {},
     "Error reading keybinds alert description" : {
       "localizations" : {
         "ar" : {
@@ -5366,7 +5630,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请确保选择的文件格式正确。"
+            "value" : "请检查文件是否为本应用导出的快捷键配置。"
           }
         },
         "zh-Hant" : {
@@ -5454,7 +5718,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "读取快捷键时发生错误"
+            "value" : "快捷键导入失败"
           }
         },
         "zh-Hant" : {
@@ -5719,7 +5983,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全局菜单栏"
+            "value" : "自定义菜单栏预留高度"
           }
         },
         "zh-Hant" : {
@@ -6003,7 +6267,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "四分之一"
+            "value" : "第 1 个四等分区域"
           }
         },
         "zh-Hant" : {
@@ -6093,7 +6357,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "流动"
+            "value" : "流畅"
           }
         },
         "zh-Hant" : {
@@ -6182,7 +6446,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "聚焦"
+            "value" : "切换窗口"
           }
         },
         "zh-Hant" : {
@@ -6271,7 +6535,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "聚焦下方"
+            "value" : "切换到下方窗口"
           }
         },
         "zh-Hant" : {
@@ -6360,7 +6624,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "聚焦左侧"
+            "value" : "切换到左侧窗口"
           }
         },
         "zh-Hant" : {
@@ -6449,7 +6713,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "聚焦下一个窗口"
+            "value" : "切换到下一个叠放窗口"
           }
         },
         "zh-Hant" : {
@@ -6538,7 +6802,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "聚焦右侧"
+            "value" : "切换到右侧窗口"
           }
         },
         "zh-Hant" : {
@@ -6627,7 +6891,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "聚焦上方"
+            "value" : "切换到上方窗口"
           }
         },
         "zh-Hant" : {
@@ -6715,7 +6979,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在更改窗口大小时给予焦点"
+            "value" : "调整时切换到该窗口"
           }
         },
         "zh-Hant" : {
@@ -6804,7 +7068,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "四分之四"
+            "value" : "第 4 个四等分区域"
           }
         },
         "zh-Hant" : {
@@ -7960,7 +8224,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "震感反馈"
+            "value" : "触控板振动反馈"
           }
         },
         "zh-Hant" : {
@@ -8327,7 +8591,14 @@
       }
     },
     "Hold this key, then press an assigned shortcut to move a window." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按住触发键，再按下方设置的快捷键，即可调整窗口。"
+          }
+        }
+      }
     },
     "Horizontal Center Half" : {
       "comment" : "Window action",
@@ -8407,7 +8678,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "水平居中二分之一"
+            "value" : "居中占半屏宽度"
           }
         },
         "zh-Hant" : {
@@ -8496,7 +8767,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "水平居中三分之一"
+            "value" : "居中占三分之一宽度"
           }
         },
         "zh-Hant" : {
@@ -8762,7 +9033,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "忽略全屏窗口"
+            "value" : "不调整全屏窗口"
           }
         },
         "zh-Hant" : {
@@ -9114,7 +9385,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "清空"
+            "value" : "替换"
           }
         },
         "zh-Hant" : {
@@ -9379,7 +9650,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "初始大小"
+            "value" : "恢复原来的位置和大小"
           }
         },
         "zh-Hant" : {
@@ -9467,7 +9738,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "初始大小"
+            "value" : "使用原来的大小"
           }
         },
         "zh-Hant" : {
@@ -9733,7 +10004,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "安装到“应用程序”文件夹"
+            "value" : "安装到「应用程序」文件夹"
           }
         },
         "zh-Hant" : {
@@ -10001,7 +10272,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "加入Discord服务器"
+            "value" : "加入 Discord"
           }
         },
         "zh-Hant" : {
@@ -10112,7 +10383,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "将指定应用排除在窗口控制之外。"
+            "value" : "不使用窗口管理功能调整这些应用。"
           }
         }
       }
@@ -10477,7 +10748,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "随macOS启动"
+            "value" : "登录 Mac 时自动启动"
           }
         },
         "zh-Hant" : {
@@ -11278,7 +11549,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "关联触发键"
+            "value" : "同时按住触发键"
           }
         },
         "zh-Hant" : {
@@ -11367,7 +11638,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macOS屏幕中心"
+            "value" : "按 macOS 方式居中"
           }
         },
         "zh-Hant" : {
@@ -11455,7 +11726,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macOS的“将窗口拖移到屏幕边缘以平铺”功能已被启用，这将会与Wally‘s Hand的窗口吸附功能相冲突。"
+            "value" : "macOS 的「将窗口拖移到屏幕边缘以平铺」功能已被启用，这将会与 Wally‘s Hand 的窗口吸附功能相冲突。"
           }
         },
         "zh-Hant" : {
@@ -11900,7 +12171,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最小化其它"
+            "value" : "最小化其他窗口"
           }
         },
         "zh-Hant" : {
@@ -12166,7 +12437,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "随窗口移动光标"
+            "value" : "调整后将鼠标移到窗口中心"
           }
         },
         "zh-Hant" : {
@@ -12700,7 +12971,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "移至下一个空间"
+            "value" : "移到下一个桌面"
           }
         },
         "zh-Hant" : {
@@ -12789,7 +13060,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "移至上一个空间"
+            "value" : "移到上一个桌面"
           }
         },
         "zh-Hant" : {
@@ -12966,7 +13237,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用光标所在的屏幕"
+            "value" : "将窗口移到鼠标所在的屏幕"
           }
         },
         "zh-Hant" : {
@@ -13144,7 +13415,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无操作"
+            "value" : "不执行操作"
           }
         },
         "zh-Hant" : {
@@ -13232,7 +13503,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无排除的应用"
+            "value" : "还没有忽略的应用"
           }
         },
         "zh-Hant" : {
@@ -13320,7 +13591,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无快捷键"
+            "value" : "还没有快捷键"
           }
         },
         "zh-Hant" : {
@@ -13409,7 +13680,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无快捷键"
+            "value" : "还没有快捷键"
           }
         },
         "zh-Hant" : {
@@ -13498,7 +13769,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "积极参与…使用当前版本！它是最新的！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -13587,7 +13858,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "这个应用比我的日记都新！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -13676,7 +13947,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "视野清晰，目视范围内无更新！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -13765,7 +14036,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "机会留给有准备的人，而Wally‘s Hand早就准备好了！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -13854,7 +14125,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "赛博减肥中，吃不下了。"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -13943,7 +14214,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "新版本？不好意思，我被这个版本完全吸引了。"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -14032,7 +14303,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "从没见过如此适合环绕的版本！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -14121,7 +14392,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "我正付出她所拥有的一切，长官！没有更新！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -14210,7 +14481,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "很久很久以前在一个遥远的星系中…也找不到更新！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -14299,7 +14570,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "我们已经得到了我们的宝贝，干嘛要更新呢！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -14388,7 +14659,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "光速巡航中，视野中无更新！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -14477,7 +14748,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "这不是你在寻找的更新！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -14566,7 +14837,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "我们搞错了“更新”按钮的位置，抱歉！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -14655,7 +14926,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "我发誓它刚刚还在这里…等我一秒钟"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -14744,7 +15015,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "一天一苹果…更新远离我？"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -14833,7 +15104,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "愿原力与你同在…下次一定！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -14922,7 +15193,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "这个版本的原力似乎很强！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -15011,7 +15282,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更新阿拉还真无得啊，乡毋宁啷个晓得嘞"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -15100,7 +15371,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "凛冬将至…更新未到。"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -15189,7 +15460,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "昨晚做了个好梦，可惜梦里没更新"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -15278,7 +15549,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "本周的更新仙子没有眷顾我们。"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -15367,7 +15638,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "保持敏锐，更多的情报將要来袭！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -15456,7 +15727,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "你正在最新技术的潮头冲浪！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -15545,7 +15816,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "我们会回来的。带着更新…但这需要时间"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -15634,7 +15905,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "我赌一分钱…你缺乏更新。"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -15723,7 +15994,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "你已经得到了最好的Loop！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -15812,7 +16083,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "一个人从来不能轻易地更新Loop。"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -15901,7 +16172,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "你的回报是…不是更新。"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -15990,7 +16261,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "一个被盯着的热锅永远不会…更新。"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -16079,7 +16350,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在眼前的八百万个问题中，更新可排不上号。"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -16168,7 +16439,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "我找到…呃呃…等下我弄丢了"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -16257,7 +16528,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "你升到满级了！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -16346,7 +16617,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "乞丐总不能是…更新者吧。"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -16435,7 +16706,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "千金散尽…更新也不来。"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -16524,7 +16795,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "没有新的情报，指挥官！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -16613,7 +16884,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "没有更新？真有你的！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -16702,7 +16973,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "没有更新，安德森先生"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -16791,7 +17062,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "永固城没有更新"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -16880,7 +17151,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "还想要更新？在这个经济状况下？？"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -16969,7 +17240,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "欢迎下次光临！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -17058,7 +17329,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "环绕才是你的第一要务！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -17147,7 +17418,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "所有系统准备就绪！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -17236,7 +17507,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "已经是最新版了:)"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -17325,7 +17596,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "暂无更新！"
+            "value" : "当前已是最新版本。"
           }
         },
         "zh-Hant" : {
@@ -17501,7 +17772,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "没有内容可供循环"
+            "value" : "还没有循环操作"
           }
         },
         "zh-Hant" : {
@@ -17590,7 +17861,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@的通知权限目前已被禁用。"
+            "value" : "%@ 尚未获得通知权限。"
           }
         },
         "zh-Hant" : {
@@ -17768,7 +18039,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请在系统设置中开启。"
+            "value" : "可在系统设置中允许通知。"
           }
         },
         "zh-Hant" : {
@@ -17856,7 +18127,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "好"
+            "value" : "知道了"
           }
         },
         "zh-Hant" : {
@@ -18212,7 +18483,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请包含至少一个修饰键。"
+            "value" : "快捷键需包含 Command、Option、Control 或 Shift 中的至少一个键。"
           }
         },
         "zh-Hant" : {
@@ -18476,7 +18747,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "点按“添加”以添加循环内容"
+            "value" : "点击「添加」，设置循环执行的窗口操作。"
           }
         },
         "zh-Hant" : {
@@ -18565,7 +18836,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "点按“添加”以添加快捷键"
+            "value" : "点按「添加」以添加快捷键"
           }
         },
         "zh-Hant" : {
@@ -18655,7 +18926,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "点按“添加”以添加操作"
+            "value" : "点按「添加」以添加操作"
           }
         },
         "zh-Hant" : {
@@ -18744,7 +19015,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "点按“添加”以添加应用"
+            "value" : "点按「添加」以添加应用"
           }
         },
         "zh-Hant" : {
@@ -19011,7 +19282,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "角落"
+            "value" : "四角分区"
           }
         },
         "zh-Hant" : {
@@ -19100,7 +19371,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "退出%@"
+            "value" : "退出 %@"
           }
         },
         "zh-Hant" : {
@@ -19295,7 +19566,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "松垮"
+            "value" : "舒缓"
           }
         },
         "zh-Hant" : {
@@ -19561,7 +19832,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请求…"
+            "value" : "前往授权..."
           }
         },
         "zh-Hant" : {
@@ -19826,7 +20097,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "调整光标下的窗口大小"
+            "value" : "调整鼠标指向的窗口"
           }
         },
         "zh-Hant" : {
@@ -19914,7 +20185,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "避开台前调度区域"
+            "value" : "为台前调度的窗口缩略图留出空间"
           }
         },
         "zh-Hant" : {
@@ -20018,7 +20289,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "拖拽时恢复窗口大小"
+            "value" : "拖动时恢复窗口原来的大小"
           }
         },
         "zh-Hant" : {
@@ -20906,7 +21177,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "搜索…"
+            "value" : "搜索窗口操作"
           }
         },
         "zh-Hant" : {
@@ -20995,7 +21266,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "四分之二"
+            "value" : "第 2 个四等分区域"
           }
         },
         "zh-Hant" : {
@@ -21259,7 +21530,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "设置触发键…"
+            "value" : "设置触发键..."
           }
         },
         "zh-Hant" : {
@@ -21700,7 +21971,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "排除的应用"
+            "value" : "忽略的应用"
           }
         },
         "zh-Hant" : {
@@ -21876,7 +22147,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "设置…"
+            "value" : "设置..."
           }
         },
         "zh-Hant" : {
@@ -21965,7 +22236,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在我们的GitHub页面上分享你的反馈！无论你发现了漏洞还是想建议新功能，都请畅所欲言。如果你感觉Wally‘s Hand对你的工作流有很大帮助，我们很乐意接受捐赠 :)"
+            "value" : "可在 GitHub 页面报告问题或提出功能建议，也可通过捐赠支持项目。"
           }
         },
         "zh-Hant" : {
@@ -23030,7 +23301,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "尺寸增量"
+            "value" : "每次移动或缩放的像素数"
           }
         },
         "zh-Hant" : {
@@ -23476,7 +23747,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "空间切换"
+            "value" : "桌面切换"
           }
         },
         "zh-Hant" : {
@@ -23741,7 +24012,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "开始隐藏"
+            "value" : "启动时不打开主窗口"
           }
         },
         "zh-Hant" : {
@@ -23831,7 +24102,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "支持macOS Tahoe液态玻璃效果"
+            "value" : "支持 macOS Tahoe 的液态玻璃效果"
           }
         },
         "zh-Hant" : {
@@ -23920,7 +24191,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "禁用调度中心手势"
+            "value" : "拖到屏幕顶部时不打开调度中心"
           }
         },
         "zh-Hant" : {
@@ -24187,7 +24458,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此快捷键已被%@占用。"
+            "value" : "此快捷键已用于 %@。"
           }
         },
         "zh-Hant" : {
@@ -24541,7 +24812,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "四分之三"
+            "value" : "第 3 个四等分区域"
           }
         },
         "zh-Hant" : {
@@ -24720,7 +24991,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此macOS版本不再受支持。"
+            "value" : "当前 macOS 版本已不受支持。"
           }
         },
         "zh-Hant" : {
@@ -24809,7 +25080,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "这将重置所有快捷键为默认值。"
+            "value" : "重置后，所有快捷键将恢复默认设置，自定义快捷键会被移除。其他设置不受影响。"
           }
         },
         "zh-Hant" : {
@@ -25430,7 +25701,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "顶部屏幕"
+            "value" : "上方屏幕"
           }
         },
         "zh-Hant" : {
@@ -25697,7 +25968,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "分开对待键盘两侧的修饰键"
+            "value" : "区分键盘左侧和右侧的触发键"
           }
         },
         "zh-Hant" : {
@@ -25785,7 +26056,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "触发延迟"
+            "value" : "按住触发键的等待时间"
           }
         },
         "zh-Hant" : {
@@ -26141,7 +26412,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "取消关联触发键"
+            "value" : "不再需要按住触发键"
           }
         },
         "zh-Hant" : {
@@ -26230,7 +26501,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "从%@更新"
+            "value" : "当前版本：%@"
           }
         },
         "zh-Hant" : {
@@ -26319,7 +26590,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更新…"
+            "value" : "更新..."
           }
         },
         "zh-Hant" : {
@@ -26495,7 +26766,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用坐标"
+            "value" : "按坐标定位"
           }
         },
         "zh-Hant" : {
@@ -26584,7 +26855,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用macOS屏幕中心"
+            "value" : "使用 macOS 居中位置"
           }
         },
         "zh-Hant" : {
@@ -26672,7 +26943,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "尽量使用macOS原生窗口管理系统"
+            "value" : "优先使用 macOS 自带的窗口排列功能"
           }
         },
         "zh-Hant" : {
@@ -26760,7 +27031,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用像素"
+            "value" : "以像素为单位"
           }
         },
         "zh-Hant" : {
@@ -26848,7 +27119,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "如果你正在使用自定义菜单栏，请选择此选项。"
+            "value" : "使用自定义菜单栏时，在屏幕顶部预留相应高度，避免窗口被遮挡。"
           }
         },
         "zh-Hant" : {
@@ -26937,7 +27208,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@版本"
+            "value" : "版本 %@"
           }
         },
         "zh-Hant" : {
@@ -27042,7 +27313,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "垂直居中二分之一"
+            "value" : "居中占半屏高度"
           }
         },
         "zh-Hant" : {
@@ -27131,7 +27402,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "垂直居中三分之一"
+            "value" : "居中占三分之一高度"
           }
         },
         "zh-Hant" : {
@@ -27755,7 +28026,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "窗口贴靠"
+            "value" : "拖动吸附"
           }
         },
         "zh-Hant" : {
@@ -28022,7 +28293,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "你最多只能使用%lld个按键组成快捷键。"
+            "value" : "快捷键最多可包含 %lld 个按键。"
           }
         },
         "zh-Hant" : {
@@ -28110,7 +28381,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "你最多只能使用%lld个按键组成触发键。"
+            "value" : "触发键最多可包含 %lld 个按键。"
           }
         },
         "zh-Hant" : {
@@ -28199,7 +28470,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "你无法导出不存在的东西！"
+            "value" : "还没有可导出的快捷键。请先添加快捷键。"
           }
         },
         "zh-Hant" : {
@@ -28288,7 +28559,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "你已经环绕了%lld次！"
+            "value" : "已调整窗口 %lld 次"
           }
         },
         "zh-Hant" : {
@@ -28377,7 +28648,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "你已经环绕了……呃…我数不过来了…"
+            "value" : "已多次调整窗口"
           }
         },
         "zh-Hant" : {
@@ -28388,122 +28659,209 @@
         }
       }
     },
-    "中文" : {
-
-    },
+    "中文" : {},
     "使用登录 zsh 在项目目录运行，并提供 PORT 环境变量。命令须在前台运行，且使用指定端口。" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "命令会在项目目录中通过 zsh 运行，并设置 PORT 环境变量。请确保命令使用上方端口，并持续在前台运行（不要加 & 或使用后台启动选项）。"
+          }
+        }
+      }
     },
-    "保存配置" : {
-
-    },
-    "停止服务" : {
-
-    },
+    "保存配置" : {},
+    "停止服务" : {},
     "停止服务，保留端口保护和占位页面。" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "停止运行服务，继续占用端口并显示提示页面。"
+          }
+        }
+      }
     },
     "停止服务会保留占位页面；停用保护会停止服务并释放端口。" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "停止服务后，端口仍由本应用占用，并显示提示页面。停用保护会同时停止服务并释放端口。"
+          }
+        }
+      }
     },
-    "停用保护" : {
-
-    },
+    "停用保护" : {},
     "停用保护后可修改配置。" : {
-
-    },
-    "删除" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请先停用保护，再修改名称、端口、目录或启动命令。"
+          }
+        }
+      }
     },
     "删除服务" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除配置"
+          }
+        }
+      }
     },
-    "删除服务配置？" : {
-
-    },
-    "取消" : {
-
-    },
-    "名称" : {
-
-    },
-    "启动命令" : {
-
-    },
+    "删除服务配置？" : {},
+    "取消" : {},
+    "名称" : {},
+    "启动命令" : {},
     "启动服务并保护端口。" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启动服务并保留此端口；会结束占用此端口的其他进程。"
+          }
+        }
+      }
     },
-    "启用窗口管理" : {
-
-    },
-    "完成" : {
-
-    },
+    "启用窗口管理" : {},
+    "完成" : {},
     "导入配置…" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导入配置..."
+          }
+        }
+      }
     },
     "导出全部配置…" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导出全部配置..."
+          }
+        }
+      }
     },
-    "将移除“%@”的配置，项目文件不受影响。" : {
-
-    },
+    "将移除“%@”的配置，项目文件不受影响。" : {},
     "异常断开后等待 3 秒，最多重试 10 次；手动停止后不会自动重启。" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "服务异常后自动尝试重启，最多 10 次。重试间隔从 2 秒逐步增加到 30 秒；手动停止后不会自动重启。"
+          }
+        }
+      }
     },
     "持续追加服务输出、状态变化和重试记录；关闭后下次启动恢复为只保留最近一次输出。" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开启后，追加保存每次运行的输出、状态变化和重试记录。关闭后，下次启动会覆盖旧日志，仅保留本次运行的输出。"
+          }
+        }
+      }
     },
-    "更改立即生效，无需保存。" : {
-
+    "更改立即生效，无需保存配置。" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这些选项会立即保存，无需点击「保存配置」。"
+          }
+        }
+      }
     },
-    "更改立即生效。日志位于 ~/Library/Logs/WallysHand/Ports/。" : {
-
-    },
-    "替换" : {
-
-    },
-    "替换全部端口配置？" : {
-
-    },
-    "服务配置备份" : {
-
-    },
-    "查看日志" : {
-
-    },
-    "添加服务" : {
-
+    "服务配置" : {},
+    "替换" : {},
+    "替换全部端口配置？" : {},
+    "服务配置备份" : {},
+    "查看日志" : {},
+    "添加服务" : {},
+    "添加服务时一并保存。" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这些选项会随服务配置一起保存，添加后不会自动启动服务。"
+          }
+        }
+      }
     },
     "现有服务配置将被备份文件替换。导入后不会自动启动服务。" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "替换后，现有服务配置会被备份中的配置覆盖。项目文件不受影响，导入的服务不会自动启动。"
+          }
+        }
+      }
     },
     "监听日志" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保留历史日志"
+          }
+        }
+      }
     },
-    "端口" : {
-
-    },
-    "端口 %@" : {
-
-    },
+    "端口" : {},
+    "端口 %@" : {},
     "自动恢复" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "异常后自动重启"
+          }
+        }
+      }
     },
-    "范围为 1 至 65535" : {
-
-    },
-    "详情" : {
-
-    },
+    "范围为 1 至 65535" : {},
+    "详情" : {},
+    "运行选项" : {},
     "选择…" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择..."
+          }
+        }
+      }
     },
-    "配置" : {
-
+    "选择项目目录…" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择项目目录..."
+          }
+        }
+      }
     },
-    "重新启动" : {
-
+    "重新启动" : {},
+    "项目目录" : {},
+    "配置项目启动命令，保护端口并管理服务恢复。" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启动本地服务、保留指定端口，并在服务异常时重启。"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

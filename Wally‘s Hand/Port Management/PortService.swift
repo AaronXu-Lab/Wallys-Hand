@@ -52,9 +52,9 @@ struct PortServiceStatus: Equatable {
         case disabled = "未启用"
         case starting = "启动中"
         case running = "运行中"
-        case interrupted = "等待恢复"
-        case stopped = "已停止 · 保护中"
-        case failed = "异常 · 保护中"
+        case interrupted = "连接中断"
+        case stopped = "已停止，端口保留"
+        case failed = "运行异常"
         case retrying = "等待重试"
         case conflict = "端口冲突"
     }
