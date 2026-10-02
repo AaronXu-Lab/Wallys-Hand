@@ -16,59 +16,30 @@ struct BehaviorConfigurationView: View {
     @Default(.suppressMissionControlOnTopDrag) var suppressMissionControlOnTopDrag
     @Default(.restoreWindowFrameOnDrag) var restoreWindowFrameOnDrag
     @Default(.useSystemWindowManagerWhenAvailable) var useSystemWindowManagerWhenAvailable
-    @Default(.useScreenWithCursor) var useScreenWithCursor
-    @Default(.moveCursorWithWindow) var moveCursorWithWindow
-    @Default(.resizeWindowUnderCursor) var resizeWindowUnderCursor
-    @Default(.focusWindowOnResize) var focusWindowOnResize
     @Default(.respectStageManager) var respectStageManager
     @Default(.stageStripSize) var stageStripSize
 
-    @State private var isPaddingConfigurationViewPresented = false
 
     var body: some View {
         SettingsForm {
             windowSection
-            cursorSection
             windowSnappingSection
             stageManagerSection
         }
         .animation(
             luminareAnimation,
             value: [
-                resizeWindowUnderCursor,
                 windowSnapping,
                 respectStageManager
             ]
         )
     }
 
+    @ViewBuilder
     private var windowSection: some View {
-        SettingsSection(String(localized: "Window", comment: "Section header shown in settings")) {
-            SettingsToggle("Move window to cursor's screen", isOn: $useScreenWithCursor)
-
-            // Enabling the system window manager will override these options.
-            if !useSystemWindowManagerWhenAvailable {
+        if !useSystemWindowManagerWhenAvailable {
+            SettingsSection(String(localized: "Window", comment: "Section header shown in settings")) {
                 SettingsToggle("Restore window frame on drag", isOn: $restoreWindowFrameOnDrag)
-                SettingsActionRow("Padding", "Configure…") {
-                    isPaddingConfigurationViewPresented = true
-                }
-                .settingsSheet(isPresented: $isPaddingConfigurationViewPresented, title: String(localized: "Padding"), width: .sm) {
-                    PaddingConfigurationView(isPresented: $isPaddingConfigurationViewPresented)
-                        .frame(width: 400)
-                }
-            }
-        }
-    }
-
-    private var cursorSection: some View {
-        SettingsSection(String(localized: "Cursor", comment: "Section header shown in settings")) {
-            SettingsToggle("Move cursor with window", isOn: $moveCursorWithWindow)
-
-            SettingsToggle("Resize window under cursor", isOn: $resizeWindowUnderCursor)
-
-            // If the system WM is enabled, the window under the cursor requires focus.
-            if resizeWindowUnderCursor, !useSystemWindowManagerWhenAvailable {
-                SettingsToggle("Focus window on resize", isOn: $focusWindowOnResize)
             }
         }
     }

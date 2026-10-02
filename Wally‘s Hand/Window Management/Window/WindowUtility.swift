@@ -12,30 +12,14 @@ import Scribe
 /// This enum is in charge of fetching windows in the user's workspace, which will be used by Wally‘s Hand.
 @Loggable(style: .static)
 enum WindowUtility {
-    /// Get the target window, depending on the user's preferences. This could be the frontmost window, or the window under the cursor.
-    /// - Returns: The target window
+    /// Get the frontmost window for window actions.
     static func userDefinedTargetWindow() -> Window? {
-        var result: Window?
-
-        log.info("Getting window at cursor...")
-
-        if Defaults[.resizeWindowUnderCursor],
-           let mouseLocation = CGEvent.mouseLocation,
-           let window = windowAtPosition(mouseLocation) {
-            result = window
+        do {
+            return try frontmostWindow()
+        } catch {
+            log.warn("Failed to get frontmost window: \(error.localizedDescription)")
+            return nil
         }
-
-        if result == nil {
-            do {
-                log.info("Getting frontmost window...")
-
-                result = try frontmostWindow()
-            } catch {
-                log.warn("Failed to get frontmost window: \(error.localizedDescription)")
-            }
-        }
-
-        return result
     }
 
     /// Get the frontmost Window

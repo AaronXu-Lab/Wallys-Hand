@@ -8,11 +8,11 @@ Build dependencies, then run the standalone regression executable under both san
 ./script/test_event_monitoring.sh address
 ```
 
-The runner compiles the production timer, shortcut cache, and event-monitor sources directly. It links the Debug build's Defaults and Scribe dependencies and uses a minimal WindowAction fixture. The rest of the app and the prebuilt dependencies are not sanitizer-instrumented by this runner.
+The runner compiles the production shortcut cache and event-monitor sources directly. It links the Debug build's Defaults and Scribe dependencies and uses a minimal WindowAction fixture. The rest of the app and the prebuilt dependencies are not sanitizer-instrumented by this runner.
 
 Coverage:
 
-- Preserve the delayed action, use the latest action, cancel safely, and ignore obsolete timer completions during concurrent replacement.
+- Ensure cycles do not gain implicit Shift shortcuts.
 - Publish internally consistent shortcut-cache snapshots while settings change.
 - Classify tap notifications using the callback type even when the event payload has a different type.
 - Prevent a queued timeout restart from reviving a stopped monitor.
@@ -26,4 +26,4 @@ The supplied build 1760 report detected free-block heap corruption on EventTapTh
 
 Code review identified unsynchronized timer/action and cache access, a raw monitor pointer used by callbacks during teardown, and asynchronous teardown capturing self even from deinit. Regression testing also reproduced dropped RunLoop blocks: CFRunLoopPerformBlock requires CFRunLoopMode.commonModes.rawValue (a CFString), while casting the Swift mode wrapper to CFTypeRef produces a different runtime type.
 
-These defects are addressed, but neither sanitizer run reproduces a full overnight idle or sleep/wake cycle. To verify the reported scenario, run the fixed app with the original trigger settings, leave it idle overnight, and exercise the first shortcut after waking/unlocking. Check both activation and release, including delayed/double-press triggers when enabled. Retain any new crash report; do not treat a successful short stress test as proof that this exact crash is eliminated.
+These defects are addressed, but neither sanitizer run reproduces a full overnight idle or sleep/wake cycle. To verify the reported scenario, run the fixed app with the original trigger settings, leave it idle overnight, and exercise the first shortcut after waking/unlocking. Check both activation and release with left and right trigger modifiers. Retain any new crash report; do not treat a successful short stress test as proof that this exact crash is eliminated.

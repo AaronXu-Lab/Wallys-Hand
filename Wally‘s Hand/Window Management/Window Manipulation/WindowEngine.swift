@@ -60,9 +60,7 @@ enum WindowEngine {
             false
         }
 
-        if Defaults[.focusWindowOnResize] || useSystemWM {
-            await window.focus()
-        }
+        await window.focus()
 
         let finalFrame: CGRect
 
@@ -97,9 +95,6 @@ enum WindowEngine {
                 finalFrame = window.frame
             }
 
-            if Defaults[.moveCursorWithWindow] {
-                CGWarpMouseCursorPosition(targetFrame.center)
-            }
         }
 
         let postResizeProperties = context.resolvedWindowProperties.map {

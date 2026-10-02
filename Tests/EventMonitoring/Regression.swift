@@ -9,67 +9,9 @@ struct EventMonitoringRegression {
         setbuf(stdout, nil)
         alarm(30)
         defer { Defaults.Keys.testSuite.removePersistentDomain(forName: Defaults.Keys.testSuiteName) }
-        try await timers()
         try await cacheSnapshots()
         try await monitorLifecycle()
         print("PASS: event-monitoring regressions")
-    }
-
-    @MainActor
-    private static func timers() async throws {
-        let received = OSAllocatedUnfairLock(initialState: [WindowAction]())
-        let timer = TriggerDelayTimer { action in received.withLock { $0.append(action) } }
-        let left = WindowAction(.left)
-        let right = WindowAction(.right)
-
-        timer.handleTrigger(startingAction: left)
-        try await Task.sleep(for: .milliseconds(100))
-        precondition(received.withLock { $0 == [left] }, "The delay must preserve its starting action")
-        precondition(!timer.isActive)
-
-        received.withLock { $0.removeAll() }
-        timer.handleTrigger(startingAction: left)
-        timer.updateStartingAction(with: right)
-        try await Task.sleep(for: .milliseconds(100))
-        precondition(received.withLock { $0 == [right] }, "The latest action must win")
-
-        received.withLock { $0.removeAll() }
-        timer.handleTrigger(startingAction: left)
-        timer.cancel()
-        try await Task.sleep(for: .milliseconds(100))
-        precondition(received.withLock { $0.isEmpty }, "Canceled timers must not fire")
-
-        // The old task wakes while the event thread cancels and replaces it.
-        Defaults[.triggerDelay] = 0.001
-        await Task.detached {
-            DispatchQueue.concurrentPerform(iterations: 4) { worker in
-                for _ in 0..<2_000 {
-                    if worker.isMultiple(of: 2) {
-                        timer.handleTrigger(startingAction: left)
-                        timer.updateStartingAction(with: right)
-                    } else {
-                        timer.cancel()
-                        _ = timer.isActive
-                    }
-                }
-            }
-        }.value
-        timer.cancel()
-        received.withLock { $0.removeAll() }
-        timer.handleTrigger(startingAction: right)
-        try await Task.sleep(for: .milliseconds(100))
-        precondition(received.withLock { $0 == [right] }, "Stale tasks must not fire or cancel a newer timer")
-        precondition(!timer.isActive)
-
-        weak var releasedTimer: TriggerDelayTimer?
-        do {
-            let temporary = TriggerDelayTimer { _ in preconditionFailure("Deinitialized timer fired") }
-            releasedTimer = temporary
-            Defaults[.triggerDelay] = 10
-            temporary.handleTrigger(startingAction: left)
-        }
-        precondition(releasedTimer == nil, "The timer task must not retain its owner")
-        print("PASS: timer actions, cancellation, replacement, concurrent mutation and deinit")
     }
 
     @MainActor
@@ -80,7 +22,7 @@ struct EventMonitoringRegression {
         let cache = WindowActionCache()
         let initial = cache.snapshot
         precondition(initial.actionsByKeybind[[1]] == normal)
-        precondition(initial.actionsByKeybind[[1, .kVK_Shift]] == normal)
+        precondition(initial.actionsByKeybind[[1, .kVK_Shift]] == nil)
         precondition(initial.bypassedActionsByKeybind[[2]] == bypass)
 
         try await Task.sleep(for: .milliseconds(50))

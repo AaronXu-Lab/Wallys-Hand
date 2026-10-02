@@ -48,7 +48,7 @@ final class WorkspaceWindowManager: ObservableObject {
         if controller == nil {
             let window = LuminareWindow {
                 WorkspaceView(model: self)
-                    .frame(height: 660)
+                    .frame(height: 990)
             }
 
             SkyLightToolBelt.setBackgroundBlur(

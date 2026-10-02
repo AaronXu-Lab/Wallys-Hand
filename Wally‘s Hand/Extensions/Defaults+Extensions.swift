@@ -23,22 +23,12 @@ extension Defaults.Keys {
     static let windowSnapping = Key<Bool>("windowSnapping", default: false, iCloud: true)
     static let suppressMissionControlOnTopDrag = Key<Bool>("suppressMissionControlOnTopDrag", default: true, iCloud: true)
     static let restoreWindowFrameOnDrag = Key<Bool>("restoreWindowFrameOnDrag", default: false, iCloud: true)
-    static let enablePadding = Key<Bool>("enablePadding", default: false, iCloud: true)
-    static let padding = Key<PaddingConfiguration>("padding", default: .zero, iCloud: true)
-    static let useScreenWithCursor = Key<Bool>("useScreenWithCursor", default: true, iCloud: true)
-    static let moveCursorWithWindow = Key<Bool>("moveCursorWithWindow", default: false, iCloud: true)
-    static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false, iCloud: true)
-    static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true, iCloud: true)
     static let respectStageManager = Key<Bool>("respectStageManager", default: true, iCloud: true)
     static let stageStripSize = Key<CGFloat>("stageStripSize", default: 100, iCloud: true)
     static let cycleModeRestartEnabled = Key<Bool>("cycleModeRestartEnabled", default: false, iCloud: true)
 
     // Keybinds
     static let triggerKey = Key<Set<CGKeyCode>>("trigger", default: [.kVK_Control, .kVK_Option], iCloud: true)
-    static let sideDependentTriggerKey = Key<Bool>("sideDependentTriggerKey", default: true, iCloud: true)
-    static let triggerDelay = Key<Double>("triggerDelay", default: 0, iCloud: true)
-    static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false, iCloud: true)
-    static let cycleBackwardsOnShiftPressed = Key<Bool>("cycleBackwardsOnShiftPressed", default: true, iCloud: true)
     static let keybinds = Key<[WindowAction]>("keybinds", default: WindowAction.defaultKeybinds, iCloud: true)
 
     // Advanced
@@ -63,11 +53,6 @@ extension Defaults.Keys {
 // MARK: - Hidden Settings
 
 extension Defaults.Keys {
-    /// Minimum screen size, defined in inches on the diagonal, for which padding will be applied on windows.
-    /// Adjust with `defaults write com.xuweinan.LoopJust paddingMinimumScreenSize -float x`
-    /// Reset with `defaults delete com.xuweinan.LoopJust paddingMinimumScreenSize`
-    static let paddingMinimumScreenSize = Key<CGFloat>("paddingMinimumScreenSize", default: 0, iCloud: true)
-
     /// Ignore the notch height when calculating top padding, so the effective
     /// distance from the screen top matches non-notch displays.
     /// Adjust with `defaults write com.xuweinan.LoopJust ignoreNotch -bool true`

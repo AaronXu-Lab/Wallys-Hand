@@ -27,7 +27,5 @@ extension Bundle {
 extension Defaults.Keys {
     static let testSuiteName = "LoopJust.EventMonitoringRegression.\(UUID().uuidString)"
     static let testSuite = UserDefaults(suiteName: testSuiteName)!
-    static let triggerDelay = Key<CGFloat>("triggerDelay", default: 0.01, suite: testSuite)
     static let keybinds = Key<[WindowAction]>("keybinds", default: [], suite: testSuite)
-    static let cycleBackwardsOnShiftPressed = Key<Bool>("reverseCycle", default: true, suite: testSuite)
 }

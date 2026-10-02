@@ -20,29 +20,12 @@ struct KeybindsConfigurationView: View {
     @StateObject private var model = KeybindsConfigurationModel()
 
     @Default(.triggerKey) private var triggerKey
-    @Default(.sideDependentTriggerKey) private var sideDependentTriggerKey
-    @Default(.triggerDelay) private var triggerDelay
     @Default(.cycleModeRestartEnabled) private var cycleModeRestartEnabled
-    @Default(.cycleBackwardsOnShiftPressed) private var cycleBackwardsOnShiftPressed
-    @Default(.doubleClickToTrigger) private var doubleClickToTrigger
     @Default(.keybinds) private var keybinds
 
     /// Is there at least one keybind action that is a cycle?
     private var isCycleActionPresentInKeybinds: Bool {
         keybinds.contains(where: { $0.cycle != nil })
-    }
-
-    /// Is Shift used in the trigger key?
-    private var isShiftUsedByTriggerKey: Bool {
-        triggerKey.map(\.baseModifier).contains(.kVK_Shift)
-    }
-
-    private var showCycleRestartOption: Bool {
-        isCycleActionPresentInKeybinds
-    }
-
-    private var showCycleBackwardsOption: Bool {
-        isCycleActionPresentInKeybinds && !isShiftUsedByTriggerKey
     }
 
     var body: some View {
@@ -55,7 +38,7 @@ struct KeybindsConfigurationView: View {
             luminareAnimation,
             value: [
                 cycleModeRestartEnabled,
-                showCycleBackwardsOption
+                isCycleActionPresentInKeybinds
             ]
         )
     }
@@ -71,40 +54,17 @@ struct KeybindsConfigurationView: View {
         }
     }
 
+    @ViewBuilder
     private var settingsSection: some View {
-        Group {
-            SettingsSection(String(localized: "Settings", comment: "Section header shown in settings")) {
-                SettingsToggle("Treat left and right keys differently", isOn: $sideDependentTriggerKey)
-
-                SettingsNumericField(
-                    "Trigger delay",
-                    value: $triggerDelay,
-                    in: 0...1,
-                    step: 0.1,
-                    format: .number.precision(.fractionLength(1...1)),
-                    clampsUpper: false,
-                    suffix: Text("s", comment: "Unit symbol: seconds")
-                )
-
-                SettingsToggle("Double-click to trigger", isOn: $doubleClickToTrigger)
-            }
-
-            if showCycleRestartOption || showCycleBackwardsOption {
-                SettingsSection(String(localized: "Cycles", comment: "Section header shown in settings")) {
-                    if showCycleRestartOption {
-                        SettingsToggle(isOn: $cycleModeRestartEnabled) {
-                            Text("Always start cycles from first item")
-                                .padding(.trailing, 4)
-                                .settingsHelp() {
-                                    Text("By default, Wally‘s Hand resumes cycles from where you last left off in each window.")
-                                        .padding(6)
-                                }
-                        }
-                    }
-
-                    if showCycleBackwardsOption {
-                        SettingsToggle("Cycle backward with Shift", isOn: $cycleBackwardsOnShiftPressed)
-                    }
+        if isCycleActionPresentInKeybinds {
+            SettingsSection(String(localized: "Cycles", comment: "Section header shown in settings")) {
+                AUIItem(
+                    String(localized: "Always start cycles from first item"),
+                    description: String(localized: "By default, Wally‘s Hand resumes cycles from where you last left off in each window.")
+                ) {
+                    Toggle("Always start cycles from first item", isOn: $cycleModeRestartEnabled)
+                        .labelsHidden()
+                        .toggleStyle(.auiSwitch)
                 }
             }
         }

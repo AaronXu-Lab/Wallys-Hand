@@ -207,10 +207,6 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return true
     }
 
-    var eligibleForReverseCycle: Bool {
-        direction == .cycle && !keybind.contains(.kVK_Shift)
-    }
-
 }
 
 extension WindowAction: CustomStringConvertible {

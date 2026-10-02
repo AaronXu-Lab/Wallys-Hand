@@ -25,7 +25,7 @@ struct LoopApp: App {
     var body: some Scene {
         Settings {
             WorkspaceView(model: WorkspaceWindowManager.shared)
-                .frame(height: 660)
+                .frame(height: 990)
         }
         .commands {
             CommandMenu("工具") {

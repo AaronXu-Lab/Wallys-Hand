@@ -17,7 +17,6 @@ struct TriggerKeycorder: View {
 
     let keyLimit: Int = 5
 
-    @Default(.sideDependentTriggerKey) private var sideDependentTriggerKey
 
     @Binding private var validCurrentKey: Set<CGKeyCode>
     @State private var selectionKey: Set<CGKeyCode>
@@ -33,7 +32,6 @@ struct TriggerKeycorder: View {
     @State private var changeButtonWidth: CGFloat = 0
 
     private var sortedKeys: [CGKeyCode] {
-        let selectionKey: Set<CGKeyCode> = sideDependentTriggerKey ? selectionKey : selectionKey.baseModifiers
         return selectionKey.sorted()
     }
 
@@ -87,7 +85,6 @@ struct TriggerKeycorder: View {
             }
         }
         .modifier(ShakeEffect(shakes: shouldShake ? 2 : 0))
-        .animation(luminareAnimation, value: sideDependentTriggerKey)
         .animation(Animation.default, value: shouldShake)
         .popover(isPresented: $tooManyKeysPopup, arrowEdge: .bottom) {
             Text("You can only use up to \(keyLimit) keys in your trigger key.")
@@ -194,7 +191,6 @@ struct TriggerKeycorder: View {
 }
 
 struct TriggerKeycorderKeyView: View {
-    @Default(.sideDependentTriggerKey) private var sideDependentTriggerKey
     private static let defaultIconName = "exclamationmark.circle.fill"
     let key: CGKeyCode
 
@@ -202,18 +198,14 @@ struct TriggerKeycorderKeyView: View {
         HStack(spacing: 4) {
             let keyImage = Image(systemName: key.modifierSystemImage ?? Self.defaultIconName)
 
-            if sideDependentTriggerKey {
-                let side: String = key.isModifierOnRightSide
-                    ? String(localized: "Right", comment: "Side of a trigger key")
-                    : String(localized: "Left", comment: "Side of a trigger key")
+            let side: String = key.isModifierOnRightSide
+                ? String(localized: "Right", comment: "Side of a trigger key")
+                : String(localized: "Left", comment: "Side of a trigger key")
 
-                Text(
-                    "\(side) \(keyImage)",
-                    comment: "Format for modifier key + side; %1$@ is the key (e.g. command), %2$@ is the side (left/right)"
-                )
-            } else {
-                keyImage
-            }
+            Text(
+                "\(side) \(keyImage)",
+                comment: "Format for modifier key + side; %1$@ is the key (e.g. command), %2$@ is the side (left/right)"
+            )
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .fixedSize(horizontal: true, vertical: false)

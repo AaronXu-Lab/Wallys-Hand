@@ -32,10 +32,7 @@ final class WindowActionCache {
     init() {
         regenerateCache()
         self.observationTask = Task { [weak self] in
-            let updates = Defaults.updates(
-                .keybinds,
-                .cycleBackwardsOnShiftPressed
-            )
+            let updates = Defaults.updates(.keybinds)
 
             for await _ in updates {
                 guard
@@ -54,12 +51,11 @@ final class WindowActionCache {
         observationTask?.cancel()
     }
 
-    /// Rebuilds the cache and includes extra entries for cycle actions with shift keys if the user has enabled `cycleBackwardsOnShiftPressed`.
+    /// Rebuilds the cache from explicitly configured shortcuts.
     private func regenerateCache() {
         let keybinds: [WindowAction] = Defaults[.keybinds].filter { !$0.keybind.isEmpty }
 
         var snapshot = Snapshot()
-        let cycleBackwardsOnShiftPressed: Bool = Defaults[.cycleBackwardsOnShiftPressed]
 
         let normalActions = keybinds.filter { $0.bypassTriggerKey != true }
         let bypassedActions = keybinds.filter { $0.bypassTriggerKey == true }
@@ -69,15 +65,6 @@ final class WindowActionCache {
             normalActions.map { ($0.keybind, $0) },
             uniquingKeysWith: { first, _ in first }
         )
-
-        if cycleBackwardsOnShiftPressed {
-            snapshot.actionsByKeybind.merge(
-                normalActions
-                    .filter { $0.direction == .cycle }
-                    .map { ($0.keybind.union([.kVK_Shift]), $0) },
-                uniquingKeysWith: { first, _ in first }
-            )
-        }
 
         snapshot.bypassedActionsByKeybind = Dictionary(
             bypassedActions.map { ($0.keybind, $0) },

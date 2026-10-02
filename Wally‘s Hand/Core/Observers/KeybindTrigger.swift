@@ -23,9 +23,6 @@ final class KeybindTrigger {
     private let stateLock = NSLock()
     private var pressedKeys: Set<CGKeyCode> = []
     private var eventFlags: CGEventFlags = []
-    var effectiveEventFlags: CGEventFlags {
-        stateLock.withLock { eventFlags }
-    }
     private var eventMonitor: ActiveEventMonitor?
 
     private var systemKeybindCache: Set<Set<CGKeyCode>> = []
@@ -35,26 +32,7 @@ final class KeybindTrigger {
     /// Special events only contain the globe key, as it can also be used as an emoji key.
     private let specialEventKeys: [CGKeyCode] = [.kVK_Globe_Emoji]
 
-    private var useTriggerDelay: Bool { Defaults[.triggerDelay] > 0.1 }
-    private var doubleClickToTrigger: Bool { Defaults[.doubleClickToTrigger] }
-    private var sideDependentTriggerKey: Bool { Defaults[.sideDependentTriggerKey] }
-    private var triggerKey: Set<CGKeyCode> {
-        sideDependentTriggerKey ? Defaults[.triggerKey] : Defaults[.triggerKey].baseModifiers
-    }
-
-    private lazy var triggerDelayTimer = TriggerDelayTimer(openCallback: openCallback)
-    private lazy var doubleClickTimer = DoubleClickTimer { [weak self] action in
-        guard let self else { return }
-
-        if useTriggerDelay {
-            startTriggerDelayTimer(
-                startingAction: action,
-                overrideExistingTriggerDelayTimerAction: true
-            )
-        } else {
-            openCallback(action)
-        }
-    }
+    private var triggerKey: Set<CGKeyCode> { Defaults[.triggerKey] }
 
     /// Initializes a ``KeybindObserver``.
     /// - Parameters:
@@ -124,7 +102,7 @@ final class KeybindTrigger {
                 return .ignore
             }
 
-            // If this shouldn't consume the event, and Wally‘s Hand isn't in the process of opening (possibly due to trigger delays),
+            // If this shouldn't consume the event, and Wally‘s Hand isn't opening,
             // check if it was a system keybind (ex. screenshot), and in that case, passthrough and force-close Wally‘s Hand
             refreshSystemKeybindCacheIfNeeded()
             if result != .opening, event.type == .keyDown, systemKeybindCache.contains(pressedKeys) {
@@ -147,8 +125,6 @@ final class KeybindTrigger {
         stateLock.withLock {
             pressedKeys = []
             eventFlags = []
-            triggerDelayTimer.cancel()
-            doubleClickTimer.reset()
             systemKeybindCache = []
             keybindCacheUpdatedAt = nil
         }
@@ -169,7 +145,7 @@ final class KeybindTrigger {
     /// - Returns: whether this event was processed by Wally‘s Hand.
     private func performKeybind(type: CGEventType, isARepeat: Bool, flags: CGEventFlags, isLoopOpen: Bool) -> PerformKeybindResult {
         let actions = windowActionCache.snapshot
-        let flagKeys = sideDependentTriggerKey ? flags.keyCodes : flags.keyCodes.baseModifiers
+        let flagKeys = flags.keyCodes
         let allPressedKeys: Set<CGKeyCode> = pressedKeys.union(flagKeys)
 
         let containsTrigger = allPressedKeys.isSuperset(of: triggerKey)
@@ -198,32 +174,25 @@ final class KeybindTrigger {
                 // This prevents failures when the user is tapping the keys in rapid succession.
                 if let action = actions.actionsByKeybind[actionKeys] {
                     if !isARepeat || action.canRepeat {
-                        openLoop(startingAction: action, overrideExistingTriggerDelayTimerAction: true)
+                        openCallback(action)
                     }
 
                     // Only consume the event if the last command actually opened Wally‘s Hand.
-                    // The main reason Wally‘s Hand *wouldn't* open after an `openLoop` call would be because the user has enabled a trigger delay.
                     return checkIfLoopOpen() ? .consume : .opening
                 }
 
                 // Only trigger Wally‘s Hand without an action if the only pressed keys perfectly matches the trigger key.
                 if allPressedKeys == triggerKey {
-                    openLoop(
-                        startingAction: .init(.noSelection),
-                        overrideExistingTriggerDelayTimerAction: !isARepeat
-                    )
+                    openCallback(.init(.noSelection))
                     return .opening
                 }
             } else if let bypassedAction = actions.bypassedActionsByKeybind[allPressedKeysBaseModifiers] {
                 if !isARepeat || bypassedAction.canRepeat {
-                    openLoop(startingAction: bypassedAction, overrideExistingTriggerDelayTimerAction: true)
+                    openCallback(bypassedAction)
                 }
 
                 return checkIfLoopOpen() ? .consume : .opening
             } else {
-                if allPressedKeys.isEmpty {
-                    doubleClickTimer.handleKeyUp()
-                }
                 closeLoop(forceClose: false)
             }
         }
@@ -232,44 +201,9 @@ final class KeybindTrigger {
         return .forward
     }
 
-    private func openLoop(startingAction: WindowAction, overrideExistingTriggerDelayTimerAction: Bool) {
-        if checkIfLoopOpen() {
-            openCallback(startingAction) // Only update Wally‘s Hand to the latest WindowAction
-        } else {
-            if doubleClickToTrigger {
-                doubleClickTimer.handleKeyDown(startingAction: startingAction)
-            } else if useTriggerDelay {
-                startTriggerDelayTimer(
-                    startingAction: startingAction,
-                    overrideExistingTriggerDelayTimerAction: overrideExistingTriggerDelayTimerAction
-                )
-            } else {
-                openCallback(startingAction)
-            }
-        }
-    }
-
     private func closeLoop(forceClose: Bool) {
-        triggerDelayTimer.cancel()
         closeCallback(forceClose)
         pressedKeys = []
-    }
-
-    private func startTriggerDelayTimer(
-        startingAction: WindowAction,
-        overrideExistingTriggerDelayTimerAction: Bool
-    ) {
-        // If a trigger delay timer is already active, only update its startingAction when
-        // overrideExistingTriggerDelayTimerAction is true. If it's false, keep the existing
-        // timer and its startingAction (do not create a new timer with nil).
-        if triggerDelayTimer.isActive {
-            if overrideExistingTriggerDelayTimerAction {
-                triggerDelayTimer.updateStartingAction(with: startingAction)
-            }
-        } else {
-            // No active timer, create one with the provided startingAction.
-            triggerDelayTimer.handleTrigger(startingAction: startingAction)
-        }
     }
 
     private func refreshSystemKeybindCacheIfNeeded() {

@@ -148,14 +148,7 @@ extension PaddingConfiguration {
                 configureScreenPadding: false
             )
         } else {
-            let respectsPaddingThreshold = if let screen {
-                Defaults[.paddingMinimumScreenSize] == 0 || screen.diagonalSize > Defaults[.paddingMinimumScreenSize]
-            } else {
-                true
-            }
-            let enablePadding = Defaults[.enablePadding] && respectsPaddingThreshold
-
-            return enablePadding ? Defaults[.padding] : .zero
+            return .zero
         }
     }
 }

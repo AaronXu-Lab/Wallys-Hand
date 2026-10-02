@@ -2,7 +2,7 @@
 # Run after ./script/build_and_run.sh --verify. No input events are posted.
 set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PRODUCTS="${DERIVED_DATA_PATH:-$ROOT_DIR/.codex/build}/Build/Products/Debug"
+PRODUCTS="${DERIVED_DATA_PATH:-$ROOT_DIR/.codex/rename-build}/Build/Products/Debug"
 TEST_DIR="$(mktemp -d "${TMPDIR:-/tmp}/loop-event-tests.XXXXXX")"
 trap 'rm -rf "$TEST_DIR"' EXIT
 
@@ -18,7 +18,6 @@ xcrun swiftc -g -Onone -swift-version 5 -sanitize="$SANITIZER" \
     "$PRODUCTS/Defaults.o" "$PRODUCTS/Scribe.o" \
     "$ROOT_DIR/Tests/EventMonitoring/Fixtures.swift" \
     "$ROOT_DIR/Tests/EventMonitoring/Regression.swift" \
-    "$ROOT_DIR/Wally‘s Hand/Core/Observers/Helpers/TriggerDelayTimer.swift" \
     "$ROOT_DIR/Wally‘s Hand/Window Management/Window Action/WindowActionCache.swift" \
     "$ROOT_DIR/Wally‘s Hand/Utilities/Event Monitoring/EventMonitorProtocol.swift" \
     "$ROOT_DIR/Wally‘s Hand/Utilities/Event Monitoring/EventTapThread.swift" \

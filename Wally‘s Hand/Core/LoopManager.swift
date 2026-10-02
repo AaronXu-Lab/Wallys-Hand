@@ -363,15 +363,6 @@ extension LoopManager {
             return action
         }
 
-        // Allow cycling backwards only if:
-        // - Shift is not part of the action's keybind (eligibleForReverseCycle)
-        // - Shift is not part of the trigger key
-        // - The user has enabled the setting
-        let allowReverseCycle = action.eligibleForReverseCycle
-            && Defaults[.triggerKey].contains(.kVK_Shift) == false
-            && Defaults[.cycleBackwardsOnShiftPressed]
-
-        let shouldCycleBackwards = allowReverseCycle && keybindTrigger.effectiveEventFlags.contains(.maskShift)
         var currentIndex: Int? = nil
 
         if Defaults[.cycleModeRestartEnabled],
@@ -394,15 +385,11 @@ extension LoopManager {
             return currentCycle[0]
         }
 
-        nextIndex += shouldCycleBackwards ? -1 : 1
+        nextIndex += 1
 
-        // Wrap around the cycle index if we've reached the end or gone before the start.
+        // Wrap around the cycle index when reaching the end.
         if nextIndex >= currentCycle.count {
             nextIndex = 0
-        }
-
-        if nextIndex < 0 {
-            nextIndex = currentCycle.count - 1
         }
 
         return currentCycle[nextIndex]
@@ -420,14 +407,14 @@ extension LoopManager {
 
     /// Resolves the target screen for `screenToResizeOn`.
     ///
-    /// By default, this uses the user's `useScreenWithCursor` setting.
+    /// By default, this uses the main screen.
     /// For actions that move windows between screens, the screen containing the window is preferred to ensure deterministic behavior.
     /// - Parameters:
     ///   - action: The window action being performed.
     ///   - window: The window to be resized, if any.
     /// - Returns: The screen the window should be on after the action.
     private func resolveAndStoreTargetScreen(action: WindowAction, window: Window?) -> NSScreen? {
-        var targetScreen = Defaults[.useScreenWithCursor] ? NSScreen.screenWithMouse : NSScreen.main
+        var targetScreen = NSScreen.main
 
         if action.direction.willChangeScreen,
            let window,
