@@ -107,7 +107,7 @@ struct PortStatusBadge: View {
     }
 
     var body: some View {
-        AUIBadge(status.phase.rawValue, systemImage: symbol,
+        AUIBadge(status.phase.rawValue, systemImage: symbol, contentType: .iconText,
                  size: .sm, variant: .light, color: color)
     }
 }

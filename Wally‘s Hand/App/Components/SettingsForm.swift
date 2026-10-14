@@ -39,10 +39,19 @@ struct SettingsSection<Content: View>: View {
             if let title {
                 Text(title).auiText(.headlineSm).accessibilityAddTraits(.isHeader)
             }
-            AUIItemSectionGroup(size: .sm) {
-                Group(subviews: content) { rows in
-                    ForEach(rows) { row in
-                        row.padding(.vertical, AUISpacing.lg)
+            // Settings pages own their ScrollView and may contain selection Lists.
+            // Item Surface supports this composition; Item Section Group requires a List.
+            AUIItemSurface(size: .md) {
+                VStack(spacing: 0) {
+                    Group(subviews: content) { rows in
+                        ForEach(rows) { row in
+                            row.padding(.vertical, AUISpacing.lg)
+                                .overlay(alignment: .bottom) {
+                                    if row.id != rows.last?.id {
+                                        Rectangle().fill(AUIColor.lineSubtle).frame(height: 0.5)
+                                    }
+                                }
+                        }
                     }
                 }
             }

@@ -27,6 +27,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_: Notification) {
+        // Canvas must not start services or replace a running application instance.
+        if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" { return }
         configureLogging()
         cliServer = PortCLIServer()
         #if DEBUG
@@ -153,16 +155,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_: NSApplication) -> Bool {
+        if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" { return false }
         WorkspaceWindowManager.shared.close()
         return false
     }
 
     func applicationShouldHandleReopen(_: NSApplication, hasVisibleWindows _: Bool) -> Bool {
+        if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" { return true }
         WorkspaceWindowManager.shared.show()
         return true
     }
 
     func applicationShouldTerminate(_: NSApplication) -> NSApplication.TerminateReply {
+        if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" { return .terminateNow }
         windowManagementTask?.cancel()
         // LoopManager and WindowDragManager are explicitly shut down so that their
         // event monitors are stopped immediately (in case they are active)

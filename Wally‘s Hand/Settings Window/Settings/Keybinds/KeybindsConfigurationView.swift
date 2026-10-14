@@ -58,10 +58,18 @@ struct KeybindsConfigurationView: View {
     private var settingsSection: some View {
         if isCycleActionPresentInKeybinds {
             SettingsSection(String(localized: "Cycles", comment: "Section header shown in settings")) {
-                AUIItem(
-                    String(localized: "Always start cycles from first item"),
-                    description: String(localized: "By default, Wally‘s Hand resumes cycles from where you last left off in each window.")
-                ) {
+                // This form owns a ScrollView rather than the List required by AUIItem.
+                // Keep the switch's text label separate from its supporting description.
+                HStack(spacing: AUISpacing.lg) {
+                    VStack(alignment: .leading, spacing: AUISpacing.sm) {
+                        Text("Always start cycles from first item")
+                            .auiText(AUITextStyle.bodyMd.emphasized())
+                        Text("By default, Wally‘s Hand resumes cycles from where you last left off in each window.")
+                            .auiText(.bodySm)
+                            .foregroundStyle(AUIColor.onSurfaceMuted)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     Toggle("Always start cycles from first item", isOn: $cycleModeRestartEnabled)
                         .labelsHidden()
                         .toggleStyle(.auiSwitch)

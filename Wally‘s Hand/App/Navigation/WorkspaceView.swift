@@ -11,10 +11,16 @@ struct WorkspaceView: View {
     var body: some View {
         HStack(spacing: 0) {
             VStack(alignment: .leading, spacing: AUISpacing.lg) {
-                Text(Bundle.main.appName)
-                    .auiText(.headlineSm)
-                    .padding(.horizontal, AUISpacing.xxl)
-                    .padding(.top, AUISpacing.lg)
+                HStack(spacing: AUISpacing.sm) {
+                    Text(Bundle.main.appName)
+                        .auiText(.headlineSm)
+                    // Use the same development channel detection as the About version.
+                    if VersionDisplay.current.isPrerelease {
+                        AUIBadge("DEV", size: .sm, variant: .light, color: .blue)
+                    }
+                }
+                .padding(.horizontal, AUISpacing.xxl)
+                .padding(.top, AUISpacing.lg)
                 ScrollView {
                     VStack(alignment: .leading, spacing: AUISpacing.xxl) {
                         sidebarSection("工具", destinations: AppDestination.tools)
@@ -54,7 +60,6 @@ struct WorkspaceView: View {
         .environmentObject(model)
         .foregroundStyle(SettingsAppearance.ink)
         .buttonStyle(AUIButtonStyle(variant: .outline, size: .sm))
-        .tint(AUIColor.accent)
         .transaction { transaction in
             if reduceMotion {
                 transaction.animation = nil
