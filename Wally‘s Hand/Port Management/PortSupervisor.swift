@@ -192,6 +192,8 @@ final class PortSupervisor {
         guard !run.releasingPlaceholder else { return }
 
         let listeners = try PortProcess.listeners(port: run.service.port)
+        // lsof may observe a child born after the initial lifecycle snapshot.
+        run.process?.refresh()
         let foreign = listeners.filter {
             $0.pid != getpid() && run.process?.owns($0) != true
         }

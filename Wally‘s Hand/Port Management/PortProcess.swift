@@ -93,14 +93,30 @@ final class PortProcess {
     }
 
     func refresh() {
-        // Keep the group anchored to a known living identity before discovering descendants.
-        if members.contains(where: \.alive) {
+        // Follow parent identities as well as process groups: tools such as Node's
+        // detached spawn create new groups while remaining children of this service.
+        members = members.filter(\.alive)
+        if !members.isEmpty {
             let bytes = proc_listallpids(nil, 0) * Int32(MemoryLayout<pid_t>.size) + 4096
             var pids = [pid_t](repeating: 0, count: Int(bytes) / MemoryLayout<pid_t>.size)
             let count = pids.withUnsafeMutableBytes { proc_listallpids($0.baseAddress, Int32($0.count)) }
-            for candidate in pids.prefix(max(0, Int(count))) where candidate > 1 {
-                if let info = PortProcessIdentity.info(candidate), info.pbi_pgid == UInt32(pid),
-                   let identity = PortProcessIdentity(candidate) { members.insert(identity) }
+            var pending = pids.prefix(max(0, Int(count))).filter { $0 > 1 }
+            var added = true
+            while added {
+                added = false
+                pending.removeAll { candidate in
+                    guard let info = PortProcessIdentity.info(candidate),
+                          let identity = PortProcessIdentity(candidate),
+                          identity.seconds == info.pbi_start_tvsec,
+                          identity.microseconds == info.pbi_start_tvusec else { return true }
+                    if members.contains(identity) { return true }
+                    let parent = members.first { $0.pid == pid_t(info.pbi_ppid) && $0.alive }
+                    let anchoredGroup = members.contains { $0.pid == pid_t(info.pbi_pgid) && $0.alive }
+                    guard parent != nil || anchoredGroup else { return false }
+                    members.insert(identity)
+                    added = true
+                    return true
+                }
             }
         }
         if !reaped {

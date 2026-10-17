@@ -142,6 +142,36 @@ struct PortRegression {
         try require(duplicate.validationError(existing: [service]) != nil, "Duplicate port accepted")
         try require(recorder.status(service.id).phase == .disabled, "Unexpected automatic enable")
 
+        // Match Node spawn({ detached: true }): the listener has its own session/group.
+        let launcher = """
+        import subprocess, sys
+        child = subprocess.Popen([sys.executable, 'server.py'], start_new_session=True)
+        child.wait()
+        """
+        try launcher.write(to: directory.appendingPathComponent("detached.py"), atomically: true, encoding: .utf8)
+        let detached = PortService(name: "Detached", port: try freePort(), directory: directory.path,
+                                   command: "exec \(python) detached.py")
+        testServices.append(detached)
+        supervisor.enable(detached)
+        try wait("detached descendant recognized") { recorder.status(detached.id).phase == .running }
+        let detachedOwners = try PortProcess.listeners(port: detached.port)
+        Thread.sleep(forTimeInterval: 2)
+        try require(try PortProcess.listeners(port: detached.port) == detachedOwners,
+                    "Detached listener was reclaimed as foreign")
+        supervisor.retry(detached.id)
+        try wait("detached restart") {
+            let current = try PortProcess.listeners(port: detached.port)
+            return recorder.status(detached.id).phase == .running && !current.isEmpty && current.isDisjoint(with: detachedOwners)
+        }
+        try require(detachedOwners.allSatisfy { !$0.alive }, "Restart leaked detached descendants")
+        let restartedOwners = try PortProcess.listeners(port: detached.port)
+        supervisor.stop(detached.id, disable: true)
+        try wait("detached cleanup") {
+            try recorder.status(detached.id).phase == .disabled && PortProcess.listeners(port: detached.port).isEmpty
+        }
+        try require(restartedOwners.allSatisfy { !$0.alive }, "Stop leaked detached descendants")
+        print("PASS detached descendant ownership, restart and stop cleanup")
+
         // A foreign fixture is the only external process this test authorizes reclaiming.
         var foreignService = service
         foreignService.command = "trap '' TERM; " + service.command
