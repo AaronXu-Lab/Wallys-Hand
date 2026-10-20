@@ -61,6 +61,82 @@ struct PortRegression {
         process.waitUntilExit()
         return String(decoding: data, as: UTF8.self)
     }
+    @MainActor static func waitForManager(_ message: String, _ condition: () throws -> Bool) throws {
+        let deadline = Date().addingTimeInterval(20)
+        while Date() < deadline {
+            if try condition() { return }
+            RunLoop.current.run(until: Date().addingTimeInterval(0.05))
+        }
+        throw PortProcessError.message("Timed out: \(message)")
+    }
+
+    @MainActor static func testStartAll(python: String, directory: URL) throws {
+        let suite = "PortStartAllTests.\(UUID())"
+        let defaults = UserDefaults(suiteName: suite)!
+        let manager = PortServiceManager(defaults: defaults)
+        var fixtures: [PortService] = []
+        defer {
+            var finished = false
+            manager.shutdown { finished = true }
+            try? waitForManager("bulk start cleanup") { finished }
+            fixtures.forEach { try? FileManager.default.removeItem(at: $0.logURL) }
+            defaults.removePersistentDomain(forName: suite)
+        }
+        try require(manager.servicesToStart.isEmpty, "Empty manager offered bulk start")
+        manager.startAll()
+        for name in ["Healthy", "Stopped", "Failed", "Disabled", "Starting"] {
+            var port = try freePort()
+            while fixtures.contains(where: { $0.port == port }) { port = try freePort() }
+            let prefix: String
+            switch name {
+            case "Failed": prefix = "test -f allow-bulk-retry || exit 1; "
+            case "Starting": prefix = "echo launch >> bulk-start-attempts; sleep 2; "
+            default: prefix = ""
+            }
+            let service = PortService(name: name, port: port, directory: directory.path,
+                                      command: "\(prefix)exec \(python) server.py")
+            try require(manager.save(service) == nil, "Bulk fixture save failed")
+            fixtures.append(service)
+        }
+        let healthy = fixtures[0], stopped = fixtures[1], failed = fixtures[2], starting = fixtures[4]
+        manager.enable(healthy)
+        manager.enable(stopped)
+        manager.enable(failed)
+        try waitForManager("bulk initial states") {
+            manager.status(healthy.id).phase == .running
+                && manager.status(stopped.id).phase == .running
+                && manager.status(failed.id).phase == .failed
+        }
+        manager.stop(stopped.id)
+        try waitForManager("bulk stopped fixture") { manager.status(stopped.id).phase == .stopped }
+        let healthyOwners = try PortProcess.listeners(port: healthy.port)
+        try Data().write(to: directory.appendingPathComponent("allow-bulk-retry"))
+        manager.enable(starting)
+
+        // One invalid project must not prevent the remaining services from starting.
+        let missingDirectory = directory.appendingPathComponent("removed-project")
+        try FileManager.default.createDirectory(at: missingDirectory, withIntermediateDirectories: true)
+        var invalidPort = try freePort()
+        while fixtures.contains(where: { $0.port == invalidPort }) { invalidPort = try freePort() }
+        let invalid = PortService(name: "Invalid", port: invalidPort, directory: missingDirectory.path, command: "exit 0")
+        try require(manager.save(invalid) == nil, "Invalid fixture setup failed")
+        try FileManager.default.removeItem(at: missingDirectory)
+        try require(Set(manager.servicesToStart.map(\.id)) == Set([stopped.id, failed.id, fixtures[3].id, invalid.id]),
+                    "Bulk candidates included running or starting services")
+        manager.startAll()
+        manager.startAll()
+        try waitForManager("all valid services running") {
+            fixtures.allSatisfy { manager.status($0.id).phase == .running }
+        }
+        try require(try PortProcess.listeners(port: healthy.port) == healthyOwners, "Bulk start restarted a healthy service")
+        try require(manager.status(invalid.id).phase == .conflict && !manager.status(invalid.id).protected,
+                    "Invalid project did not report its own error")
+        try require(manager.servicesToStart.map(\.id) == [invalid.id], "Running services still offered bulk start")
+        let attempts = try String(contentsOf: directory.appendingPathComponent("bulk-start-attempts"), encoding: .utf8)
+        try require(attempts.split(separator: "\n").count == 1, "Bulk start duplicated an in-progress launch")
+        print("PASS bulk start enables disabled, resumes stopped, retries failed, skips running/starting, isolates invalid projects")
+    }
+
     @MainActor static func main() throws {
         setbuf(stdout, nil)
         let recorder = StatusRecorder()
@@ -133,6 +209,7 @@ struct PortRegression {
                 open("rebuilt", "w").close()
         """
         try server.write(to: directory.appendingPathComponent("server.py"), atomically: true, encoding: .utf8)
+        try testStartAll(python: python, directory: directory)
         let port = try freePort()
         var service = PortService(name: "Fixture", port: port, directory: directory.path,
                                   command: "\(python) server.py & child=$!; wait $child")

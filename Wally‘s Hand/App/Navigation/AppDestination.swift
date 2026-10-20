@@ -2,17 +2,18 @@ import SwiftUI
 
 /// Only independent tools and application-wide destinations belong in the main sidebar.
 enum AppDestination: String, CaseIterable, Identifiable {
-    case windows, ports, settings, about
+    case windows, ports, memory, settings, about
 
     var id: Self { self }
-    var isTool: Bool { self == .windows || self == .ports }
-    static let tools: [Self] = [.windows, .ports]
+    var isTool: Bool { self == .windows || self == .ports || self == .memory }
+    static let tools: [Self] = [.windows, .ports, .memory]
     static let application: [Self] = [.settings, .about]
 
     var title: String {
         switch self {
         case .windows: String(localized: "窗口管理")
         case .ports: String(localized: "端口管理")
+        case .memory: String(localized: "内存信息")
         case .settings: String(localized: "通用设置")
         case .about: String(localized: "关于")
         }
@@ -22,6 +23,7 @@ enum AppDestination: String, CaseIterable, Identifiable {
         switch self {
         case .windows: String(localized: "用快捷键和边缘吸附整理窗口。")
         case .ports: String(localized: "配置项目启动命令，保护端口并管理服务恢复。")
+        case .memory: String(localized: "查看内存负载、内存压力与占用较大的进程。")
         case .settings: String(localized: "语言、启动方式与应用显示。")
         case .about: String(localized: "版本、更新与项目信息。")
         }
@@ -31,6 +33,7 @@ enum AppDestination: String, CaseIterable, Identifiable {
         switch self {
         case .windows: "rectangle.split.2x2"
         case .ports: "network"
+        case .memory: "memorychip"
         case .settings: "gearshape"
         case .about: "info.circle"
         }

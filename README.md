@@ -23,6 +23,9 @@ Wally‘s Hand can become very powerful when paired with cycles. These enable yo
 ### Port management
 
 In **工具 → 端口管理**, add a service name, TCP port, project directory and startup command.
+Use **启动全部** in the overview or **启动全部服务** in the menu bar to start every
+disabled, stopped, failed, conflicting, or waiting-to-retry service. Running services
+and launches or brief listener interruptions already in progress are left alone.
 Use **导出全部配置** to save every service and its recovery/log settings as one JSON backup;
 **导入配置** replaces the saved list after confirmation. Imported services stay disabled.
 Project files and logs are not included, so restore the project directories separately.

@@ -59,6 +59,10 @@ struct PortConfigurationView: View {
                         .monospacedDigit()
                         .foregroundStyle(SettingsAppearance.muted)
                     Spacer()
+                    Button("启动全部", systemImage: "play.fill") { manager.startAll() }
+                        .buttonStyle(AUIButtonStyle(variant: .outline, size: .xs, contentType: .iconText))
+                        .disabled(manager.servicesToStart.isEmpty)
+                        .help("启动所有未启用、已停止或异常的服务，保留正在运行和启动中的服务。")
                     addButton
                 }
                 .padding(.horizontal, AUISpacing.xxl)

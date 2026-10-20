@@ -12,6 +12,7 @@ final class MenuBarController: NSObject, NSMenuDelegate, NSMenuItemValidation {
     private var actions: [UUID: () -> Void] = [:]
     private let servicesAnchorTag = 567900
     private let retryProblemsTag = 567901
+    private let startAllTag = 567902
     private var serviceEntries: [UUID: ServiceEntry] = [:]
 
     private struct ServiceEntry {
@@ -84,6 +85,9 @@ final class MenuBarController: NSObject, NSMenuDelegate, NSMenuItemValidation {
             WorkspaceWindowManager.shared.show(.ports)
         }
         settings.tag = servicesAnchorTag
+        let startAll = add("启动全部服务", to: menu) { [weak self] in self?.ports.startAll() }
+        startAll.tag = startAllTag
+        startAll.toolTip = "启动所有未启用、已停止或异常的服务，保留正在运行和启动中的服务。"
         let retryProblems = add("重启异常服务", to: menu) { [weak self] in
             self?.ports.retryProblemServices()
         }
@@ -97,6 +101,7 @@ final class MenuBarController: NSObject, NSMenuDelegate, NSMenuItemValidation {
     /// Stable partition: protected services first; preserve configured order within each group.
     /// Reuse menu items while tracking so status changes do not dismiss the open submenu.
     private func updateServices(in menu: NSMenu) {
+        menu.item(withTag: startAllTag)?.isEnabled = !ports.servicesToStart.isEmpty
         let problemCount = ports.problemServices.count
         if let retryProblems = menu.item(withTag: retryProblemsTag) {
             retryProblems.title = problemCount > 0 ? "重启异常服务（\(problemCount)）" : "重启异常服务"
@@ -189,6 +194,10 @@ final class MenuBarController: NSObject, NSMenuDelegate, NSMenuItemValidation {
     }
 
     func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
-        menuItem.tag != retryProblemsTag || !ports.problemServices.isEmpty
+        switch menuItem.tag {
+        case startAllTag: !ports.servicesToStart.isEmpty
+        case retryProblemsTag: !ports.problemServices.isEmpty
+        default: true
+        }
     }
 }

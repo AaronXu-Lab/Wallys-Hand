@@ -98,6 +98,7 @@ struct WorkspaceView: View {
         switch model.destination {
         case .windows: WindowManagementView(selection: $model.windowTab)
         case .ports: PortConfigurationView()
+        case .memory: MemoryConfigurationView()
         case .settings: GeneralConfigurationView()
         case .about: AboutConfigurationView()
         }

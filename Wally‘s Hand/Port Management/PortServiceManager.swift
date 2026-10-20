@@ -43,6 +43,25 @@ final class PortServiceManager: ObservableObject {
     func status(_ id: UUID) -> PortServiceStatus { statuses[id] ?? PortServiceStatus() }
     var hasAttention: Bool { services.contains { status($0.id).needsAttention } }
     var hasProtection: Bool { services.contains { status($0.id).protected } }
+    var servicesToStart: [PortService] {
+        services.filter {
+            let current = status($0.id)
+            return !current.protected || [.stopped, .failed, .conflict, .retrying].contains(current.phase)
+        }
+    }
+
+    /// Start saved services without interrupting healthy or in-progress launches.
+    func startAll() {
+        for service in servicesToStart {
+            if status(service.id).protected {
+                statuses[service.id] = PortServiceStatus(phase: .starting, protected: true)
+                retry(service.id)
+            } else {
+                enable(service)
+            }
+        }
+    }
+
     var problemServices: [PortService] {
         services.filter { status($0.id).protected && status($0.id).needsAttention }
     }
