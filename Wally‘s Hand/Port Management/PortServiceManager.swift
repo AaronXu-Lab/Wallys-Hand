@@ -35,24 +35,28 @@ final class PortServiceManager: ObservableObject {
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         if let data = defaults.data(forKey: Self.storageKey) {
-            do { services = try JSONDecoder().decode([PortService].self, from: data) }
-            catch { storageError = "无法读取端口配置：\(error.localizedDescription)" }
+            do { self.services = try JSONDecoder().decode([PortService].self, from: data) }
+            catch { self.storageError = "无法读取端口配置：\(error.localizedDescription)" }
         }
     }
 
-    func status(_ id: UUID) -> PortServiceStatus { statuses[id] ?? PortServiceStatus() }
+    func status(_ id: UUID) -> PortServiceStatus {
+        statuses[id] ?? PortServiceStatus()
+    }
+
     var hasAttention: Bool { services.contains { status($0.id).needsAttention } }
     var hasProtection: Bool { services.contains { status($0.id).protected } }
-    var servicesToStart: [PortService] {
+    var quickStartCandidates: [PortService] {
         services.filter {
+            guard $0.quickStart == true else { return false }
             let current = status($0.id)
             return !current.protected || [.stopped, .failed, .conflict, .retrying].contains(current.phase)
         }
     }
 
-    /// Start saved services without interrupting healthy or in-progress launches.
-    func startAll() {
-        for service in servicesToStart {
+    /// Start only explicitly selected services without interrupting healthy or in-progress launches.
+    func quickStart() {
+        for service in quickStartCandidates {
             if status(service.id).protected {
                 statuses[service.id] = PortServiceStatus(phase: .starting, protected: true)
                 retry(service.id)
@@ -65,14 +69,22 @@ final class PortServiceManager: ObservableObject {
     var problemServices: [PortService] {
         services.filter { status($0.id).protected && status($0.id).needsAttention }
     }
+
     func retryProblemServices() {
-        for service in problemServices { retry(service.id) }
+        for service in problemServices {
+            retry(service.id)
+        }
     }
 
     /// Includes every saved service and its recovery/logging options, but no running state.
     func exportBackup() throws -> Data {
-        if let storageError { throw NSError(domain: "PortServiceManager", code: 1,
-                                            userInfo: [NSLocalizedDescriptionKey: storageError]) }
+        if let storageError {
+            throw NSError(
+                domain: "PortServiceManager",
+                code: 1,
+                userInfo: [NSLocalizedDescriptionKey: storageError]
+            )
+        }
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         return try encoder.encode(Backup(version: 1, services: services))
@@ -89,12 +101,16 @@ final class PortServiceManager: ObservableObject {
               backup.services.allSatisfy({ (1...65535).contains($0.port) })
         else { throw BackupError.duplicateConfiguration }
         if let error = persist(backup.services) {
-            throw NSError(domain: "PortServiceManager", code: 2,
-                          userInfo: [NSLocalizedDescriptionKey: error])
+            throw NSError(
+                domain: "PortServiceManager",
+                code: 2,
+                userInfo: [NSLocalizedDescriptionKey: error]
+            )
         }
         statuses.removeAll()
         storageError = nil
     }
+
     var tooltip: String {
         let enabled = services.filter { status($0.id).protected }
         guard !enabled.isEmpty else { return "Wally‘s Hand" }
@@ -104,12 +120,21 @@ final class PortServiceManager: ObservableObject {
     func save(_ service: PortService) -> String? {
         guard storageError == nil else { return storageError }
         guard !status(service.id).protected else { return "请先停用保护，再修改配置。" }
-        if let error = service.validationError(existing: services) { return error }
+        if let error = service.validationError(existing: services) {
+            return error
+        }
         var updated = services
-        if let index = updated.firstIndex(where: { $0.id == service.id }) { updated[index] = service }
-        else { updated.append(service) }
+        if let index = updated.firstIndex(where: { $0.id == service.id }) {
+            var merged = service
+            merged.quickStart = updated[index].quickStart
+            updated[index] = merged
+        } else {
+            updated.append(service)
+        }
         let error = persist(updated)
-        if error == nil { statuses.removeValue(forKey: service.id) }
+        if error == nil {
+            statuses.removeValue(forKey: service.id)
+        }
         return error
     }
 
@@ -120,7 +145,9 @@ final class PortServiceManager: ObservableObject {
         guard services[index].automaticallyRecover != enabled else { return nil }
         var updated = services
         updated[index].automaticallyRecover = enabled
-        if let error = persist(updated) { return error }
+        if let error = persist(updated) {
+            return error
+        }
         supervisor.setAutomaticallyRecover(enabled, for: id)
         return nil
     }
@@ -131,15 +158,43 @@ final class PortServiceManager: ObservableObject {
         guard services[index].isMonitoringLogs != enabled else { return nil }
         var updated = services
         updated[index].monitorLogs = enabled
-        if let error = persist(updated) { return error }
+        if let error = persist(updated) {
+            return error
+        }
         supervisor.setMonitorLogs(enabled, for: id)
+        return nil
+    }
+
+    /// Selection is saved immediately in Settings; it never launches a service.
+    func setQuickStart(_ enabled: Bool, for id: UUID) -> String? {
+        guard storageError == nil else { return storageError }
+        guard let index = services.firstIndex(where: { $0.id == id }) else { return "找不到服务配置。" }
+        var updated = services
+        updated[index].quickStart = enabled
+        return persist(updated)
+    }
+
+    /// Commit both runtime options together, including while process configuration is locked.
+    func saveRuntimeOptions(_ service: PortService) -> String? {
+        guard storageError == nil else { return storageError }
+        guard let index = services.firstIndex(where: { $0.id == service.id }) else { return "找不到服务配置。" }
+        var updated = services
+        updated[index].automaticallyRecover = service.automaticallyRecover
+        updated[index].monitorLogs = service.monitorLogs
+        if let error = persist(updated) {
+            return error
+        }
+        supervisor.setAutomaticallyRecover(service.automaticallyRecover, for: service.id)
+        supervisor.setMonitorLogs(service.isMonitoringLogs, for: service.id)
         return nil
     }
 
     func remove(_ service: PortService) -> String? {
         guard !status(service.id).protected else { return "请先停用保护，再删除配置。" }
         let error = persist(services.filter { $0.id != service.id })
-        if error == nil { statuses.removeValue(forKey: service.id) }
+        if error == nil {
+            statuses.removeValue(forKey: service.id)
+        }
         return error
     }
 
@@ -161,10 +216,20 @@ final class PortServiceManager: ObservableObject {
         statuses[service.id] = PortServiceStatus(phase: .starting, protected: true)
         supervisor.enable(service)
     }
-    func retry(_ id: UUID) { supervisor.retry(id) }
-    func stop(_ id: UUID) { supervisor.stop(id, disable: false) }
-    func disable(_ id: UUID) { supervisor.stop(id, disable: true) }
-    func shutdown(completion: @escaping () -> Void) {
+
+    func retry(_ id: UUID) {
+        supervisor.retry(id)
+    }
+
+    func stop(_ id: UUID) {
+        supervisor.stop(id, disable: false)
+    }
+
+    func disable(_ id: UUID) {
+        supervisor.stop(id, disable: true)
+    }
+
+    func shutdown(completion: @escaping () -> ()) {
         supervisor.shutdown { DispatchQueue.main.async { completion() } }
     }
 }

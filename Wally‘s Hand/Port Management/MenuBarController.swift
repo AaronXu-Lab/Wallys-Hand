@@ -9,10 +9,10 @@ final class MenuBarController: NSObject, NSMenuDelegate, NSMenuItemValidation {
     private let ports = PortServiceManager.shared
     private var statusItem: NSStatusItem?
     private var subscriptions = Set<AnyCancellable>()
-    private var actions: [UUID: () -> Void] = [:]
-    private let servicesAnchorTag = 567900
-    private let retryProblemsTag = 567901
-    private let startAllTag = 567902
+    private var actions: [UUID: () -> ()] = [:]
+    private let servicesAnchorTag = 567_900
+    private let retryProblemsTag = 567_901
+    private let quickStartTag = 567_902
     private var serviceEntries: [UUID: ServiceEntry] = [:]
 
     private struct ServiceEntry {
@@ -43,7 +43,9 @@ final class MenuBarController: NSObject, NSMenuDelegate, NSMenuItemValidation {
     private func refresh() {
         let visible = !Defaults[.hideMenuBarIcon] || ports.hasProtection
         guard visible else {
-            if let statusItem { NSStatusBar.system.removeStatusItem(statusItem) }
+            if let statusItem {
+                NSStatusBar.system.removeStatusItem(statusItem)
+            }
             statusItem = nil
             return
         }
@@ -85,9 +87,9 @@ final class MenuBarController: NSObject, NSMenuDelegate, NSMenuItemValidation {
             WorkspaceWindowManager.shared.show(.ports)
         }
         settings.tag = servicesAnchorTag
-        let startAll = add("启动全部服务", to: menu) { [weak self] in self?.ports.startAll() }
-        startAll.tag = startAllTag
-        startAll.toolTip = "启动所有未启用、已停止或异常的服务，保留正在运行和启动中的服务。"
+        let quickStart = add("快速启动", to: menu) { [weak self] in self?.ports.quickStart() }
+        quickStart.tag = quickStartTag
+        quickStart.toolTip = "仅启动设置中选中的服务，跳过正在运行或启动中的服务。"
         let retryProblems = add("重启异常服务", to: menu) { [weak self] in
             self?.ports.retryProblemServices()
         }
@@ -101,7 +103,7 @@ final class MenuBarController: NSObject, NSMenuDelegate, NSMenuItemValidation {
     /// Stable partition: protected services first; preserve configured order within each group.
     /// Reuse menu items while tracking so status changes do not dismiss the open submenu.
     private func updateServices(in menu: NSMenu) {
-        menu.item(withTag: startAllTag)?.isEnabled = !ports.servicesToStart.isEmpty
+        menu.item(withTag: quickStartTag)?.isEnabled = !ports.quickStartCandidates.isEmpty
         let problemCount = ports.problemServices.count
         if let retryProblems = menu.item(withTag: retryProblemsTag) {
             retryProblems.title = problemCount > 0 ? "重启异常服务（\(problemCount)）" : "重启异常服务"
@@ -111,7 +113,9 @@ final class MenuBarController: NSObject, NSMenuDelegate, NSMenuItemValidation {
             + ports.services.filter { !ports.status($0.id).protected }
         for (id, entry) in Array(serviceEntries) where !services.contains(entry.service) {
             for child in entry.item.submenu?.items ?? [] {
-                if let actionID = child.representedObject as? UUID { actions.removeValue(forKey: actionID) }
+                if let actionID = child.representedObject as? UUID {
+                    actions.removeValue(forKey: actionID)
+                }
             }
             menu.removeItem(entry.item)
             serviceEntries.removeValue(forKey: id)
@@ -144,7 +148,9 @@ final class MenuBarController: NSObject, NSMenuDelegate, NSMenuItemValidation {
             let targetIndex = firstServiceIndex + offset
             let currentIndex = menu.index(of: entry.item)
             if currentIndex != targetIndex {
-                if currentIndex >= 0 { menu.removeItem(entry.item) }
+                if currentIndex >= 0 {
+                    menu.removeItem(entry.item)
+                }
                 menu.insertItem(entry.item, at: targetIndex)
             }
         }
@@ -157,7 +163,7 @@ final class MenuBarController: NSObject, NSMenuDelegate, NSMenuItemValidation {
         let detail = submenu.addItem(withTitle: "", action: nil, keyEquivalent: "")
         submenu.addItem(.separator())
         let recovery = add("异常后自动重启", to: submenu) { [weak self] in
-            guard let self, let current = self.ports.services.first(where: { $0.id == service.id }) else { return }
+            guard let self, let current = ports.services.first(where: { $0.id == service.id }) else { return }
             if let error = self.ports.setAutomaticallyRecover(!current.automaticallyRecover, for: service.id) {
                 let alert = NSAlert()
                 alert.messageText = "自动重启设置保存失败"
@@ -173,12 +179,22 @@ final class MenuBarController: NSObject, NSMenuDelegate, NSMenuItemValidation {
         let disable = add("停用保护并释放端口", to: submenu) { [weak self] in self?.ports.disable(service.id) }
         let log = add("查看日志", to: submenu) { NSWorkspace.shared.open(service.logURL) }
         item.submenu = submenu
-        return ServiceEntry(service: service, item: item, status: status, detail: detail,
-                            recovery: recovery, enable: enable, retry: retry, stop: stop, disable: disable, log: log)
+        return ServiceEntry(
+            service: service,
+            item: item,
+            status: status,
+            detail: detail,
+            recovery: recovery,
+            enable: enable,
+            retry: retry,
+            stop: stop,
+            disable: disable,
+            log: log
+        )
     }
 
     @discardableResult
-    private func add(_ title: String, key: String = "", to menu: NSMenu, action: @escaping () -> Void) -> NSMenuItem {
+    private func add(_ title: String, key: String = "", to menu: NSMenu, action: @escaping () -> ()) -> NSMenuItem {
         let id = UUID()
         actions[id] = action
         let item = NSMenuItem(title: title, action: #selector(performAction(_:)), keyEquivalent: key)
@@ -195,7 +211,7 @@ final class MenuBarController: NSObject, NSMenuDelegate, NSMenuItemValidation {
 
     func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
         switch menuItem.tag {
-        case startAllTag: !ports.servicesToStart.isEmpty
+        case quickStartTag: !ports.quickStartCandidates.isEmpty
         case retryProblemsTag: !ports.problemServices.isEmpty
         default: true
         }

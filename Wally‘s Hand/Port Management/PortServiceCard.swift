@@ -1,11 +1,12 @@
 import AaronUI
+import AppKit
 import SwiftUI
 
 /// The overview answers only: which service, which port, what state, and what next.
 struct PortServiceCard: View {
     let service: PortService
     @ObservedObject var manager: PortServiceManager
-    let showDetails: () -> Void
+    let showDetails: () -> ()
 
     private var status: PortServiceStatus { manager.status(service.id) }
 
@@ -42,6 +43,22 @@ struct PortServiceCard: View {
                     .textSelection(.enabled)
                     .accessibilityLabel("端口 \(String(service.port))")
                 PortStatusBadge(status: status).fixedSize()
+                Text(status.protected ? "端口保护中" : "未保护")
+                    .auiText(.caption)
+                    .foregroundStyle(SettingsAppearance.muted)
+            }
+            if status.needsAttention {
+                if !status.detail.isEmpty {
+                    Text(status.detail)
+                        .auiText(.bodySm)
+                        .foregroundStyle(AUIColor.warningInk)
+                        .lineLimit(2)
+                        .help(status.detail)
+                        .textSelection(.enabled)
+                }
+                Button("查看日志", systemImage: "doc.text") { NSWorkspace.shared.open(service.logURL) }
+                    .buttonStyle(AUIButtonStyle(variant: .ghost, size: .xs, contentType: .iconText))
+                    .disabled(!FileManager.default.fileExists(atPath: service.logURL.path))
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -56,7 +73,6 @@ struct PortServiceCard: View {
         }
         .fixedSize()
     }
-
 }
 
 struct PortPrimaryAction: View {
@@ -66,17 +82,26 @@ struct PortPrimaryAction: View {
     private var shouldStop: Bool {
         status.protected && [.running, .starting, .interrupted, .retrying].contains(status.phase)
     }
+
     private var title: String {
-        if !status.protected { return "启动并保护" }
-        if shouldStop { return "停止服务" }
+        if !status.protected {
+            return "启动并保护"
+        }
+        if shouldStop {
+            return "停止服务"
+        }
         return status.phase == .stopped ? "启动服务" : "重试"
     }
 
     var body: some View {
         Button(title) {
-            if !status.protected { manager.enable(service) }
-            else if shouldStop { manager.stop(service.id) }
-            else { manager.retry(service.id) }
+            if !status.protected {
+                manager.enable(service)
+            } else if shouldStop {
+                manager.stop(service.id)
+            } else {
+                manager.retry(service.id)
+            }
         }
         .buttonStyle(AUIButtonStyle(variant: .outline, size: .xs))
         .help(shouldStop ? "停止服务，保留端口保护和占位页面。" : "启动服务并保护端口。")
@@ -107,7 +132,13 @@ struct PortStatusBadge: View {
     }
 
     var body: some View {
-        AUIBadge(status.phase.rawValue, systemImage: symbol, contentType: .iconText,
-                 size: .sm, variant: .light, color: color)
+        AUIBadge(
+            status.phase.rawValue,
+            systemImage: symbol,
+            contentType: .iconText,
+            size: .sm,
+            variant: .light,
+            color: color
+        )
     }
 }

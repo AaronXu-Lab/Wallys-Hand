@@ -8,6 +8,7 @@ private final class StatusRecorder {
         lock.lock(); defer { lock.unlock() }
         values[id] = status
     }
+
     func status(_ id: UUID) -> PortServiceStatus {
         lock.lock(); defer { lock.unlock() }
         return values[id] ?? PortServiceStatus()
@@ -17,16 +18,22 @@ private final class StatusRecorder {
 @main
 struct PortRegression {
     static func require(_ condition: @autoclosure () throws -> Bool, _ message: String) throws {
-        if try !condition() { throw PortProcessError.message(message) }
+        if try !condition() {
+            throw PortProcessError.message(message)
+        }
     }
+
     static func wait(_ message: String, timeout: TimeInterval = 15, _ condition: () throws -> Bool) throws {
         let deadline = Date().addingTimeInterval(timeout)
         while Date() < deadline {
-            if try condition() { return }
+            if try condition() {
+                return
+            }
             Thread.sleep(forTimeInterval: 0.1)
         }
         throw PortProcessError.message("Timed out: \(message)")
     }
+
     static func freePort() throws -> Int {
         let fd = socket(AF_INET, SOCK_STREAM, 0)
         defer { close(fd) }
@@ -43,12 +50,14 @@ struct PortRegression {
         }
         return Int(UInt16(bigEndian: address.sin_port))
     }
+
     static func openDescriptorCount() -> Int {
-        (0..<2048).reduce(0) { count, fd in
+        (0 ..< 2048).reduce(0) { count, fd in
             errno = 0
             return count + (fcntl(Int32(fd), F_GETFD) >= 0 || errno != EBADF ? 1 : 0)
         }
     }
+
     static func response(_ port: Int, host: String = "127.0.0.1") throws -> String {
         let process = Process()
         let output = Pipe()
@@ -61,16 +70,19 @@ struct PortRegression {
         process.waitUntilExit()
         return String(decoding: data, as: UTF8.self)
     }
+
     @MainActor static func waitForManager(_ message: String, _ condition: () throws -> Bool) throws {
         let deadline = Date().addingTimeInterval(20)
         while Date() < deadline {
-            if try condition() { return }
+            if try condition() {
+                return
+            }
             RunLoop.current.run(until: Date().addingTimeInterval(0.05))
         }
         throw PortProcessError.message("Timed out: \(message)")
     }
 
-    @MainActor static func testStartAll(python: String, directory: URL) throws {
+    @MainActor static func testQuickStart(python: String, directory: URL) throws {
         let suite = "PortStartAllTests.\(UUID())"
         let defaults = UserDefaults(suiteName: suite)!
         let manager = PortServiceManager(defaults: defaults)
@@ -82,24 +94,50 @@ struct PortRegression {
             fixtures.forEach { try? FileManager.default.removeItem(at: $0.logURL) }
             defaults.removePersistentDomain(forName: suite)
         }
-        try require(manager.servicesToStart.isEmpty, "Empty manager offered bulk start")
-        manager.startAll()
+        try require(manager.quickStartCandidates.isEmpty, "Empty manager offered bulk start")
+        manager.quickStart()
         for name in ["Healthy", "Stopped", "Failed", "Disabled", "Starting"] {
             var port = try freePort()
-            while fixtures.contains(where: { $0.port == port }) { port = try freePort() }
-            let prefix: String
-            switch name {
-            case "Failed": prefix = "test -f allow-bulk-retry || exit 1; "
-            case "Starting": prefix = "echo launch >> bulk-start-attempts; sleep 2; "
-            default: prefix = ""
+            while fixtures.contains(where: { $0.port == port }) {
+                port = try freePort()
             }
-            let service = PortService(name: name, port: port, directory: directory.path,
-                                      command: "\(prefix)exec \(python) server.py")
+            let prefix = switch name {
+            case "Failed": "test -f allow-bulk-retry || exit 1; "
+            case "Starting": "echo launch >> bulk-start-attempts; sleep 2; "
+            default: ""
+            }
+            let service = PortService(
+                name: name,
+                port: port,
+                directory: directory.path,
+                command: "\(prefix)exec \(python) server.py"
+            )
             try require(manager.save(service) == nil, "Bulk fixture save failed")
             fixtures.append(service)
         }
+        try require(manager.quickStartCandidates.isEmpty, "Existing services were selected by default")
+        manager.quickStart()
+        try require(fixtures.allSatisfy { !manager.status($0.id).protected }, "Unselected service started")
+        for service in fixtures {
+            try require(manager.setQuickStart(true, for: service.id) == nil, "Selection failed")
+        }
+        let reloaded = PortServiceManager(defaults: defaults)
+        try require(reloaded.services.allSatisfy { $0.quickStart == true }, "Selection was not persisted")
+        // Saving an editor draft must preserve the selection set in Settings.
+        try require(
+            manager.save(fixtures[0]) == nil && manager.services[0].quickStart == true,
+            "Editor draft overwrote quick-start selection"
+        )
         let healthy = fixtures[0], stopped = fixtures[1], failed = fixtures[2], starting = fixtures[4]
         manager.enable(healthy)
+        var options = healthy
+        options.automaticallyRecover = true
+        options.monitorLogs = true
+        try require(manager.saveRuntimeOptions(options) == nil, "Protected runtime options failed to save")
+        try require(
+            manager.services[0].automaticallyRecover && manager.services[0].isMonitoringLogs,
+            "Runtime options were not saved together"
+        )
         manager.enable(stopped)
         manager.enable(failed)
         try waitForManager("bulk initial states") {
@@ -117,24 +155,38 @@ struct PortRegression {
         let missingDirectory = directory.appendingPathComponent("removed-project")
         try FileManager.default.createDirectory(at: missingDirectory, withIntermediateDirectories: true)
         var invalidPort = try freePort()
-        while fixtures.contains(where: { $0.port == invalidPort }) { invalidPort = try freePort() }
+        while fixtures.contains(where: { $0.port == invalidPort }) {
+            invalidPort = try freePort()
+        }
         let invalid = PortService(name: "Invalid", port: invalidPort, directory: missingDirectory.path, command: "exit 0")
         try require(manager.save(invalid) == nil, "Invalid fixture setup failed")
+        try require(manager.setQuickStart(true, for: invalid.id) == nil, "Invalid fixture selection failed")
+        var excludedPort = try freePort()
+        while fixtures.contains(where: { $0.port == excludedPort }) || excludedPort == invalid.port {
+            excludedPort = try freePort()
+        }
+        let excluded = PortService(name: "Excluded", port: excludedPort, directory: directory.path, command: "exit 77")
+        try require(manager.save(excluded) == nil, "Excluded fixture save failed")
         try FileManager.default.removeItem(at: missingDirectory)
-        try require(Set(manager.servicesToStart.map(\.id)) == Set([stopped.id, failed.id, fixtures[3].id, invalid.id]),
-                    "Bulk candidates included running or starting services")
-        manager.startAll()
-        manager.startAll()
+        try require(
+            Set(manager.quickStartCandidates.map(\.id)) == Set([stopped.id, failed.id, fixtures[3].id, invalid.id]),
+            "Bulk candidates included running or starting services"
+        )
+        manager.quickStart()
+        manager.quickStart()
         try waitForManager("all valid services running") {
             fixtures.allSatisfy { manager.status($0.id).phase == .running }
         }
         try require(try PortProcess.listeners(port: healthy.port) == healthyOwners, "Bulk start restarted a healthy service")
-        try require(manager.status(invalid.id).phase == .conflict && !manager.status(invalid.id).protected,
-                    "Invalid project did not report its own error")
-        try require(manager.servicesToStart.map(\.id) == [invalid.id], "Running services still offered bulk start")
+        try require(
+            manager.status(invalid.id).phase == .conflict && !manager.status(invalid.id).protected,
+            "Invalid project did not report its own error"
+        )
+        try require(manager.quickStartCandidates.map(\.id) == [invalid.id], "Running services still offered bulk start")
+        try require(!manager.status(excluded.id).protected, "Quick start launched an unselected service")
         let attempts = try String(contentsOf: directory.appendingPathComponent("bulk-start-attempts"), encoding: .utf8)
         try require(attempts.split(separator: "\n").count == 1, "Bulk start duplicated an in-progress launch")
-        print("PASS bulk start enables disabled, resumes stopped, retries failed, skips running/starting, isolates invalid projects")
+        print("PASS opt-in quick start persists selection, excludes unselected services, saves runtime options, skips running/starting, isolates invalid projects")
     }
 
     @MainActor static func main() throws {
@@ -181,7 +233,9 @@ struct PortRegression {
         try require(imported.services == manager.services, "Invalid backup changed configuration")
         print("PASS configuration, recovery and monitoring persistence with manual enable on relaunch")
         let descriptorBaseline = openDescriptorCount()
-        for _ in 0..<80 { _ = try PortProcess.listeners(port: try freePort()) }
+        for _ in 0 ..< 80 {
+            _ = try PortProcess.listeners(port: freePort())
+        }
         try require(openDescriptorCount() <= descriptorBaseline + 8, "Port scans leaked file descriptors")
         print("PASS repeated port scans release pipes and child processes")
         let python = CommandLine.arguments[1]
@@ -209,10 +263,14 @@ struct PortRegression {
                 open("rebuilt", "w").close()
         """
         try server.write(to: directory.appendingPathComponent("server.py"), atomically: true, encoding: .utf8)
-        try testStartAll(python: python, directory: directory)
+        try testQuickStart(python: python, directory: directory)
         let port = try freePort()
-        var service = PortService(name: "Fixture", port: port, directory: directory.path,
-                                  command: "\(python) server.py & child=$!; wait $child")
+        var service = PortService(
+            name: "Fixture",
+            port: port,
+            directory: directory.path,
+            command: "\(python) server.py & child=$!; wait $child"
+        )
         testServices.append(service)
         try require(service.validationError(existing: []) == nil, "Valid service rejected")
         var duplicate = service; duplicate.id = UUID()
@@ -226,15 +284,21 @@ struct PortRegression {
         child.wait()
         """
         try launcher.write(to: directory.appendingPathComponent("detached.py"), atomically: true, encoding: .utf8)
-        let detached = PortService(name: "Detached", port: try freePort(), directory: directory.path,
-                                   command: "exec \(python) detached.py")
+        let detached = try PortService(
+            name: "Detached",
+            port: freePort(),
+            directory: directory.path,
+            command: "exec \(python) detached.py"
+        )
         testServices.append(detached)
         supervisor.enable(detached)
         try wait("detached descendant recognized") { recorder.status(detached.id).phase == .running }
         let detachedOwners = try PortProcess.listeners(port: detached.port)
         Thread.sleep(forTimeInterval: 2)
-        try require(try PortProcess.listeners(port: detached.port) == detachedOwners,
-                    "Detached listener was reclaimed as foreign")
+        try require(
+            try PortProcess.listeners(port: detached.port) == detachedOwners,
+            "Detached listener was reclaimed as foreign"
+        )
         supervisor.retry(detached.id)
         try wait("detached restart") {
             let current = try PortProcess.listeners(port: detached.port)
@@ -254,7 +318,7 @@ struct PortRegression {
         foreignService.command = "trap '' TERM; " + service.command
         let foreign = try PortProcess(service: foreignService)
         defer { try? foreign.terminate(force: true); foreign.refresh() }
-        try wait("foreign fixture listening") { !(try PortProcess.listeners(port: port)).isEmpty }
+        try wait("foreign fixture listening") { try !(PortProcess.listeners(port: port)).isEmpty }
         let foreignOwners = try PortProcess.listeners(port: port)
         supervisor.enable(service)
         try wait("foreign port reclaimed and expected service running") { recorder.status(service.id).phase == .running }
@@ -262,13 +326,17 @@ struct PortRegression {
         print("PASS external port reclamation (including SIGKILL) and descendant ownership")
 
         let rebuilding = try PortProcess.listeners(port: port)
-        for owner in rebuilding { try owner.signal(SIGUSR1) }
+        for owner in rebuilding {
+            try owner.signal(SIGUSR1)
+        }
         try wait("short rebuild finished") { FileManager.default.fileExists(atPath: directory.appendingPathComponent("rebuilt").path) }
         try wait("same process recovered") { recorder.status(service.id).phase == .running }
         try require(try PortProcess.listeners(port: port) == rebuilding, "Brief rebuild restarted the service")
         print("PASS short rebuild keeps the original process")
 
-        for owner in try PortProcess.listeners(port: port) { try owner.signal(SIGKILL) }
+        for owner in try PortProcess.listeners(port: port) {
+            try owner.signal(SIGKILL)
+        }
         try wait("failed service") { recorder.status(service.id).phase == .failed }
         try wait("HTTP placeholder") { try response(port).contains("503 Service Unavailable") }
         try require(try response(port, host: "[::1]").contains("503 Service Unavailable"), "Missing IPv6 placeholder")
@@ -295,7 +363,9 @@ struct PortRegression {
         supervisor.setAutomaticallyRecover(true, for: service.id)
         Thread.sleep(forTimeInterval: 0.7)
         try require(try PortProcess.listeners(port: port) == before, "Toggling recovery restarted a running service")
-        for owner in before { try owner.signal(SIGKILL) }
+        for owner in before {
+            try owner.signal(SIGKILL)
+        }
         try wait("automatic recovery", timeout: 20) {
             let listeners = try PortProcess.listeners(port: port)
             return recorder.status(service.id).phase == .running && !listeners.isEmpty && listeners.isDisjoint(with: before)
@@ -303,7 +373,9 @@ struct PortRegression {
         print("PASS enabling recovery at runtime without restarting the process")
         supervisor.setAutomaticallyRecover(false, for: service.id)
         Thread.sleep(forTimeInterval: 0.7)
-        for owner in try PortProcess.listeners(port: port) { try owner.signal(SIGKILL) }
+        for owner in try PortProcess.listeners(port: port) {
+            try owner.signal(SIGKILL)
+        }
         try wait("runtime recovery disabled") { recorder.status(service.id).phase == .failed }
         try wait("disabled recovery placeholder") { try response(port).contains("503 Service Unavailable") }
         supervisor.setAutomaticallyRecover(true, for: service.id)
@@ -325,28 +397,44 @@ struct PortRegression {
         try require(try PortProcess.listeners(port: port).isEmpty, "Shutdown left listeners")
         print("PASS explicit stop suppresses recovery; shutdown cleans children and sockets")
 
-        let fast = PortSupervisor(timing: .init(poll: 0.05, interruptionGrace: 0.15,
-                                               startupTimeout: 0.5, retryBase: 0.1, retryLimit: 2),
-                                  report: recorder.record)
+        let fast = PortSupervisor(
+            timing: .init(
+                poll: 0.05,
+                interruptionGrace: 0.15,
+                startupTimeout: 0.5,
+                retryBase: 0.1,
+                retryLimit: 2
+            ),
+            report: recorder.record
+        )
         defer {
             let finished = DispatchSemaphore(value: 0)
             fast.shutdown { finished.signal() }
             _ = finished.wait(timeout: .now() + 10)
         }
-        var failing = PortService(name: "Failure", port: try freePort(), directory: directory.path,
-                                  command: "echo attempt; echo attempt >> attempts; exit 23", automaticallyRecover: true,
-                                  monitorLogs: true)
+        var failing = try PortService(
+            name: "Failure",
+            port: freePort(),
+            directory: directory.path,
+            command: "echo attempt; echo attempt >> attempts; exit 23",
+            automaticallyRecover: true,
+            monitorLogs: true
+        )
         testServices.append(failing)
         fast.enable(failing)
         try wait("retry limit") { recorder.status(failing.id).phase == .failed }
         let attempts = try String(contentsOf: directory.appendingPathComponent("attempts"), encoding: .utf8)
         try require(attempts.split(separator: "\n").count == 3, "Wrong retry limit")
         let monitoredLog = try String(contentsOf: failing.logURL, encoding: .utf8)
-        try require(monitoredLog.components(separatedBy: "\nattempt\n").count - 1 == 3,
-                    "Monitoring did not preserve output from all attempts")
-        try require(monitoredLog.contains("退出码 23") && monitoredLog.contains("状态：等待重试") &&
-                    monitoredLog.contains("已达到 2 次重试上限"),
-                    "Monitoring did not preserve lifecycle events")
+        try require(
+            monitoredLog.components(separatedBy: "\nattempt\n").count - 1 == 3,
+            "Monitoring did not preserve output from all attempts"
+        )
+        try require(
+            monitoredLog.contains("退出码 23") && monitoredLog.contains("状态：等待重试") &&
+                monitoredLog.contains("已达到 2 次重试上限"),
+            "Monitoring did not preserve lifecycle events"
+        )
         try wait("exhausted retries keep placeholder") { try response(failing.port).contains("503 Service Unavailable") }
         fast.stop(failing.id, disable: true)
         try wait("failed service disabled") { recorder.status(failing.id).phase == .disabled }
@@ -366,16 +454,28 @@ struct PortRegression {
         }
         print("PASS startup timeout and rapid action cancellation")
 
-        let cancellable = PortSupervisor(timing: .init(poll: 0.05, interruptionGrace: 0.15,
-                                                      startupTimeout: 0.5, retryBase: 2, retryLimit: 2),
-                                         report: recorder.record)
+        let cancellable = PortSupervisor(
+            timing: .init(
+                poll: 0.05,
+                interruptionGrace: 0.15,
+                startupTimeout: 0.5,
+                retryBase: 2,
+                retryLimit: 2
+            ),
+            report: recorder.record
+        )
         defer {
             let finished = DispatchSemaphore(value: 0)
             cancellable.shutdown { finished.signal() }
             _ = finished.wait(timeout: .now() + 10)
         }
-        let pending = PortService(name: "Cancel retry", port: try freePort(), directory: directory.path,
-                                  command: "echo attempt >> cancelled-attempts; exit 23", automaticallyRecover: true)
+        let pending = try PortService(
+            name: "Cancel retry",
+            port: freePort(),
+            directory: directory.path,
+            command: "echo attempt >> cancelled-attempts; exit 23",
+            automaticallyRecover: true
+        )
         testServices.append(pending)
         cancellable.enable(pending)
         try wait("retry scheduled") { recorder.status(pending.id).phase == .retrying }

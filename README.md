@@ -23,10 +23,10 @@ Wally‘s Hand can become very powerful when paired with cycles. These enable yo
 ### Port management
 
 In **工具 → 端口管理**, add a service name, TCP port, project directory and startup command.
-Use **启动全部** in the overview or **启动全部服务** in the menu bar to start every
-disabled, stopped, failed, conflicting, or waiting-to-retry service. Running services
+Use **快速启动** in the overview or menu bar to start only services selected in Settings → 快速启动 (none selected by default). It starts eligible
+disabled, stopped, failed, conflicting, or waiting-to-retry services. Running services
 and launches or brief listener interruptions already in progress are left alone.
-Use **导出全部配置** to save every service and its recovery/log settings as one JSON backup;
+Use **导出全部配置** to save every service and its recovery/log options and quick-start selections as one JSON backup;
 **导入配置** replaces the saved list after confirmation. Imported services stay disabled.
 Project files and logs are not included, so restore the project directories separately.
 Commands run in a login zsh with `PORT` set. Use a foreground command (for example,
@@ -53,11 +53,14 @@ and timestamped status/retry events across launches. The switch applies immediat
 and persists with the service configuration. Disable it to return to a latest-attempt
 log on the next launch. Monitoring logs can grow while the switch is enabled.
 
-The overview cards show only service name, port, status, a primary action, and
-**详情**. Details combine configuration, recovery policy, diagnostics, logs,
-restart, release, and deletion. Configuration is read-only while protected;
-disable protection before editing. Configuration changes require saving, while
-the recovery switch for an existing service applies immediately.
+The overview cards show service name, port, service state and port-protection state,
+a primary action, and **详情**. Services needing attention also show a diagnostic
+summary and a log shortcut. Details combine configuration, recovery policy,
+diagnostics, logs, restart, release, and deletion. Configuration and runtime options
+apply only after saving; Cancel discards edits. Process configuration is read-only
+while protected; disable protection before editing the project or command.
+Runtime options can still be saved while protected. Quick-start selection in Settings
+and the menu-bar recovery toggle apply immediately.
 
 Port handoffs have a brief gap; this is polling and reclamation, not an uninterrupted proxy.
 The placeholder serves plain HTTP, not HTTPS, and no application-level health check is implied

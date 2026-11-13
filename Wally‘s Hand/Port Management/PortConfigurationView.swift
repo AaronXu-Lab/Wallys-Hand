@@ -36,8 +36,11 @@ struct PortConfigurationView: View {
                         .textSelection(.enabled)
                 }
                 if manager.services.isEmpty {
-                    AUIEmptyState("尚未添加服务", systemImage: "network",
-                                  description: "添加项目和启动命令，集中管理本地服务。") {
+                    AUIEmptyState(
+                        "尚未添加服务",
+                        systemImage: "network",
+                        description: "添加项目和启动命令，集中管理本地服务。"
+                    ) {
                         addButton
                     }
                     .background(SettingsAppearance.surface, in: RoundedRectangle(cornerRadius: AUIRadius.lg))
@@ -59,10 +62,10 @@ struct PortConfigurationView: View {
                         .monospacedDigit()
                         .foregroundStyle(SettingsAppearance.muted)
                     Spacer()
-                    Button("启动全部", systemImage: "play.fill") { manager.startAll() }
+                    Button("快速启动", systemImage: "play.fill") { manager.quickStart() }
                         .buttonStyle(AUIButtonStyle(variant: .outline, size: .xs, contentType: .iconText))
-                        .disabled(manager.servicesToStart.isEmpty)
-                        .help("启动所有未启用、已停止或异常的服务，保留正在运行和启动中的服务。")
+                        .disabled(manager.quickStartCandidates.isEmpty)
+                        .help("在设置的“快速启动”面板选择服务；仅启动所选服务，跳过正在运行或启动中的服务。")
                     addButton
                 }
                 .padding(.horizontal, AUISpacing.xxl)
@@ -73,10 +76,14 @@ struct PortConfigurationView: View {
         .sheet(item: $selectedService) { service in
             PortServiceSheet(service: service, manager: manager)
         }
-        .settingsConfirmation(String(localized: "替换全部端口配置？"), isPresented: $confirmingImport,
-                              message: String(localized: "现有服务配置将被备份文件替换。导入后不会自动启动服务。"),
-                              confirm: String(localized: "替换"), destructive: true,
-                              onCancel: { pendingImport = nil }) {
+        .settingsConfirmation(
+            String(localized: "替换全部端口配置？"),
+            isPresented: $confirmingImport,
+            message: String(localized: "现有服务配置将被备份文件替换。导入后不会自动启动服务。"),
+            confirm: String(localized: "替换"),
+            destructive: true,
+            onCancel: { pendingImport = nil }
+        ) {
             guard let pendingImport else { return }
             do {
                 try manager.importBackup(pendingImport)

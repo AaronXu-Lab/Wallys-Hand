@@ -60,6 +60,8 @@ struct PortServiceSheet: View {
         guard let current else { return true }
         return draft.name != current.name || portText != String(current.port)
             || draft.directory != current.directory || draft.command != current.command
+            || draft.automaticallyRecover != current.automaticallyRecover
+            || draft.isMonitoringLogs != current.isMonitoringLogs
     }
 
     var body: some View {
@@ -71,7 +73,11 @@ struct PortServiceSheet: View {
                     .fixedSize(horizontal: false, vertical: true)
                 Spacer()
                 if let current {
-                    PortStatusBadge(status: status)
+                    VStack(alignment: .trailing, spacing: AUISpacing.xs) {
+                        PortStatusBadge(status: status)
+                        Text(status.protected ? "端口保护中" : "未保护")
+                            .auiText(.caption).foregroundStyle(SettingsAppearance.muted)
+                    }
                     Button("查看日志", systemImage: "doc.text") { NSWorkspace.shared.open(current.logURL) }
                         .buttonStyle(AUIButtonStyle(variant: .ghost, size: .xs, contentType: .iconText))
                         .help("查看日志")
@@ -92,7 +98,7 @@ struct PortServiceSheet: View {
                         VStack(alignment: .leading, spacing: AUISpacing.xl) {
                             VStack(alignment: .leading, spacing: AUISpacing.sm) {
                                 Text("运行选项").auiText(.headlineSm).accessibilityAddTraits(.isHeader)
-                                Text(isNew ? "添加服务时一并保存。" : "更改立即生效，无需保存配置。")
+                                Text("更改在保存后生效。")
                                     .auiText(.caption).foregroundStyle(SettingsAppearance.muted)
                             }
                             recoverySection
@@ -118,17 +124,23 @@ struct PortServiceSheet: View {
         .background(SettingsAppearance.surface)
         .foregroundStyle(SettingsAppearance.ink)
         .tint(SettingsAppearance.accent)
-        .settingsConfirmation(String(localized: "删除服务配置？"), isPresented: $confirmingDeletion,
-                              message: "将移除“\(current?.name ?? draft.name)”的配置，项目文件不受影响。",
-                              confirm: String(localized: "删除服务"), destructive: true) {
+        .settingsConfirmation(
+            String(localized: "删除服务配置？"),
+            isPresented: $confirmingDeletion,
+            message: "将移除“\(current?.name ?? draft.name)”的配置，项目文件不受影响。",
+            confirm: String(localized: "删除服务"),
+            destructive: true
+        ) {
             guard let current else { return }
             error = manager.remove(current)
-            if error == nil { dismiss() }
+            if error == nil {
+                dismiss()
+            }
         }
     }
 
-    /// Shared insets make configuration and immediately applied options distinct groups.
-    private func sectionCard<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+    /// Shared insets separate process configuration from saved runtime options.
+    private func sectionCard(@ViewBuilder content: () -> some View) -> some View {
         content()
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(AUISpacing.xl)
@@ -179,28 +191,43 @@ struct PortServiceSheet: View {
             } else {
                 HStack(alignment: .top, spacing: AUISpacing.lg) {
                     VStack(alignment: .leading, spacing: AUISpacing.sm) {
-                        AUIInput("例如：网站开发", text: $draft.name, size: .sm, label: "名称",
-                                 state: validationMessage(for: .name) == nil ? .default : .error)
-                            .accessibilityLabel("名称")
-                            .focused($focusedField, equals: .name)
+                        AUIInput(
+                            "例如：网站开发",
+                            text: $draft.name,
+                            size: .sm,
+                            label: "名称",
+                            state: validationMessage(for: .name) == nil ? .default : .error
+                        )
+                        .accessibilityLabel("名称")
+                        .focused($focusedField, equals: .name)
                         fieldError(.name)
                     }
                     VStack(alignment: .leading, spacing: AUISpacing.sm) {
-                        AUIInput("5173", text: $portText, size: .sm, label: "端口",
-                                 state: validationMessage(for: .port) == nil ? .default : .error)
-                            .accessibilityLabel("端口")
-                            .accessibilityHint("范围为 1 至 65535")
-                            .focused($focusedField, equals: .port)
+                        AUIInput(
+                            "5173",
+                            text: $portText,
+                            size: .sm,
+                            label: "端口",
+                            state: validationMessage(for: .port) == nil ? .default : .error
+                        )
+                        .accessibilityLabel("端口")
+                        .accessibilityHint("范围为 1 至 65535")
+                        .focused($focusedField, equals: .port)
                         fieldError(.port)
                     }
                     .frame(width: 140)
                 }
                 VStack(alignment: .leading, spacing: AUISpacing.sm) {
                     HStack(alignment: .bottom, spacing: AUISpacing.md) {
-                        AUIInput("例如：~/Projects/website", text: $draft.directory, size: .sm, label: "项目目录",
-                                 state: validationMessage(for: .directory) == nil ? .default : .error)
-                            .accessibilityLabel("项目目录")
-                            .focused($focusedField, equals: .directory)
+                        AUIInput(
+                            "例如：~/Projects/website",
+                            text: $draft.directory,
+                            size: .sm,
+                            label: "项目目录",
+                            state: validationMessage(for: .directory) == nil ? .default : .error
+                        )
+                        .accessibilityLabel("项目目录")
+                        .focused($focusedField, equals: .directory)
                         Button("选择…", action: chooseDirectory)
                             .buttonStyle(AUIButtonStyle(variant: .outline, size: .sm))
                             .accessibilityLabel("选择项目目录…")
@@ -208,10 +235,14 @@ struct PortServiceSheet: View {
                     fieldError(.directory)
                 }
                 VStack(alignment: .leading, spacing: AUISpacing.sm) {
-                    AUIInputArea("例如：npm run dev -- --port 5173", text: $draft.command,
-                                 label: "启动命令", lines: 3...6)
-                        .accessibilityLabel("启动命令")
-                        .focused($focusedField, equals: .command)
+                    AUIInputArea(
+                        "例如：npm run dev -- --port 5173",
+                        text: $draft.command,
+                        label: "启动命令",
+                        lines: 3...6
+                    )
+                    .accessibilityLabel("启动命令")
+                    .focused($focusedField, equals: .command)
                     fieldError(.command)
                 }
                 Text("使用登录 zsh 在项目目录运行，并提供 PORT 环境变量。命令须在前台运行，且使用指定端口。")
@@ -232,13 +263,7 @@ struct PortServiceSheet: View {
 
     private var recoverySection: some View {
         VStack(alignment: .leading, spacing: AUISpacing.md) {
-            Toggle(isOn: Binding(
-                get: { current?.automaticallyRecover ?? draft.automaticallyRecover },
-                set: { enabled in
-                    if let current { error = manager.setAutomaticallyRecover(enabled, for: current.id) }
-                    else { draft.automaticallyRecover = enabled }
-                }
-            )) {
+            Toggle(isOn: $draft.automaticallyRecover) {
                 Text("自动恢复").auiText(.headlineSm)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -250,13 +275,7 @@ struct PortServiceSheet: View {
 
     private var monitoringSection: some View {
         VStack(alignment: .leading, spacing: AUISpacing.md) {
-            Toggle(isOn: Binding(
-                get: { current?.isMonitoringLogs ?? draft.isMonitoringLogs },
-                set: { enabled in
-                    if let current { error = manager.setMonitorLogs(enabled, for: current.id) }
-                    else { draft.monitorLogs = enabled }
-                }
-            )) {
+            Toggle(isOn: Binding(get: { draft.isMonitoringLogs }, set: { draft.monitorLogs = $0 })) {
                 Text("监听日志").auiText(.headlineSm)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -277,7 +296,7 @@ struct PortServiceSheet: View {
             Button(isNew || hasChanges ? "取消" : "完成") { dismiss() }
                 .buttonStyle(AUIButtonStyle(variant: .outline, size: .xs))
                 .keyboardShortcut(.cancelAction)
-            if !status.protected {
+            if !status.protected || hasChanges {
                 Button(isNew ? "添加服务" : "保存配置", action: save)
                     .buttonStyle(AUIButtonStyle(variant: .fill, size: .xs))
                     .keyboardShortcut(.defaultAction)
@@ -287,6 +306,13 @@ struct PortServiceSheet: View {
     }
 
     private func save() {
+        if status.protected {
+            error = manager.saveRuntimeOptions(draft)
+            if error == nil {
+                dismiss()
+            }
+            return
+        }
         didAttemptSave = true
         // Focus the first invalid field in the same order as the form.
         if let invalid = [ConfigurationField.name, .port, .directory, .command]
@@ -297,11 +323,10 @@ struct PortServiceSheet: View {
         guard let port = Int(portText) else { return }
         var updated = draft
         updated.port = port
-        // The recovery switch applies immediately for existing services; do not overwrite it with a stale draft.
-        updated.automaticallyRecover = current?.automaticallyRecover ?? draft.automaticallyRecover
-        updated.monitorLogs = current?.monitorLogs ?? draft.monitorLogs
         error = manager.save(updated)
-        if error == nil { dismiss() }
+        if error == nil {
+            dismiss()
+        }
     }
 
     private func chooseDirectory() {
@@ -309,6 +334,8 @@ struct PortServiceSheet: View {
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.allowsMultipleSelection = false
-        if panel.runModal() == .OK, let url = panel.url { draft.directory = url.path }
+        if panel.runModal() == .OK, let url = panel.url {
+            draft.directory = url.path
+        }
     }
 }
